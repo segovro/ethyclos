@@ -1,0 +1,235 @@
+<html lang="en">
+<head>
+<title>Bills</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="web3.js"></script>
+<script type="text/javascript" src="bignumber.js"></script>
+<script type="text/javascript" src="creditCommons.js"></script>
+<script type="text/javascript">
+	window.onload = function() {
+		document.getElementById('me').innerHTML = "ETH Account: <b>"
+				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
+				+ myIsMember + "</b> Alias: <b>" + myAlias
+				+ "<br></b> Whisper Account: <b>" + myWhisper
+				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
+				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+		document.getElementById('myBalance').innerHTML = "<h2>" + myBalance
+				+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
+		document.getElementById('myDebitLimit').innerHTML = myDebitLimit
+				+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
+		document.getElementById('payeeCurrency').innerHTML = " <span class=\"badge\">"
+				+ myCurrencyName + "</span></h2>";
+
+		var billsReceivedUnpaid;
+		var billsReceivedPaid;
+		var billsSentUnpaid;
+		var billsSentPaid;
+
+		/*
+		for (i = 1, 5, i++) {
+
+		var bill = creditCommons.getBill(i);              
+		var payee = bill[0];
+		var payer = bill[1];
+		var bDescription = bill[2];
+		var bAmount = bill[3];
+		var paid= bill[4];
+		var listBill = "<hr/>Bill number: <b>" + i + "</b> Paid: <b>" + paid 
+		+ "</b><br/>From: " + payee
+		+ "<br/>To: " + payer
+		+ "<br/>Description: " + bDescription
+		+ "<br/>Description: <b>" + bAmount + " " + creditCommons.getGroupDescription(creditCommons.getMember(myCoinbase)[3])[2] + "</b><br/>";
+		if (bill[1] = myCoinbase) {
+		if (bill[4] = false) {billsReceivedUnpaid += listBill}
+		if (bill[4] = true) {billsReceivedPaid += listBill}
+		}
+		if (bill[0] = myCoinbase) {
+		if (bill[4] = false) {billsSentUnpaid += listBill}
+		if (bill[4] = true) {billsSentPaid += listBill}
+		}
+		
+		}
+		 */
+
+		document.getElementById('billsReceivedUnpaid').innerHTML = billsReceivedUnpaid;
+		document.getElementById('billsReceivedPaid').innerHTML = billsReceivedPaid;
+		document.getElementById('billsSentUnpaid').innerHTML = billsSentUnpaid;
+		document.getElementById('billsSentPaid').innerHTML = billsSentPaid;
+
+	}
+
+	function conversion() {
+		var billPayee = myCoinbase;
+		var billPayer = document.getElementById('billPayer').value;
+		var billDescription = document.getElementById('billDescription').value;
+		var billPayeeAmount = document.getElementById('billPayeeAmount').value;
+		var ratePayee = myRate;
+		var payerGroup = creditCommons.getMember(billPayer)[3];
+		var ratePayer = creditCommons.getGroupRates(payerGroup)[0];
+		var currencyPayer = creditCommons.getGroupDescription(payerGroup)[2];
+		var billPayerAmount = billPayeeAmount * ratePayee / ratePayer;
+		document.getElementById('payerCurrency').innerHTML = currencyPayer;
+		document.getElementById('billPayerAmount').innerHTML = billPayerAmount;
+	}
+
+	function createBill() {
+		var billPayee = myCoinbase;
+		var billPayer = document.getElementById('billPayer').value;
+		var billDescription = document.getElementById('billDescription').value;
+		var billPayerAmount = document.getElementById('billPayerAmount').value;
+		creditCommons.createBill(billPayee, billPayer, billDescription,
+				billAmount);
+		location.reload();
+	}
+
+	function payBill() {
+		var billNumber = document.getElementById('billNumber').value;
+		creditCommons.createBill(billNumber);
+		location.reload();
+	}
+</script>
+<style>
+.navbar {
+	margin-bottom: 0;
+	border-radius: 0;
+}
+</style>
+</head>
+<body>
+
+	<div class="container bg-3 text-center">
+		<script type="text/javascript" src="navbar.js"></script>
+		<small><p class="bg-info" id="me"></p></small>
+		<div class="row">
+			<h3>Bills</h3>
+			<div class="col-sm-6">
+				<div class="well">
+					<h4>
+						<span class="glyphicon glyphicon-user"></span> My Wallet
+					</h4>
+					<table class="table">
+						<thead>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="text-right col-sm-3">My Balance:</td>
+								<td class="text-right col-sm-3""><p id="myBalance"></p></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-3">My Debit Limit:</td>
+								<td class="text-right col-sm-3"><p id="myDebitLimit"></p></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+			<div class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Send bill</h4>
+					</div>
+					<div class="panel-body">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="billPayer">Payer
+									account:</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="billPayer"
+										placeholder="Enter payer account">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="billDescription">Description</label>
+								<div class="col-sm-8">
+									<textarea class="form-control" rows="5" id="billDescription"
+										placeholder="Describe delivered products and services"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="billPayeeAmount">Amount
+									in <span class="badge"><p id="payeeCurrency"></p></span>
+								</label>
+								<div class="col-sm-6">
+									<input type="text" class="form-control" id="billPayeeAmount"
+										placeholder="Enter amount in payee currency">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="billPayerAmount">Amount
+									in <span class="badge"><p id="payerCurrency"></p></span>
+								</label>
+								<div class="col-sm-6">
+									<output type="text" class="form-control" id="billPayerAmount">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="panel-footer">
+						<button type="submit" class="btn btn-default"
+							onClick="conversion();">Calculate payer amount</button>
+						<button type="submit" class="btn btn-default"
+							onClick="sendBill();">Send Bill</button>
+					</div>
+				</div>
+
+
+				<h4>Pay bill</h4>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="billNumber">Bill
+							Number:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="billNumber"
+								placeholder="Enter bill number">
+						</div>
+					</div>
+				</form>
+				<button type="submit" class="btn btn-default" onClick="payBill();">Pay
+					Bill</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<hr />
+				<h4>Bills received</h4>
+				<h5>Unpaid</h5>
+				<p id="billsReceivedUnpaid"></p>
+				<h5>Paid</h5>
+				<p id="billsReceivedPaid"></p>
+				<hr />
+				<h4>Bills sent</h4>
+				<p id="billsSentUnpaid"></p>
+				<h5>Unpaid</h5>
+				<h5>Paid</h5>
+				<p id="billsSentPaid"></p>
+				<hr />
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-footer">
+		<p>
+			<img
+				src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png"
+				width="20" align="top" /> <i>Powered by ethereum</i>
+		</p>
+		<a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+			alt="Creative Commons License" style="border-width: 0"
+			src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This
+		work is licensed under a <a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
+			Commons Attribution-NonCommercial-ShareAlike 4.0 International
+			License</a>.
+	</div>
+</body>
+</html>

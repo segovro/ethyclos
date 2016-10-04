@@ -1,0 +1,303 @@
+<html lang="en">
+<head>
+<title>Members</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="web3.js"></script>
+<script type="text/javascript" src="bignumber.js"></script>
+<script type="text/javascript" src="creditCommons.js"></script>
+<script type="text/javascript">
+	window.onload = function() {
+		document.getElementById('me').innerHTML = "ETH Account: <b>"
+				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
+				+ myIsMember + "</b> Alias: <b>" + myAlias
+				+ "<br></b> Whisper Account: <b>" + myWhisper
+				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
+				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+				
+	            
+		        document.getElementById('groupAccount').innerText = groupAccount;
+		        document.getElementById('coordinator').innerText = coordinator;
+		        document.getElementById('groupID').innerText = myGroupID;
+		        document.getElementById('groupName').innerText = groupName;
+		        document.getElementById('currency').innerText = currencyName;
+		        document.getElementById('rate').innerText = rate + "% Base Currency";
+		        document.getElementById('debitLimitG').innerText = debitLimit + " "
+		                + currencyName;
+		        document.getElementById('creditLimitG').innerText = creditLimit + " "
+		                + currencyName;
+		        document.getElementById('open').innerText = open;
+		        document.getElementById('groupBalance').innerText = groupBalance + " "
+		                + currencyName;
+		        document.getElementById('intertradeDebitLimit').innerText = intertradeDebitLimit
+		                + " " + currencyName;
+		        document.getElementById('intertradeCreditLimit').innerText = intertradeCreditLimit
+		                + " " + currencyName;
+
+		/*
+		var membersList = "";
+		for (i = 0; i < creditCommons.getNumberMembers(); i++) {
+			membersList += "<hr/>Address: <b>" + creditCommons.getMPbyIndex(i)
+					+ "</b> Alias: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[1]
+					+ "</b><br> Group: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[2]
+					+ "</b> Coordinator: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[3]
+					+ "</b><br/> Balance: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[4]
+					+ "</b> Debit Limit: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[5]
+					+ "</b> Credit Limit: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[6]
+					+ "</b><br/>";
+			document.getElementById('listGroups').innerHTML = membersList;
+		}
+		 */
+
+	}
+
+	function joinGroup() {
+		var groupToJ = document.getElementById('groupToJoin').value;
+		creditCommons.joinGroup(groupToJ);
+		location.reload();
+	}
+
+	function createGroup() {
+		var CgoupName = document.getElementById('CgoupName').value;
+		var Ccurrency = document.getElementById('Ccurrency').value;
+		var Crate = document.getElementById('Crate').value;
+		var CdebitLimit = document.getElementById('CdebitLimit').value;
+		var CcreditLimit = document.getElementById('CcreditLimit').value;
+		var CIdebitLimit = document.getElementById('CIdebitLimit').value;
+		var CIcreditLimit = document.getElementById('CIcreditLimit').value;
+		var Copen = document.getElementById('Copen').value;
+		creditCommons.createGroup(Ccoordinator, CgoupName, Ccurrency, Crate,
+				CdebitLimit, CcreditLimit, CIdebitLimit, CIcreditLimit, Copen);
+		location.reload();
+	}
+
+	function modifyGroup() {
+		var MgroupID = myGroupID;
+		var MgoupName = doMument.getElementById('MgoupName').value;
+		var MMurrenMy = doMument.getElementById('MMurrenMy').value;
+		var Mrate = doMument.getElementById('Mrate').value;
+		var MdebitLimit = doMument.getElementById('MdebitLimit').value;
+		var MMreditLimit = doMument.getElementById('MMreditLimit').value;
+		var MIdebitLimit = doMument.getElementById('MIdebitLimit').value;
+		var MIMreditLimit = doMument.getElementById('MIMreditLimit').value;
+		var Mopen = doMument.getElementById('Mopen').value;
+		creditCommons.modifyGroup(groupID, MgoupName, MMurrenMy, Mrate,
+				MdebitLimit, MMreditLimit, MIdebitLimit, MIMreditLimit, Mopen);
+		location.reload();
+	}
+
+	function transferGroupCoordinator() {
+		var newCoordinator = document.getElementById('newCoordinator').value;
+		creditCommons.transferGroupCoordinator(myGroupID, newCoordinator);
+		location.reload();
+	}
+</script>
+<style>
+.navbar {
+	margin-bottom: 0;
+	border-radius: 0;
+}
+</style>
+</head>
+<body>
+
+	<div class="container bg-3 text-center">
+		<script type="text/javascript" src="navbar.js"></script>
+		<small><p class="bg-info" id="me"></p></small>
+		<div class="row">
+				<div class="col-sm-6">
+				                <div class="panel panel-default">
+                    <div class="panel-heading">
+					<h4>Create Group</h4>
+					<div class="alert alert-warning">Only if you do not belong to one group. Resign first</div>
+					</div>
+					<div class="panel-body">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="CgroupName">Group
+								Name:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="CgroupName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="Ccurrency">Group
+								Currency:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="Ccurrency">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="Crate">Currency
+								Rate:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="Crate">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="CdebitLimit">Default
+								Debit Limit:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="CdebitLimitG">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="CcreditLimit">Default
+								Credit Limit:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="CcreditLimitG">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="CIdebitLimit">Intertrade
+								Debit Limit:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="CIdebitLimitG">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="CIcreditLimit">Intertrade
+								Credit Limit:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="CIcreditLimitG">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="Copen">Open:</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="checkbox" id="Copen">
+							</div>
+						</div>
+					</form>
+					</div>
+					<div class="panel-footer">
+					<button type="submit" class="btn btn-default"
+						onClick="createGroup();">Create</button>
+				</div>
+				</div>
+				</div>
+				<div class="col-sm-6">
+					<h4>Modify Group</h4>
+					<h5>Transfer commune</h5>
+					<div class="alert alert-warning">Only Commune Account</div>
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="newCommune">New
+								Commune:</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="newCommune"
+									placeholder="Enter the new coordinator address">
+							</div>
+						</div>
+					</form>
+					<button type="submit" class="btn btn-default" onClick="transfer();">Transfer</button>
+					<hr />
+					<h5>Transfer Intertrade Account</h5>
+                    <div class="alert alert-warning">Only Intertrade Account</div>
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="newIntertrade">New
+                                Intertrade:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="newIntertrade"
+                                    placeholder="Enter the new intertrade address">
+                            </div>
+                        </div>
+                    </form>
+                    <button type="submit" class="btn btn-default" onClick="transfer();">Transfer</button>
+                    <hr />
+					<h5>Change Group Parameters</h5>
+					<div class="alert alert-warning">Only Commune Account</div>
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="MgroupName">Group
+								Name:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="MgroupName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="Mcurrency">Group
+								Currency:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="Mcurrency">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="Mrate">Currency
+								Rate:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="Mrate">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="MdebitLimit">Default
+								Debit Limit:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="MdebitLimitG">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="McreditLimit">Default
+								Credit Limit:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="McreditLimitG">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="MIdebitLimit">Intertrade
+								Debit Limit:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="MIdebitLimitG">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="MIcreditLimit">Intertrade
+								Credit Limit:</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="MIcreditLimitG">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="Mopen">Open:</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="checkbox" id="Mopen">
+							</div>
+						</div>
+					</form>
+					<button type="submit" class="btn btn-default"
+						onClick="modifyGroup();">Modify</button>
+				</div>
+		</div>
+	</div>
+
+	<div class="panel-footer">
+		<p>
+			<img
+				src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png"
+				width="20" align="top" /> <i>Powered by ethereum</i>
+		</p>
+		<a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+			alt="Creative Commons License" style="border-width: 0"
+			src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This
+		work is licensed under a <a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
+			Commons Attribution-NonCommercial-ShareAlike 4.0 International
+			License</a>.
+	</div>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<html lang="en">
+<head>
+<title>Groups</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="web3.js"></script>
+<script type="text/javascript" src="bignumber.js"></script>
+<script type="text/javascript" src="creditCommons.js"></script>
+<script type="text/javascript">
+	window.onload = function() {
+
+		document.getElementById('me').innerHTML = "ETH Account: <b>"
+				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
+				+ myIsMember + "</b> Alias: <b>" + myAlias
+				+ "<br></b> Whisper Account: <b>" + myWhisper
+				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
+				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+
+		document.getElementById('numberG').innerHTML = "Number of groups: <b>"
+				+ nrGroups + "</b>";
+
+		var groupsList = "";
+		for (i = 0; i < nrGroups; i++) {
+			infoGroupNumber = creditCommons.getGroupbyIndex(i);
+
+			var infoGroup = creditCommons.getGroupDescription(infoGroupNumber);
+			var infoGroupName = infoGroup[0];
+			var infoGroupDescription = infoGroup[1];
+			var infoCurrencyName = infoGroup[2];
+			var infoGroupOpen = infoGroup[3];
+			var infoGroupNrM = infoGroup[4];
+
+			var infoGroupRates = creditCommons.getGroupRates(infoGroupNumber);
+			var infoRate = infoGroupRates[0];
+			var infoGroupDebitLimit = infoGroupRates[1];
+			var infoGroupCreditLimit = infoGroupRates[2];
+
+			var InfoGroupManagement = creditCommons
+					.getGroupManagement(infoGroupNumber);
+			var intertradeAccount = InfoGroupManagement[0];
+			var communeAccount = InfoGroupManagement[1];
+
+			groupsList += "<hr/><img src=\"https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png\" class=\"img-circle\" width=\"20\" height=\"20\"> Group ID: <b>" + infoGroupNumber
+					+ "</b> Group name: <b>" + infoGroupName + "</b> Open: <b>"
+					+ infoGroupOpen + "</b><br>Group Description: <i>"
+					+ infoGroupDescription
+					+ "</i><br/>Currency name: <span class=\"badge\">"
+					+ infoCurrencyName + "</span><br/> Rate: <b>" + infoRate
+					+ "</b><br/> Intertrade Account: <b>" + intertradeAccount
+					+ "</b><br/> Commune Account: <b>" + communeAccount
+					+ "</b>";
+		}
+
+		document.getElementById('listGroups').innerHTML = groupsList;
+	}
+
+	var newGroup = creditCommons
+			.NewGroup(
+					{},
+					{
+						fromBlock : 1400000,
+						toBlock : 'latest'
+					},
+					function(error, result) {
+						var groupsList = "";
+						var row = "";
+						var d;
+						newGroup
+								.watch(function(error, result) {
+									d = new Date(
+											result.args._NGTimeStamp * 1000);
+									row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> Created: "
+											+ d
+											+ "<br/><img src=\"https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png\" class=\"img-circle\" width=\"20\" height=\"20\"> Group ID: <b>"
+											+ result.args._groupIDN
+											+ "</b> Group Name: <b>"
+											+ result.args._groupNameN
+											+ "</b><br/>Group Creator: "
+											+ result.args._creator + "<br/>";
+									document.getElementById('listNewGroups').innerHTML = row;
+								});
+					});
+
+	var modifiedGroup = creditCommons
+			.ModifyGroup(
+					{},
+					{
+						fromBlock : 1400000,
+						toBlock : 'latest'
+					},
+					function(error, result) {
+						var row = "";
+						var d;
+						modifiedGroup
+								.watch(function(error, result) {
+									d = new Date(
+											result.args._MGTimeStamp * 1000);
+									row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> Modified: "
+											+ d
+											+ "<br/><img src=\"https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png\" class=\"img-circle\" width=\"20\" height=\"20\"> Group ID: <b>"
+											+ result.args._groupIDM
+											+ "</b> Group New Name: <b>"
+											+ result.args._groupNameM
+											+ "</b><br/>Commune: "
+											+ result.args._modifier + "<br/>";
+									document.getElementById('listModGroups').innerHTML = row;
+								});
+					});
+</script>
+<style>
+.navbar {
+	margin-bottom: 0;
+	border-radius: 0;
+}
+</style>
+</head>
+<body>
+	<div class="container bg-3 text-center">
+		<script type="text/javascript" src="navbar.js"></script>
+		<small><p class="bg-info" id="me"></p></small>
+		<div class="row">
+			<div class="col-sm-12">
+				<h3>Groups</h3>
+				<p id="numberG"></p>
+				<div class="text-left" id="listGroups"></div>
+				<h4>New Groups</h4>
+				<div class="text-left" id="listNewGroups"></div>
+				<h4>Modified Groups</h4>
+				<div class="text-left" id="listModGroups"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-footer">
+		<p>
+			<img
+				src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png"
+				width="20" align="top" /> <i>Powered by ethereum</i>
+		</p>
+		<a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+			alt="Creative Commons License" style="border-width: 0"
+			src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This
+		work is licensed under a <a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
+			Commons Attribution-NonCommercial-ShareAlike 4.0 International
+			License</a>.
+	</div>
+</body>
+</html>
