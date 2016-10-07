@@ -23,8 +23,8 @@ document.write(
 		'        <li class="dropdown-submenu">'+
 		'          <a class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-shopping-cart"></span> Marketplace</a>'+
 		'          <ul class="dropdown-menu">'+
-		'        <li><a href="members.html"><span class="glyphicon glyphicon-shopping-cart"></span> Shopping</a></li> '+
-		'        <li><a href="groups.html"><span class="glyphicon glyphicon-pushpin"></span> Manage offers</a></li> '+
+		'        <li><a href="shopping.html"><span class="glyphicon glyphicon-shopping-cart"></span> Shopping</a></li> '+
+		'        <li><a href="myOffers.html"><span class="glyphicon glyphicon-pushpin"></span> Manage offers</a></li> '+
 		'       	</ul>'+
 		'        </li>'+
 		'        <li class="dropdown-submenu">'+
@@ -55,9 +55,9 @@ document.write(
 		'          <a class="dropdown-toggle" data-toggle="dropdown" href="budget.html"><span class="glyphicon glyphicon-cloud"></span> Community</a>'+
 		'          <ul class="dropdown-menu">'+
 		'        <li><a href="budget.html"><span class="glyphicon glyphicon-th-list"></span> Commons Finances</a></li> '+
+		'        <li><a href="commune.html"><span class="glyphicon glyphicon-home"></span> Commune Budget</a></li> '+
 		'          <li><a href="civilService.html"><span class="glyphicon glyphicon-hourglass"></span> Community Service</a></li>        '+
 		'          <li><a href="funding.html"><span class="glyphicon glyphicon-cloud-upload"></span> Community Funding</a></li>        '+
-		'        <li><a href="commune.html"><span class="glyphicon glyphicon-home"></span> Commune Budget</a></li> '+
 		'        <li><a href="treasury.html"><span class="glyphicon glyphicon-lock"></span> Monetary Adjustments</a></li>'+
 		'        <li><a href="administration.html"><span class="glyphicon glyphicon-inbox"></span> Administration</a></li>'+
 		'          </ul>'+

@@ -11,6 +11,13 @@
   <script type="text/javascript" src="cc.js"></script>
   <script type="text/javascript" >	
 	window.onload = function () {
+	      document.getElementById('me').innerHTML = "ETH Account: <b>"
+              + myCoinbase + "<br></b> Credit Commons Member: <b>"
+              + myIsMember + "</b> Alias: <b>" + myAlias
+              + "<br></b> Whisper Account: <b>" + myWhisper
+              + "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+              + myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
+              + "</b> Is Commune: <b>" + isCommune + "</b>";
 	
 	document.getElementById('me').innerHTML = "alias: " + myAlias + "<br/> account: " + coinbase;
 	document.getElementById('goalFunding').innerText = goalCrowdFundig/baseUnits + " HR";

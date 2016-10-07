@@ -14,11 +14,14 @@
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
-        document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
-        + "<br></b> Credit Commons Member: <b>" + isMember + "</b> Alias: <b>" + myAlias
-        + "<br></b> Whisper Account: <b>" + whisperID
-        + "<br></b>Group ID: <b>" + myGroupID + "</b> Group Name: <b>" + groupName 
-        + "</b> Is Intertrade: <b>" + isIntertrade + "</b>" + "</b> Is Commune: <b>" + isCommune + "</b>";
+        document.getElementById('me').innerHTML = "ETH Account: <b>"
+            + myCoinbase + "<br></b> Credit Commons Member: <b>"
+            + myIsMember + "</b> Alias: <b>" + myAlias
+            + "<br></b> Whisper Account: <b>" + myWhisper
+            + "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+            + myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
+            + "</b> Is Commune: <b>" + isCommune + "</b>";
+            
 		var shh = web3.shh;
 		var identity = shh.newIdentity();
 		document.getElementById('postID').innerText = identity;
