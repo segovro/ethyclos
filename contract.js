@@ -59,6 +59,7 @@ contract ehtyclos {
 		uint creditTrust;
 		uint creditLine;
 		uint creditDeadline;
+		uint lastTransaction;
 	}
 	
 	// @notice map the members structure into an array indexed by the members
@@ -78,13 +79,14 @@ contract ehtyclos {
 			member[msg.sender].alias = _alias;
 			member[msg.sender].whisperID = _whisperID;
 			member[msg.sender].memberDescription = _description;
-			member[msg.sender].imageLink = _imageLink;
+			member[msg.sender].mImagelink = _imageLink;
 			member[msg.sender].memberCommunity = 0;
 			member[msg.sender].isExchange = false;
 			member[msg.sender].isCommune = false;
 			member[msg.sender].balance = 0;
 			member[msg.sender].creditLine = 0;
-			member[msg.sender].creditDeadline = 0;			
+			member[msg.sender].creditDeadline = 0;	
+			member[msg.sender].lastTransaction = now;
 		NewMember (msg.sender, _alias, _description, now);
 		memberIndex[memberIndex.length ++] = msg.sender;
 		nrMembers = nrMembers + 1;
@@ -96,7 +98,7 @@ contract ehtyclos {
 		if (bytes(_alias).length != 0) {member[msg.sender].alias = _alias;}
 		if (bytes(_whisperID).length != 0) {member[msg.sender].whisperID = _whisperID;}
 		if (bytes(_description).length != 0) {member[msg.sender].memberDescription = _description;}
-		if (bytes(_imageLink).length != 0) {member[msg.sender].imageLink = _imageLink;}
+		if (bytes(_imageLink).length != 0) {member[msg.sender].mImagelink = _imageLink;}
 		}
 	
 	// @notice anybody in the system can join a community if the community is
@@ -151,14 +153,13 @@ contract ehtyclos {
 		member[_memberOfCommunity].balance = 0;
 		member[_memberOfCommunity].memberCommunity = 0;
 		member[_memberOfCommunity].creditLine = 0;
-		member[_memberOfCommunity].creditLimit = 0;
 		community[_communityD].nrMembers = community[_communityD].nrMembers - 1;
 		ResignCommunity (_memberOfCommunity, member[_memberOfCommunity].alias, _communityD, community[_communityD].communityName, now);		
 		}
 	}
 
-	function getMember (address _memberG) constant returns (bool, string, string, uint, int, uint, uint) {
-	    return (member[_memberG].isMember, member[_memberG].alias, member[_memberG].memberDescription, member[_memberG].memberCommunity, member[_memberG].balance, member[_memberG].creditLine, member[_memberG].creditLimit);
+	function getMember (address _memberG) constant returns (bool, string, string, uint, int, uint) {
+	    return (member[_memberG].isMember, member[_memberG].alias, member[_memberG].memberDescription, member[_memberG].memberCommunity, member[_memberG].balance, member[_memberG].creditLine);
 	}
 	
 	function getMemberStatus (address _memberG) constant returns (bool, bool) {
@@ -166,7 +167,7 @@ contract ehtyclos {
 	}
 	
 	function getMemberWhisper (address _memberG) constant returns (string, string) {
-	   return (member[_memberG].whisperID, member[_memberG].imageLink);
+	   return (member[_memberG].whisperID, member[_memberG].mImagelink);
 	}
 			
 	function getMPbyIndex (uint _mIndex) constant returns (address _getMemberID) {
@@ -186,20 +187,14 @@ contract ehtyclos {
     	uint rate;
     	uint transferTax;
     	uint accumulationTax;
-    	unit rewardRate;
+    	uint rewardRate;
     	uint defaultMemberCreditLine;
     	uint defaultMemberCreditLimit;	
     	bool open;
     	uint nrMembers;
     	uint quorum;
-    	uint goalDemurrage;
-    	uint goalCrowdFunding;
-    	uint goalCommunityHours;
-    	uint goalExpenses;
-    	int realDemurrage;
-    	uint realCrowdFunding;
-    	int realCommunityHours;
-    	uint realExpenses; 	
+    	uint goalIncomes;
+    	uint goalSpenditures;
     	int totalMinted;
     	uint totalCredit;
     	uint totalTrustCost;
@@ -222,7 +217,7 @@ contract ehtyclos {
 	// communities
     // @notice the commune account holding the community common moneys, such as
 	// taxes
-    function createCommunity (string _communityName, string _description, string _currencyName, uint _creditLine, uint _creditLimit, uint _exchangecreditLine, uint _exchangeCreditLimit, bool _open) {
+    function createCommunity (string _communityName, string _description, string _currencyName, uint _creditLine, uint _creditLimit, uint _exchangeCreditLine, bool _open) {
     	// @notice the member exists in the system and the member is not in a
 		// community and the name is valid
     	if (member[msg.sender].isMember = true) {
@@ -242,14 +237,8 @@ contract ehtyclos {
     					community[communityID].open = _open;
     					community[communityID].nrMembers = 1;
     					community[communityID].quorum = 3;
-    					community[communityID].goalDemurrage;
-    			    	community[communityID].goalCrowdFunding;
-    			    	community[communityID].goalCommunityHours;
-    			    	community[communityID].goalExpenses;
-    			    	community[communityID].realDemurrage;
-    			    	community[communityID].realCrowdFunding;
-    			    	community[communityID].realCommunityHours;
-    			    	community[communityID].realExpenses = 0;	
+    					community[communityID].goalIncomes;
+    			    	community[communityID].goalSpenditures;
     			    	community[communityID].totalMinted;
     			    	community[communityID].totalCredit;
     			    	community[communityID].totalTrustCost;
@@ -261,8 +250,7 @@ contract ehtyclos {
     						member[msg.sender].isExchange = true;
     						member[msg.sender].isCommune = true;
     						member[msg.sender].balance = 0;
-    						member[msg.sender].creditLine = _exchangecreditLine;
-    						member[msg.sender].creditLimit = _exchangeCreditLimit;
+    						member[msg.sender].creditLine = _exchangeCreditLine;
     					communityIndex[communityIndex.length ++] = communityID;
     					nrCommunities = nrCommunities +1;
     				} 
@@ -305,7 +293,7 @@ contract ehtyclos {
     // @notice the commune can modify one, several or all parameters of a
 	// community. If one parameter is left empty, it remains the same. Only the
 	// exchange commune can change its parameters
-    function modifyCommunity (uint _communityID, string _communityName, string _description, string _currencyName, uint _rate, uint _creditLine, uint _creditLimit, uint _exchangecreditLine, uint _exchangeCreditLimit, bool _open, uint _newQuorum) {
+    function modifyCommunity (uint _communityID, string _communityName, string _description, string _currencyName, uint _rate, uint _creditLine, uint _exchangeCreditLine, uint _exchangeCreditLimit, bool _open, uint _newQuorum) {
     	        if (msg.sender == community[_communityID].commune) {
     			// @notice if a value for a parameter is given, change the
 				// parameter, if empty retain old value
@@ -314,9 +302,7 @@ contract ehtyclos {
     			if (bytes(_currencyName).length != 0) {community[_communityID].currencyName = _currencyName;}
     			if (_rate != 0) {community[_communityID].rate = _rate;}	
     			if (_creditLine != 0) {community[_communityID].defaultMemberCreditLine = _creditLine;}
-    			if (_creditLimit != 0) {community[_communityID].defaultMemberCreditLimit = _creditLimit;}
-    			if (_exchangecreditLine != 0) {member[community[_communityID].exchangeAccount].creditLine = _exchangecreditLine;}
-    			if (_exchangeCreditLimit != 0) {member[community[_communityID].exchangeAccount].creditLimit = _exchangeCreditLimit;}
+    			if (_exchangeCreditLine != 0) {member[community[_communityID].exchangeAccount].creditLine = _exchangeCreditLine;}
     			if (_open == true) {community[_communityID].open = true;}	
     			if (_newQuorum != 0) {community[_communityID].quorum = _newQuorum;}	
     			ModifyCommunity (msg.sender, _communityID, _communityName, now);				
@@ -352,7 +338,6 @@ contract ehtyclos {
 		// with only integers
 		int _intFromAmount = int (_fromAmount);
 		int _intFromDLimit = - int(member[msg.sender].creditLine);
-		int _intToCLimit = int(member[msg.sender].creditLimit);
 		int _toAmount = 0;
 		// @notice check if both accounts are in the same community
 		if (member[msg.sender].memberCommunity == member[_to].memberCommunity) {
@@ -397,8 +382,9 @@ contract ehtyclos {
 	// from today
 	function endorseCredit (address _borrower, uint _credit, uint _daysAfter)  {
 		if (member[msg.sender].memberCommunity == member[_borrower].memberCommunity) {
+			uint _community = member[msg.sender].memberCommunity;
 			updateCredit (_borrower); 	
-		if (member[_borrower].creditLine > 0) {cancelCredit (_borrower)};
+		if (member[_borrower].creditLine > 0) {cancelCredit (_borrower);}
 			uint _unitsOfTrust = _credit * _daysAfter;
 			if (member[msg.sender].trust > _unitsOfTrust) {
 				member[msg.sender].trust -= _unitsOfTrust;
@@ -409,26 +395,29 @@ contract ehtyclos {
 				uint _creditDeadline = now + _daysAfter * 1 days; 
 				member[_borrower].deadline = _creditDeadline; 
 				member[_borrower].creditTrust = _unitsOfTrust;
-				community[_borrower].totalCredit += _credit;
-				community[_borrower].totalTrustCost += _unitsOfTrust;
-				community[_borrower].totalTrustAvailable -= _unitsOfTrust;
+				community[_community].totalCredit += _credit;
+				community[_community].totalTrustCost += _unitsOfTrust;
+				community[_community].totalTrustAvailable -= _unitsOfTrust;
 				Credit(msg.sender, _borrower, _creditDeadline, _unitsOfTrust);		
 			}
-		}}
+		}
 	}
 	
-	function cancelCredit internal (address _borrower) {
+	function cancelCredit (address _borrower) internal {
+		uint _community = member[_borrower].memberCommunity;
+		uint _credit = member[_borrower].creditLine;
 		address _moneyLender = member[_borrower].moneyLender;
 		uint _unitsOfTrust = member[_borrower].creditTrust;
 		member[_moneyLender].trust += _unitsOfTrust;
 		member[_borrower].creditLine = 0;
 		member[_borrower].creditDeadline = 0;	
-		community[msg.sender].totalCredit -= _credit;
-		community[msg.sender].totalTrustCost -= _unitsOfTrust;
-		community[msg.sender].totalTrustAvailable += _unitsOfTrust;
+		community[_community].totalCredit -= _credit;
+		community[_community].totalTrustCost -= _unitsOfTrust;
+		community[_community].totalTrustAvailable += _unitsOfTrust;
 	}
 	
-	function updateCredit internal (address _borrower) {
+	function updateCredit (address _borrower) internal {
+		uint _community = member[_borrower].memberCommunity;
 		// @notice update the credit status
 		if (member[_borrower].creditLine > 0) {
 		// @notice check if deadline is over
@@ -436,26 +425,26 @@ contract ehtyclos {
 				bool _success = false;
 				uint _credit = member[_borrower].creditLine;
 				uint _creditTrust = member[_borrower].creditTrust;
-				int _reward = _creditTrust * community[_borrower].rewardRate/100;
+				int _reward = _creditTrust * community[_community].rewardRate/100;
 				address _moneyLender = member[_borrower].moneyLender;
 			// @notice if time is over reset credit to zero, deadline to zero
 				member[_borrower].deadline = 0;
-				community[_borrower].totalCredit -= _credit;
+				community[_community].totalCredit -= _credit;
 				member[_borrower].creditLine = 0;				
-				community[_borrower].totalTrustCost -= _creditTrust;
+				community[_community].totalTrustCost -= _creditTrust;
 				// @notice if balance is negative the credit was not returned, the money lender balanceReputation is not restored and is penalized with a 20%
 				// @notice as regards the borrower will not be able to make any new transfer until future incomes cover the debts
 				// @return money lender reputation penalized
 				if (member[_borrower].balance < 0) {					
 					member[_moneyLender].trust += _creditTrust - _reward;
-					community[_borrower].totalTrustAvailable += _creditTrust - _reward;
+					community[_community].totalTrustAvailable += _creditTrust - _reward;
 				}
 				// @notice if balance is not negative the credit was returned, the money lender balanceReputation is restored and is rewardRateed with a 20%
 				// @return money lender reputation rewarded
 				else {
 					_success = true;
 					member[_moneyLender].trust += _creditTrust + _reward;
-					community[_borrower].totalTrustAvailable += _creditTrust + _reward;
+					community[_community].totalTrustAvailable += _creditTrust + _reward;
 				}
 				// @notice reset money lender information
 				// @return money lender information deleted
@@ -469,17 +458,33 @@ contract ehtyclos {
 	
 	function transfer () {}
 	function exchange () {}
-	function payAccTax () {}
-	function payTrnsTax () {}
+	function payAccTax (uint _amount) internal {
+		uint _community = member[msg.sender].memberCommunity;
+		address _commune = community[_community].commune;
+		uint _timeYears = (now - member[msg.sender].lastTransaction)/(1 years);
+		uint _taxRate = community[_community].accumulationTax;
+		uint _tax = member[msg.sender].balance * _taxRate * _timeYears / 100;
+		member[msg.sender].balance -= _tax;
+		member[_commune].balance += _tax;		
+	}
+	
+	function payTrnsTax (address _to, uint _amount) internal {
+		uint _community = member[_to].memberCommunity;
+		address _commune = community[_community].commune;
+		uint _taxRate = community[_community].transactionTax;
+		uint _tax = _amount * _taxRate / 100;
+		member[msg.sender].balance -= _tax;
+		member[_commune].balance += _tax;	
+	}
 		
 		struct sells {
 		address seller;
 		address buyer;
 		string description;
 		string sImageLink;
-		uint = unitPrice; 
+		uint unitPrice; 
 		uint sellAmount;
-		unit sellTax;
+		uint sellTax;
 		uint sellDateTime;
 		bool paid;
 	    }
@@ -487,15 +492,15 @@ contract ehtyclos {
 	mapping(uint => sells) sell;    
 
 	function createsell (address _buyer, string _description, uint _sellAmount) {
-	    nrsells ++;
-		uint sellNumber = nrsells;
+	    nrSells ++;
+		uint sellNumber = nrSells;
 		sell[sellNumber].seller = msg.sender;
 		sell[sellNumber].buyer = _buyer;
 		sell[sellNumber].description = _description;
 		sell[sellNumber].sellAmount = _sellAmount;
 		sell[sellNumber].sellDateTime = now;
 		sell[sellNumber].paid = false;	
-		sell (nrsells, msg.sender, _buyer, _description, _sellAmount, now)
+		Sell (nrSells, msg.sender, _buyer, _description, _sellAmount, now);
 	}
 
 	function paysell (uint _sellNumber) {
@@ -506,7 +511,7 @@ contract ehtyclos {
 	}	
 	
 	function getsell (uint _sellNumber) constant returns (address, address, string, uint, uint, bool) {
-		return (sell[_sellNumber].seller, sell[_sellNumber].buyer, sell[_sellNumber].description, sell[_sellNumber].sellAmount, sell[sellNumber].sellDateTime, sell[_sellNumber].paid);
+		return (sell[_sellNumber].seller, sell[_sellNumber].buyer, sell[_sellNumber].description, sell[_sellNumber].sellAmount, sell[_sellNumber].sellDateTime, sell[_sellNumber].paid);
 	}
     
     event ProposalAdded(uint proposalNumber, uint community, string description, address creator);
