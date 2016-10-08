@@ -11,17 +11,17 @@
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="web3.js"></script>
 <script type="text/javascript" src="bignumber.js"></script>
-<script type="text/javascript" src="creditCommons.js"></script>
+<script type="text/javascript" src="ethyclos.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
-        document.getElementById('me').innerHTML = "ETH Account: <b>"
-            + myCoinbase + "<br></b> Credit Commons Member: <b>"
-            + myIsMember + "</b> Alias: <b>" + myAlias
-            + "<br></b> Whisper Account: <b>" + myWhisper
-            + "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
-            + myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
-            + "</b> Is Commune: <b>" + isCommune + "</b>";
-            
+		document.getElementById('me').innerHTML = "ETH Account: <b>"
+				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
+				+ myIsMember + "</b> Alias: <b>" + myAlias
+				+ "<br></b> Whisper Account: <b>" + myWhisper
+				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
+				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+
 		document.getElementById('myBalance').innerHTML = "<h2>" + myBalance
 				+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
 		document.getElementById('myDebitLimit').innerHTML = myDebitLimit

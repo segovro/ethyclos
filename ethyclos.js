@@ -11,31 +11,20 @@ var creditcommonsContract = web3.eth.contract([ {
 	} ],
 	"name" : "closeProposal",
 	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
-	"constant" : true,
+	"constant" : false,
 	"inputs" : [ {
-		"name" : "_groupG",
+		"name" : "_newMember",
+		"type" : "address"
+	}, {
+		"name" : "_communityJ",
 		"type" : "uint256"
 	} ],
-	"name" : "getGroupManagement",
-	"outputs" : [ {
-		"name" : "",
-		"type" : "address",
-		"value" : "0x0000000000000000000000000000000000000000"
-	}, {
-		"name" : "",
-		"type" : "address",
-		"value" : "0x0000000000000000000000000000000000000000"
-	}, {
-		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
-	}, {
-		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
-	} ],
+	"name" : "acceptAtCommunity",
+	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : true,
@@ -43,9 +32,9 @@ var creditcommonsContract = web3.eth.contract([ {
 	"name" : "sysAdmin",
 	"outputs" : [ {
 		"name" : "",
-		"type" : "address",
-		"value" : "0xa6b753eaec2c2ea4afc1fcc91ae2836480b2d237"
+		"type" : "address"
 	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : true,
@@ -56,70 +45,37 @@ var creditcommonsContract = web3.eth.contract([ {
 	"name" : "getMember",
 	"outputs" : [ {
 		"name" : "",
-		"type" : "bool",
-		"value" : false
+		"type" : "bool"
 	}, {
 		"name" : "",
-		"type" : "string",
-		"value" : ""
+		"type" : "string"
 	}, {
 		"name" : "",
-		"type" : "string",
-		"value" : ""
+		"type" : "string"
 	}, {
 		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
+		"type" : "uint256"
 	}, {
 		"name" : "",
-		"type" : "int256",
-		"value" : "0"
+		"type" : "int256"
 	}, {
 		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
-	}, {
-		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
+		"type" : "uint256"
 	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_newMember",
+		"name" : "_communityID",
+		"type" : "uint256"
+	}, {
+		"name" : "_newCommune",
 		"type" : "address"
-	}, {
-		"name" : "_groupJ",
-		"type" : "uint256"
 	} ],
-	"name" : "acceptAtGroup",
+	"name" : "transferCommunityCommune",
 	"outputs" : [],
-	"type" : "function"
-}, {
-	"constant" : true,
-	"inputs" : [ {
-		"name" : "_proposalNumber",
-		"type" : "uint256"
-	} ],
-	"name" : "getProposalVotes",
-	"outputs" : [ {
-		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
-	}, {
-		"name" : "",
-		"type" : "int256",
-		"value" : "0"
-	}, {
-		"name" : "",
-		"type" : "bool",
-		"value" : false
-	}, {
-		"name" : "",
-		"type" : "bool",
-		"value" : false
-	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
@@ -132,42 +88,48 @@ var creditcommonsContract = web3.eth.contract([ {
 	}, {
 		"name" : "_description",
 		"type" : "string"
+	}, {
+		"name" : "_imageLink",
+		"type" : "string"
 	} ],
-	"name" : "modifyMember",
+	"name" : "modifyMemberInfo",
 	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
-	"constant" : false,
+	"constant" : true,
 	"inputs" : [ {
-		"name" : "_groupName",
-		"type" : "string"
-	}, {
-		"name" : "_description",
-		"type" : "string"
-	}, {
-		"name" : "_currencyName",
-		"type" : "string"
-	}, {
-		"name" : "_rate",
+		"name" : "_proposalNumber",
+		"type" : "uint256"
+	} ],
+	"name" : "getProposalVotes",
+	"outputs" : [ {
+		"name" : "",
 		"type" : "uint256"
 	}, {
-		"name" : "_debitLimit",
-		"type" : "uint256"
+		"name" : "",
+		"type" : "int256"
 	}, {
-		"name" : "_creditLimit",
-		"type" : "uint256"
+		"name" : "",
+		"type" : "bool"
 	}, {
-		"name" : "_intertradeDebitLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_intertradeCreditLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_open",
+		"name" : "",
 		"type" : "bool"
 	} ],
-	"name" : "createGroup",
-	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [ {
+		"name" : "_gIndex",
+		"type" : "uint256"
+	} ],
+	"name" : "getCommunitybyIndex",
+	"outputs" : [ {
+		"name" : "_getCommunityID",
+		"type" : "uint256"
+	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
@@ -177,6 +139,7 @@ var creditcommonsContract = web3.eth.contract([ {
 	} ],
 	"name" : "transferSysAdmin",
 	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : true,
@@ -187,58 +150,9 @@ var creditcommonsContract = web3.eth.contract([ {
 	"name" : "getMPbyIndex",
 	"outputs" : [ {
 		"name" : "_getMemberID",
-		"type" : "address",
-		"value" : "0x0000000000000000000000000000000000000000"
+		"type" : "address"
 	} ],
-	"type" : "function"
-}, {
-	"constant" : true,
-	"inputs" : [],
-	"name" : "getNumberGroups",
-	"outputs" : [ {
-		"name" : "_nrG",
-		"type" : "uint256",
-		"value" : "0"
-	} ],
-	"type" : "function"
-}, {
-	"constant" : false,
-	"inputs" : [ {
-		"name" : "_groupID",
-		"type" : "uint256"
-	}, {
-		"name" : "_groupName",
-		"type" : "string"
-	}, {
-		"name" : "_description",
-		"type" : "string"
-	}, {
-		"name" : "_currencyName",
-		"type" : "string"
-	}, {
-		"name" : "_rate",
-		"type" : "uint256"
-	}, {
-		"name" : "_debitLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_creditLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_intertradeDebitLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_intertradeCreditLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_open",
-		"type" : "bool"
-	}, {
-		"name" : "_newQuorum",
-		"type" : "uint256"
-	} ],
-	"name" : "modifyGroup",
-	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : true,
@@ -249,22 +163,28 @@ var creditcommonsContract = web3.eth.contract([ {
 	"name" : "getMemberWhisper",
 	"outputs" : [ {
 		"name" : "",
-		"type" : "string",
-		"value" : ""
+		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "string"
 	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
-	"constant" : true,
+	"constant" : false,
 	"inputs" : [ {
-		"name" : "_gIndex",
+		"name" : "_borrower",
+		"type" : "address"
+	}, {
+		"name" : "_credit",
+		"type" : "uint256"
+	}, {
+		"name" : "_daysAfter",
 		"type" : "uint256"
 	} ],
-	"name" : "getGroupbyIndex",
-	"outputs" : [ {
-		"name" : "_getGroupID",
-		"type" : "uint256",
-		"value" : "0"
-	} ],
+	"name" : "endorseCredit",
+	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : true,
@@ -272,22 +192,77 @@ var creditcommonsContract = web3.eth.contract([ {
 	"name" : "getTotals",
 	"outputs" : [ {
 		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
+		"type" : "uint256"
 	}, {
 		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
+		"type" : "uint256"
 	}, {
 		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
 	} ],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [],
+	"name" : "transfer",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [ {
+		"name" : "_communityG",
+		"type" : "uint256"
+	} ],
+	"name" : "getCommunityRates",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_proposalGroup",
+		"name" : "_communityName",
+		"type" : "string"
+	}, {
+		"name" : "_description",
+		"type" : "string"
+	}, {
+		"name" : "_currencyName",
+		"type" : "string"
+	}, {
+		"name" : "_creditLine",
+		"type" : "uint256"
+	}, {
+		"name" : "_creditLimit",
+		"type" : "uint256"
+	}, {
+		"name" : "_exchangeCreditLine",
+		"type" : "uint256"
+	}, {
+		"name" : "_open",
+		"type" : "bool"
+	} ],
+	"name" : "createCommunity",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_proposalCommunity",
 		"type" : "uint256"
 	}, {
 		"name" : "_title",
@@ -304,33 +279,23 @@ var creditcommonsContract = web3.eth.contract([ {
 	} ],
 	"name" : "newProposal",
 	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_payer",
+		"name" : "_buyer",
 		"type" : "address"
 	}, {
 		"name" : "_description",
 		"type" : "string"
 	}, {
-		"name" : "_billAmount",
+		"name" : "_sellAmount",
 		"type" : "uint256"
 	} ],
-	"name" : "createBill",
+	"name" : "createsell",
 	"outputs" : [],
-	"type" : "function"
-}, {
-	"constant" : false,
-	"inputs" : [ {
-		"name" : "_groupID",
-		"type" : "uint256"
-	}, {
-		"name" : "_newIntertrade",
-		"type" : "address"
-	} ],
-	"name" : "transferGroupIntertrade",
-	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
@@ -343,64 +308,7 @@ var creditcommonsContract = web3.eth.contract([ {
 	} ],
 	"name" : "transfer",
 	"outputs" : [],
-	"type" : "function"
-}, {
-	"constant" : true,
-	"inputs" : [ {
-		"name" : "_billNumber",
-		"type" : "uint256"
-	} ],
-	"name" : "getBill",
-	"outputs" : [ {
-		"name" : "",
-		"type" : "address",
-		"value" : "0x0000000000000000000000000000000000000000"
-	}, {
-		"name" : "",
-		"type" : "address",
-		"value" : "0x0000000000000000000000000000000000000000"
-	}, {
-		"name" : "",
-		"type" : "string",
-		"value" : ""
-	}, {
-		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
-	}, {
-		"name" : "",
-		"type" : "bool",
-		"value" : false
-	} ],
-	"type" : "function"
-}, {
-	"constant" : true,
-	"inputs" : [ {
-		"name" : "_groupG",
-		"type" : "uint256"
-	} ],
-	"name" : "getGroupDescription",
-	"outputs" : [ {
-		"name" : "",
-		"type" : "string",
-		"value" : ""
-	}, {
-		"name" : "",
-		"type" : "string",
-		"value" : ""
-	}, {
-		"name" : "",
-		"type" : "string",
-		"value" : ""
-	}, {
-		"name" : "",
-		"type" : "bool",
-		"value" : false
-	}, {
-		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
-	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
@@ -413,30 +321,98 @@ var creditcommonsContract = web3.eth.contract([ {
 	}, {
 		"name" : "_description",
 		"type" : "string"
+	}, {
+		"name" : "_imageLink",
+		"type" : "string"
 	} ],
 	"name" : "registerSystem",
 	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_candidateGroup",
+		"name" : "_communityID",
+		"type" : "uint256"
+	}, {
+		"name" : "_communityName",
+		"type" : "string"
+	}, {
+		"name" : "_description",
+		"type" : "string"
+	}, {
+		"name" : "_currencyName",
+		"type" : "string"
+	}, {
+		"name" : "_rate",
+		"type" : "uint256"
+	}, {
+		"name" : "_creditLine",
+		"type" : "uint256"
+	}, {
+		"name" : "_exchangeCreditLine",
+		"type" : "uint256"
+	}, {
+		"name" : "_exchangeCreditLimit",
+		"type" : "uint256"
+	}, {
+		"name" : "_open",
+		"type" : "bool"
+	}, {
+		"name" : "_newQuorum",
+		"type" : "uint256"
+	} ],
+	"name" : "modifyCommunity",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_communityJ",
+		"type" : "uint256"
+	} ],
+	"name" : "joinCommunity",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_candidateCommunity",
 		"type" : "uint256"
 	} ],
 	"name" : "proposeAcceptanceAsMember",
 	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
-	"constant" : false,
+	"constant" : true,
 	"inputs" : [ {
-		"name" : "_memberOfGroup",
-		"type" : "address"
-	}, {
-		"name" : "_groupD",
+		"name" : "_sellNumber",
 		"type" : "uint256"
 	} ],
-	"name" : "kickOutGroup",
-	"outputs" : [],
+	"name" : "getsell",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "address"
+	}, {
+		"name" : "",
+		"type" : "address"
+	}, {
+		"name" : "",
+		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "bool"
+	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : true,
@@ -447,56 +423,21 @@ var creditcommonsContract = web3.eth.contract([ {
 	"name" : "getProposal",
 	"outputs" : [ {
 		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
-	}, {
-		"name" : "",
-		"type" : "string",
-		"value" : ""
-	}, {
-		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
-	}, {
-		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
-	}, {
-		"name" : "",
-		"type" : "address",
-		"value" : "0x0000000000000000000000000000000000000000"
-	} ],
-	"type" : "function"
-}, {
-	"constant" : true,
-	"inputs" : [ {
-		"name" : "_groupG",
 		"type" : "uint256"
-	} ],
-	"name" : "getGroupRates",
-	"outputs" : [ {
-		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
 	}, {
 		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
+		"type" : "string"
 	}, {
 		"name" : "",
-		"type" : "uint256",
-		"value" : "0"
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "address"
 	} ],
-	"type" : "function"
-}, {
-	"constant" : true,
-	"inputs" : [],
-	"name" : "getNumberMembers",
-	"outputs" : [ {
-		"name" : "_nrM",
-		"type" : "uint256",
-		"value" : "0"
-	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : true,
@@ -510,9 +451,16 @@ var creditcommonsContract = web3.eth.contract([ {
 	"name" : "getIfVoted",
 	"outputs" : [ {
 		"name" : "",
-		"type" : "bool",
-		"value" : false
+		"type" : "bool"
 	} ],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [],
+	"name" : "exchange",
+	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : true,
@@ -523,13 +471,28 @@ var creditcommonsContract = web3.eth.contract([ {
 	"name" : "getMemberStatus",
 	"outputs" : [ {
 		"name" : "",
-		"type" : "bool",
-		"value" : false
+		"type" : "bool"
 	}, {
 		"name" : "",
-		"type" : "bool",
-		"value" : false
+		"type" : "bool"
 	} ],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [ {
+		"name" : "_communityG",
+		"type" : "uint256"
+	} ],
+	"name" : "getCommunityManagement",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "address"
+	}, {
+		"name" : "",
+		"type" : "address"
+	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
@@ -542,61 +505,83 @@ var creditcommonsContract = web3.eth.contract([ {
 	} ],
 	"name" : "vote",
 	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_groupJ",
+		"name" : "_communityID",
 		"type" : "uint256"
+	}, {
+		"name" : "_newExchange",
+		"type" : "address"
 	} ],
-	"name" : "joinGroup",
+	"name" : "transferCommunityExchange",
 	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_billNumber",
+		"name" : "_memberOfCommunity",
+		"type" : "address"
+	}, {
+		"name" : "_communityD",
 		"type" : "uint256"
 	} ],
-	"name" : "payBill",
+	"name" : "kickOutCommunity",
 	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
 	"inputs" : [],
-	"name" : "resignFromGroup",
+	"name" : "resignFromCommunity",
 	"outputs" : [],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_groupMember",
-		"type" : "address"
-	}, {
-		"name" : "_newDebitLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_newCreditLimit",
+		"name" : "_sellNumber",
 		"type" : "uint256"
 	} ],
-	"name" : "modifyMemberLimits",
+	"name" : "paysell",
 	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [ {
+		"name" : "_communityG",
+		"type" : "uint256"
+	} ],
+	"name" : "getCommunityDescription",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "bool"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	} ],
+	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
-	"inputs" : [ {
-		"name" : "_groupID",
-		"type" : "uint256"
-	}, {
-		"name" : "_newCommune",
-		"type" : "address"
-	} ],
-	"name" : "transferGroupCommune",
-	"outputs" : [],
-	"type" : "function"
-}, {
 	"inputs" : [],
-	"type" : "constructor"
+	"name" : "ethyclos",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
 }, {
 	"anonymous" : false,
 	"inputs" : [ {
@@ -605,18 +590,18 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "address"
 	}, {
 		"indexed" : true,
-		"name" : "_groupIDN",
+		"name" : "_community",
 		"type" : "uint256"
 	}, {
 		"indexed" : false,
-		"name" : "_groupNameN",
+		"name" : "_communityName",
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_NGTimeStamp",
+		"name" : "_TimeStamp",
 		"type" : "uint256"
 	} ],
-	"name" : "NewGroup",
+	"name" : "NewCommunity",
 	"type" : "event"
 }, {
 	"anonymous" : false,
@@ -626,36 +611,36 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "address"
 	}, {
 		"indexed" : true,
-		"name" : "_groupIDM",
+		"name" : "_community",
 		"type" : "uint256"
 	}, {
 		"indexed" : false,
-		"name" : "_groupNameM",
+		"name" : "_communityName",
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_MGTimeStamp",
+		"name" : "_TimeStamp",
 		"type" : "uint256"
 	} ],
-	"name" : "ModifyGroup",
+	"name" : "ModifyCommunity",
 	"type" : "event"
 }, {
 	"anonymous" : false,
 	"inputs" : [ {
 		"indexed" : true,
-		"name" : "_memberAddressN",
+		"name" : "_memberAddress",
 		"type" : "address"
 	}, {
 		"indexed" : false,
-		"name" : "_memberAliasN",
+		"name" : "_memberAlias",
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_descriptionN",
+		"name" : "_description",
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_NMTimeStamp",
+		"name" : "_TimeStamp",
 		"type" : "uint256"
 	} ],
 	"name" : "NewMember",
@@ -664,51 +649,51 @@ var creditcommonsContract = web3.eth.contract([ {
 	"anonymous" : false,
 	"inputs" : [ {
 		"indexed" : false,
-		"name" : "_memberJG",
+		"name" : "_member",
 		"type" : "address"
 	}, {
 		"indexed" : false,
-		"name" : "_aliasJG",
+		"name" : "_alias",
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_groupJG",
+		"name" : "_community",
 		"type" : "uint256"
 	}, {
 		"indexed" : false,
-		"name" : "_groupNameJG",
+		"name" : "_communityName",
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_JGTimeStamp",
+		"name" : "_TimeStamp",
 		"type" : "uint256"
 	} ],
-	"name" : "JoinGroup",
+	"name" : "JoinCommunity",
 	"type" : "event"
 }, {
 	"anonymous" : false,
 	"inputs" : [ {
 		"indexed" : false,
-		"name" : "_memberRG",
+		"name" : "_member",
 		"type" : "address"
 	}, {
 		"indexed" : false,
-		"name" : "_aliasRG",
+		"name" : "_alias",
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_groupRG",
+		"name" : "_community",
 		"type" : "uint256"
 	}, {
 		"indexed" : false,
-		"name" : "_groupNameRG",
+		"name" : "_communityName",
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_RGTimeStamp",
+		"name" : "_TimeStamp",
 		"type" : "uint256"
 	} ],
-	"name" : "ResignGroup",
+	"name" : "ResignCommunity",
 	"type" : "event"
 }, {
 	"anonymous" : false,
@@ -730,10 +715,85 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "int256"
 	}, {
 		"indexed" : false,
-		"name" : "_tTimeStamp",
+		"name" : "_TimeStamp",
 		"type" : "uint256"
 	} ],
 	"name" : "Transaction",
+	"type" : "event"
+}, {
+	"anonymous" : false,
+	"inputs" : [ {
+		"indexed" : true,
+		"name" : "_MoneyLender",
+		"type" : "address"
+	}, {
+		"indexed" : true,
+		"name" : "_borrowerAddress",
+		"type" : "address"
+	}, {
+		"indexed" : false,
+		"name" : "_cDealine",
+		"type" : "uint256"
+	}, {
+		"indexed" : false,
+		"name" : "_endorsedUoT",
+		"type" : "uint256"
+	} ],
+	"name" : "Credit",
+	"type" : "event"
+}, {
+	"anonymous" : false,
+	"inputs" : [ {
+		"indexed" : true,
+		"name" : "_moneyLender",
+		"type" : "address"
+	}, {
+		"indexed" : true,
+		"name" : "_borrower",
+		"type" : "address"
+	}, {
+		"indexed" : false,
+		"name" : "_creditCost",
+		"type" : "uint256"
+	}, {
+		"indexed" : false,
+		"name" : "_success",
+		"type" : "bool"
+	}, {
+		"indexed" : false,
+		"name" : "_TimeStamp",
+		"type" : "uint256"
+	} ],
+	"name" : "CreditExp",
+	"type" : "event"
+}, {
+	"anonymous" : false,
+	"inputs" : [ {
+		"indexed" : false,
+		"name" : "_sellNumber",
+		"type" : "uint256"
+	}, {
+		"indexed" : true,
+		"name" : "_seller",
+		"type" : "address"
+	}, {
+		"indexed" : true,
+		"name" : "_buyer",
+		"type" : "address"
+	}, {
+		"indexed" : false,
+		"name" : "_description",
+		"type" : "string"
+	}, {
+		"indexed" : false,
+		"name" : "_sellAmount",
+		"type" : "uint256"
+	}, {
+		"indexed" : false,
+		"name" : "_TimeStamp",
+		"type" : "uint256"
+	} ],
+	"name" : "Sell",
 	"type" : "event"
 }, {
 	"anonymous" : false,
@@ -743,7 +803,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "uint256"
 	}, {
 		"indexed" : false,
-		"name" : "group",
+		"name" : "community",
 		"type" : "uint256"
 	}, {
 		"indexed" : false,
@@ -864,7 +924,8 @@ var intertradeDebitLimit = intertradeWallet[5];
 var intertradeCreditLimit = intertradeWallet[6];
 
 var me = "ETH Account: <b>" + myCoinbase
-+ "<br></b> Credit Commons Member: <b>" + myIsMember + "</b> Alias: <b>" + myAlias 
-+ "<br></b> Whisper Account: <b>" + myWhisper 
-+ "<br></b>Group ID: <b>" + myGroup + "</b> Group Name: <b>" + groupName
-+ "<br></b> Is Intertrade: <b>" + isIntertrade + "</b> Is Commune: <b>" + isCommune + "</b>";
+		+ "<br></b> Credit Commons Member: <b>" + myIsMember
+		+ "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
+		+ myWhisper + "<br></b>Group ID: <b>" + myGroup
+		+ "</b> Group Name: <b>" + groupName + "<br></b> Is Intertrade: <b>"
+		+ isIntertrade + "</b> Is Commune: <b>" + isCommune + "</b>";

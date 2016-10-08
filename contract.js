@@ -354,14 +354,12 @@ contract ehtyclos {
 			_toAmount = _intFromAmount * _rateSender/ _rateReceiver;
 			// @notice if the community limits are not surpassed, we proceed
 			// with the transfer
-			if (((member[_fromCommunityAccount].balance - _intFromAmount) > - int(member[_fromCommunityAccount].creditLine)) 
-				&& ((member[_toCommunityAccount].balance + _toAmount) < int(member[_toCommunityAccount].creditLimit))) {
+			if ((member[_fromCommunityAccount].balance - _intFromAmount) > - int(member[_fromCommunityAccount].creditLine)) {
 				} 
 		} 
 		// @notice if the member limits are not surpassed, we proceed with the
 		// transfer
-			if (((member[msg.sender].balance - _intFromAmount) > _intFromDLimit) 
-				&& ((member[_to].balance + _toAmount) < _intToCLimit)) { 
+			if ((member[msg.sender].balance - _intFromAmount) > _intFromDLimit)  { 
 				member[msg.sender].balance -= _intFromAmount;
 				member[_to].balance += _toAmount;
 				// @notice adjust exchange accounts
@@ -393,7 +391,7 @@ contract ehtyclos {
 				// @notice the _deadline is established as a number of days
 				// ahead
 				uint _creditDeadline = now + _daysAfter * 1 days; 
-				member[_borrower].deadline = _creditDeadline; 
+				member[_borrower].creditDeadline = _creditDeadline; 
 				member[_borrower].creditTrust = _unitsOfTrust;
 				community[_community].totalCredit += _credit;
 				community[_community].totalTrustCost += _unitsOfTrust;
@@ -421,14 +419,14 @@ contract ehtyclos {
 		// @notice update the credit status
 		if (member[_borrower].creditLine > 0) {
 		// @notice check if deadline is over
-			if (now >= member[_borrower].deadline) {
+			if (now >= member[_borrower].creditDeadline) {
 				bool _success = false;
 				uint _credit = member[_borrower].creditLine;
 				uint _creditTrust = member[_borrower].creditTrust;
-				int _reward = _creditTrust * community[_community].rewardRate/100;
+				uint _reward = _creditTrust * community[_community].rewardRate/100;
 				address _moneyLender = member[_borrower].moneyLender;
 			// @notice if time is over reset credit to zero, deadline to zero
-				member[_borrower].deadline = 0;
+				member[_borrower].creditDeadline = 0;
 				community[_community].totalCredit -= _credit;
 				member[_borrower].creditLine = 0;				
 				community[_community].totalTrustCost -= _creditTrust;
@@ -463,18 +461,18 @@ contract ehtyclos {
 		address _commune = community[_community].commune;
 		uint _timeYears = (now - member[msg.sender].lastTransaction)/(1 years);
 		uint _taxRate = community[_community].accumulationTax;
-		uint _tax = member[msg.sender].balance * _taxRate * _timeYears / 100;
-		member[msg.sender].balance -= _tax;
-		member[_commune].balance += _tax;		
+		if (member[msg.sender].balance > 0) {uint _tax = uint(member[msg.sender].balance) * _taxRate * _timeYears / 100;} else {_tax = 0;}
+		member[msg.sender].balance -= int(_tax);
+		member[_commune].balance += int(_tax);		
 	}
 	
 	function payTrnsTax (address _to, uint _amount) internal {
 		uint _community = member[_to].memberCommunity;
 		address _commune = community[_community].commune;
-		uint _taxRate = community[_community].transactionTax;
+		uint _taxRate = community[_community].transferTax;
 		uint _tax = _amount * _taxRate / 100;
-		member[msg.sender].balance -= _tax;
-		member[_commune].balance += _tax;	
+		member[msg.sender].balance -= int(_tax);
+		member[_commune].balance += int(_tax);	
 	}
 		
 		struct sells {

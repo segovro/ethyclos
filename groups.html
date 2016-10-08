@@ -11,17 +11,17 @@
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="web3.js"></script>
 <script type="text/javascript" src="bignumber.js"></script>
-<script type="text/javascript" src="creditCommons.js"></script>
+<script type="text/javascript" src="ethyclos.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
 
-        document.getElementById('me').innerHTML = "ETH Account: <b>"
-            + myCoinbase + "<br></b> Credit Commons Member: <b>"
-            + myIsMember + "</b> Alias: <b>" + myAlias
-            + "<br></b> Whisper Account: <b>" + myWhisper
-            + "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
-            + myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
-            + "</b> Is Commune: <b>" + isCommune + "</b>";
+		document.getElementById('me').innerHTML = "ETH Account: <b>"
+				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
+				+ myIsMember + "</b> Alias: <b>" + myAlias
+				+ "<br></b> Whisper Account: <b>" + myWhisper
+				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
+				+ "</b> Is Commune: <b>" + isCommune + "</b>";
 
 		document.getElementById('numberG').innerHTML = "Number of groups: <b>"
 				+ nrGroups + "</b>";
@@ -47,14 +47,22 @@
 			var intertradeAccount = InfoGroupManagement[0];
 			var communeAccount = InfoGroupManagement[1];
 
-			groupsList += "<hr/><img src=\"https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png\" class=\"img-circle\" width=\"20\" height=\"20\"> Group ID: <b>" + infoGroupNumber
-					+ "</b> Group name: <b>" + infoGroupName + "</b> Open: <b>"
-					+ infoGroupOpen + "</b><br>Group Description: <i>"
+			groupsList += "<hr/><img src=\"https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png\" class=\"img-circle\" width=\"20\" height=\"20\"> Group ID: <b>"
+					+ infoGroupNumber
+					+ "</b> Group name: <b>"
+					+ infoGroupName
+					+ "</b> Open: <b>"
+					+ infoGroupOpen
+					+ "</b><br>Group Description: <i>"
 					+ infoGroupDescription
 					+ "</i><br/>Currency name: <span class=\"badge\">"
-					+ infoCurrencyName + "</span><br/> Rate: <b>" + infoRate
-					+ "</b><br/> Intertrade Account: <b>" + intertradeAccount
-					+ "</b><br/> Commune Account: <b>" + communeAccount
+					+ infoCurrencyName
+					+ "</span><br/> Rate: <b>"
+					+ infoRate
+					+ "</b><br/> Intertrade Account: <b>"
+					+ intertradeAccount
+					+ "</b><br/> Commune Account: <b>"
+					+ communeAccount
 					+ "</b>";
 		}
 
