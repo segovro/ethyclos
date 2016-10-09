@@ -7,7 +7,7 @@ document.write(
 		'        <span class="icon-bar"></span>'+
 		'        <span class="icon-bar"></span> '+
 		'      </button>'+
-		'    <a class="navbar-brand" href="http://creditcommons.net/" target="blank"><b> eThyclos </b></a>'+
+		'    <a class="navbar-brand" href="https://github.com/segovro/ethyclos/wiki" target="blank"><b>eThyclos </b></a>'+
 		'    </div>'+
 		'    <div class="collapse navbar-collapse" id="myNavbar">'+
 		'      <ul class="nav navbar-nav">'+
@@ -55,6 +55,7 @@ document.write(
 		'          <a class="dropdown-toggle" data-toggle="dropdown" href="budget.html"><span class="glyphicon glyphicon-cloud"></span> Community</a>'+
 		'          <ul class="dropdown-menu">'+
 		'        <li><a href="budget.html"><span class="glyphicon glyphicon-th-list"></span> Commons Finances</a></li> '+
+		'        <li><a href="monitor.html"><span class="glyphicon glyphicon-dashboard"></span> Community Monitoring</a></li> '+
 		'        <li><a href="commune.html"><span class="glyphicon glyphicon-home"></span> Commune Budget</a></li> '+
 		'          <li><a href="civilService.html"><span class="glyphicon glyphicon-hourglass"></span> Community Service</a></li>        '+
 		'          <li><a href="funding.html"><span class="glyphicon glyphicon-cloud-upload"></span> Community Funding</a></li>        '+

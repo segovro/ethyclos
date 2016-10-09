@@ -880,8 +880,8 @@ var myAlias = myMembership[1];
 var myDescription = myMembership[2];
 var myGroupNr = myMembership[3];
 var myBalance = myMembership[4];
-var myDebitLimit = myMembership[5];
-var myCreditLimit = myMembership[6];
+var myCreditLine = myMembership[5];
+
 
 var myStatus = creditCommons.getMemberStatus(myCoinbase);
 var isIntertrade = myStatus[0];
