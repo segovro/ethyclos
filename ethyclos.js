@@ -206,13 +206,6 @@ var creditcommonsContract = web3.eth.contract([ {
 	"payable" : false,
 	"type" : "function"
 }, {
-	"constant" : false,
-	"inputs" : [],
-	"name" : "transfer",
-	"outputs" : [],
-	"payable" : false,
-	"type" : "function"
-}, {
 	"constant" : true,
 	"inputs" : [ {
 		"name" : "_communityG",
@@ -262,6 +255,19 @@ var creditcommonsContract = web3.eth.contract([ {
 }, {
 	"constant" : false,
 	"inputs" : [ {
+		"name" : "_to",
+		"type" : "address"
+	}, {
+		"name" : "_amount",
+		"type" : "uint256"
+	} ],
+	"name" : "transaction",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
 		"name" : "_proposalCommunity",
 		"type" : "uint256"
 	}, {
@@ -294,19 +300,6 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "uint256"
 	} ],
 	"name" : "createsell",
-	"outputs" : [],
-	"payable" : false,
-	"type" : "function"
-}, {
-	"constant" : false,
-	"inputs" : [ {
-		"name" : "_to",
-		"type" : "address"
-	}, {
-		"name" : "_fromAmount",
-		"type" : "uint256"
-	} ],
-	"name" : "transfer",
 	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
@@ -453,13 +446,6 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "",
 		"type" : "bool"
 	} ],
-	"payable" : false,
-	"type" : "function"
-}, {
-	"constant" : false,
-	"inputs" : [],
-	"name" : "exchange",
-	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
 }, {
@@ -702,17 +688,13 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_sender",
 		"type" : "address"
 	}, {
-		"indexed" : false,
-		"name" : "_senderAmount",
-		"type" : "uint256"
-	}, {
 		"indexed" : true,
 		"name" : "_receiver",
 		"type" : "address"
 	}, {
 		"indexed" : false,
-		"name" : "_receiverAmount",
-		"type" : "int256"
+		"name" : "_amount",
+		"type" : "uint256"
 	}, {
 		"indexed" : false,
 		"name" : "_TimeStamp",
@@ -881,7 +863,6 @@ var myDescription = myMembership[2];
 var myGroupNr = myMembership[3];
 var myBalance = myMembership[4];
 var myCreditLine = myMembership[5];
-
 
 var myStatus = creditCommons.getMemberStatus(myCoinbase);
 var isIntertrade = myStatus[0];

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="ethyclos.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script
@@ -59,29 +60,6 @@
 				+ " <li><span class=\"badge\">" + myCurrencyName + "</span>";
 	}
 
-	function register() {
-		if (isMember = false) {
-			var alias = document.getElementById('alias').value;
-			var whisperIdentity = web3.shh.newIdentity();
-			creditCommons.registerSystem(newAlias, whisperIdentity);
-			location.reload();
-		}
-	}
-
-	function resign() {
-		if (myGroupID > 0) {
-			creditCommons.resignGroup();
-			location.reload();
-		}
-	}
-
-	function joinGroup() {
-		if (myGroupID = 0) {
-			var group = document.getElementById('group').value;
-			creditCommons.joinGroup(group);
-			location.reload();
-		}
-	}
 </script>
 <style type="text/css">
 .navbar {
@@ -89,8 +67,9 @@
 	border-radius: 0;
 	background: green;
 }
+
 .well {
-    border: 5px solid green;
+	border: 5px solid green;
 }
 </style>
 </head>
@@ -158,48 +137,27 @@
 							</tr>
 						</tbody>
 					</table>
-
-					<h3>
-						<span class="glyphicon glyphicon-thumbs-down"></span> Liabilities
-					</h3>
-					<div id="amountCredit"></div>
-					<div id="unitsOfTrust"></div>
-					<div id="deadline"></div>
-					<div id="moneyLender"></div>
-					<h3>
-						<span class="glyphicon glyphicon-thumbs-up"></span> Endorsed
-						Credits
-					</h3>
-					<h4>
-						<span class="glyphicon glyphicon-ok"></span> Ongoing Credits
-					</h4>
-					<div id="listCredit"></div>
-					<h4>
-						<span class="glyphicon glyphicon-remove"></span> Expired Credits
-					</h4>
-					<div id="listCreditEx"></div>
 				</div>
 
-				<hr />
-				<h4>Register at Credit Commons system</h4>
-				<form class="form-horizontal" role="form" action="">
-					<div class="form-group">
-						<label class="control-label" for="alias">Chose alias:</label>
-						<div>
-							<input type="text" class="form-control" id="alias"
-								placeholder="Enter your alias">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="description">Description</label>
-						<div>
-							<textarea class="form-control" rows="5" id="description"
-								placeholder="Introduce yourself. Geolocation. Country code. Phones, email, etc."
-								cols=""></textarea>
-						</div>
-					</div>
-				</form>
-				<button type="submit" class="btn btn-default" onClick="register();">Register</button>
+				<h3>
+					<span class="glyphicon glyphicon-thumbs-down"></span> Liabilities
+				</h3>
+				<div id="amountCredit"></div>
+				<div id="unitsOfTrust"></div>
+				<div id="deadline"></div>
+				<div id="moneyLender"></div>
+				<h3>
+					<span class="glyphicon glyphicon-thumbs-up"></span> Endorsed
+					Credits
+				</h3>
+				<h4>
+					<span class="glyphicon glyphicon-ok"></span> Ongoing Credits
+				</h4>
+				<div id="listCredit"></div>
+				<h4>
+					<span class="glyphicon glyphicon-remove"></span> Expired Credits
+				</h4>
+				<div id="listCreditEx"></div>
 			</div>
 			<div class="col-sm-6">
 				<div class="well">
@@ -282,24 +240,7 @@
 						</tbody>
 					</table>
 				</div>
-				<hr />
-				<h4>
-					Resign
-					<h4>
-						<button type="submit" class="btn btn-default" onClick="resign();">Resign
-							from your Group</button>
-						<h4>
-							Join Group
-							<h4>
-								<form class="form-horizontal" role="form" action="">
-									<div class="form-group">
-										<input type="text" class="form-control" id="groupToJoin"
-											placeholder="Enter the group ID">
-									</div>
-								</form>
-								<button type="submit" class="btn btn-default"
-									onClick="joinGroup();">Join</button>
-								<hr />
+
 			</div>
 		</div>
 	</div>

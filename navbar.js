@@ -11,7 +11,7 @@ document.write(
 		'    </div>'+
 		'    <div class="collapse navbar-collapse" id="myNavbar">'+
 		'      <ul class="nav navbar-nav">'+
-		'      <li><a href="index.html"><span class="glyphicon glyphicon-home"></span> My account</a></li>'+
+		'      <li><a href="index.html"><span class="glyphicon glyphicon-home"></span> My account</a>'+	
 		'      <li class="dropdown-submenu">'+
 		'          <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-piggy-bank"></span> Banking</a>'+
 		'          <ul class="dropdown-menu">'+
@@ -31,16 +31,16 @@ document.write(
 		'          <a class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-user"></span> People</a>'+
 		'          <ul class="dropdown-menu">'+
 		'        <li><a href="members.html"><span class="glyphicon glyphicon-user"></span> Members</a></li> '+
-		'        <li><a href="groups.html"><span class="glyphicon glyphicon-flag"></span> Groups</a></li> '+
+		'        <li><a href="communities.html"><span class="glyphicon glyphicon-flag"></span> Communities</a></li> '+
 		'        <li><a href="memberMngt.html"><span class="glyphicon glyphicon-wrench"></span> Members Management</a></li> '+		
-		'        <li><a href="groupMngt.html"><span class="	glyphicon glyphicon-wrench"></span> Group Management</a></li> '+
+		'        <li><a href="communityMngt.html"><span class="	glyphicon glyphicon-wrench"></span> Community Management</a></li> '+
 		'       	</ul>'+
 		'        </li>'+
 		'        <li class="dropdown-submenu">'+
 		'          <a class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-envelope"></span> Posts</a>'+
 		'          <ul class="dropdown-menu">'+
 		'          <li><a href="postMembers.html"><span class="glyphicon glyphicon-comment"></span> Post Members</a></li>        '+
-		'          <li><a href="postGroups.html"><span class="glyphicon glyphicon-paperclip"></span> Group Board</a></li>        '+
+		'          <li><a href="postCommunity.html"><span class="glyphicon glyphicon-paperclip"></span> Community Board</a></li>        '+
 		'          <li><a href="announcements.html"><span class="glyphicon glyphicon-bullhorn"></span> Broadcast announcements</a></li>        '+
 		'          </ul>'+
 		'        </li>'+
@@ -59,8 +59,14 @@ document.write(
 		'        <li><a href="commune.html"><span class="glyphicon glyphicon-home"></span> Commune Budget</a></li> '+
 		'          <li><a href="civilService.html"><span class="glyphicon glyphicon-hourglass"></span> Community Service</a></li>        '+
 		'          <li><a href="funding.html"><span class="glyphicon glyphicon-cloud-upload"></span> Community Funding</a></li>        '+
-		'        <li><a href="treasury.html"><span class="glyphicon glyphicon-lock"></span> Monetary Adjustments</a></li>'+
+		'        <li><a href="monetary.html"><span class="glyphicon glyphicon-lock"></span> Monetary Adjustments</a></li>'+
 		'        <li><a href="administration.html"><span class="glyphicon glyphicon-inbox"></span> Administration</a></li>'+
+		'          </ul>'+
+		'        </li>'+
+		'      <li class="dropdown-submenu"><a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-pencil"></span> Registration</a>'+
+		'          <ul class="dropdown-menu">'+
+		'          <li><a href="registerSystem.html"><span class="glyphicon glyphicon-pencil"></span> Register System</a></li> '+
+		'          <li><a href="registerCommunity.html"><span class="glyphicon glyphicon-pencil"></span> Register Group</a></li> '+
 		'          </ul>'+
 		'        </li>'+
 		'      </ul>'+
