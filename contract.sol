@@ -325,7 +325,7 @@ contract ehtyclos {
     	_getCommunityID = communityIndex[_gIndex];
     }
     
-    event Transaction (address indexed _sender, uint _senderAmount, address indexed _receiver, int _receiverAmount, uint _TimeStamp);
+    event Transaction (address indexed _sender, address indexed _receiver, uint _amount, uint _TimeStamp);
     event Credit(address indexed _MoneyLender, address indexed _borrowerAddress, uint _cDealine, uint _endorsedUoT);
     event CreditExp(address indexed _moneyLender, address indexed _borrower, uint _creditCost, bool _success, uint _TimeStamp);
     event Sell (uint _sellNumber, address indexed _seller, address indexed _buyer, string _description, uint _sellAmount, uint _TimeStamp);
@@ -333,43 +333,61 @@ contract ehtyclos {
 	// @notice function transfer from the member of the same exchange or to the
 	// member of another exchange. The amount is expressed in the sender
 	// currency
-	function transfer (address _to, uint _fromAmount) {		
-		// @notice the given amount is converted to integer in order to work
-		// with only integers
-		int _intFromAmount = int (_fromAmount);
-		int _intFromDLimit = - int(member[msg.sender].creditLine);
-		int _toAmount = 0;
+	function transaction (address _to, uint _amount) {		
+		address _from = msg.sender;
+		uint _toAmount = _amount;
+		payAccTax (_amount);
 		// @notice check if both accounts are in the same community
 		if (member[msg.sender].memberCommunity == member[_to].memberCommunity) {
-			_toAmount = _intFromAmount;
+			transfer (_from, _to, _amount);
+			payTrnsTax (_to, _amount);
 		} else {
-			// @notice conversions if the transaction is accross communities
-			address _fromCommunityAccount = community[member[msg.sender].memberCommunity].exchangeAccount;
-			address _toCommunityAccount = community[member[_to].memberCommunity].exchangeAccount;
-			// @the amount is converted to the receiver currency
-			uint _rateSenderU = community[member[msg.sender].memberCommunity].rate;
-			uint _rateReceiverU = community[member[_to].memberCommunity].rate;
-			int _rateSender = int(_rateSenderU);
-			int _rateReceiver = int(_rateReceiverU);
-			_toAmount = _intFromAmount * _rateSender/ _rateReceiver;
-			// @notice if the community limits are not surpassed, we proceed
-			// with the transfer
-			if ((member[_fromCommunityAccount].balance - _intFromAmount) > - int(member[_fromCommunityAccount].creditLine)) {
-				} 
-		} 
-		// @notice if the member limits are not surpassed, we proceed with the
-		// transfer
-			if ((member[msg.sender].balance - _intFromAmount) > _intFromDLimit)  { 
-				member[msg.sender].balance -= _intFromAmount;
-				member[_to].balance += _toAmount;
-				// @notice adjust exchange accounts
-				if (member[msg.sender].memberCommunity != member[_to].memberCommunity) {			
-					member[_fromCommunityAccount].balance -= _intFromAmount;
-					member[_toCommunityAccount].balance += _toAmount;
-					} 
-			} 
- 			Transaction (msg.sender, _fromAmount, _to, _toAmount, now);
+			exchange (_from, _to, _amount);
+			}
 		}
+	
+	function transfer (address _from, address _to, uint _amount) internal {
+		int _intAmount = int(_amount);
+		if ((member[_from].balance - _intAmount) > - int((member[_from].creditLine)))  { 
+			member[_from].balance -= _intAmount;
+			member[_to].balance += _intAmount;
+			Transaction (msg.sender, _to, _amount, now);
+		}
+	}
+		
+	function exchange (address _from, address _to, uint _amount) internal {		
+		address _fromExchange = community[member[_from].memberCommunity].exchangeAccount;
+		address _toExchange = community[member[_to].memberCommunity].exchangeAccount;
+		transfer (_from, _fromExchange, _amount);
+		uint _rateFrom = community[member[_from].memberCommunity].rate;
+		uint _rateTo = community[member[_from].memberCommunity].rate;
+		uint _amountTo = _amount * _rateFrom/_rateTo;
+		int _intAmountFrom = int(_amount);
+		int _intAmountTo = int(_amountTo);
+		if ((member[_fromExchange].balance - _intAmountFrom) > - int((member[_fromExchange].creditLine)))  { 
+			member[_fromExchange].balance -= _intAmountFrom;
+			member[_toExchange].balance += _intAmountTo;
+		}
+		transfer (_toExchange, _to, _amountTo);
+		payTrnsTax (_to, _amountTo);
+	}
+	
+	function payAccTax (uint _amount) internal {
+		uint _community = member[msg.sender].memberCommunity;
+		address _commune = community[_community].commune;
+		uint _timeYears = (now - member[msg.sender].lastTransaction)/(1 years);
+		uint _taxRate = community[_community].accumulationTax;
+		if (member[msg.sender].balance > 0) {uint _tax = uint(member[msg.sender].balance) * _taxRate * _timeYears / 100;} else {_tax = 0;}
+		transfer (msg.sender, _commune,  _tax);
+	}
+	
+	function payTrnsTax (address _to, uint _amount) internal {
+		uint _community = member[_to].memberCommunity;
+		address _commune = community[_community].commune;
+		uint _taxRate = community[_community].transferTax;
+		uint _tax = _amount * _taxRate / 100;
+		transfer (_to, _commune,  _tax);	
+	}
 	
 	// @notice function authorize a credit
 	// @notice only members of a group can authorize or get a credit to a member
@@ -430,14 +448,19 @@ contract ehtyclos {
 				community[_community].totalCredit -= _credit;
 				member[_borrower].creditLine = 0;				
 				community[_community].totalTrustCost -= _creditTrust;
-				// @notice if balance is negative the credit was not returned, the money lender balanceReputation is not restored and is penalized with a 20%
-				// @notice as regards the borrower will not be able to make any new transfer until future incomes cover the debts
+				// @notice if balance is negative the credit was not returned,
+				// the money lender balanceReputation is not restored and is
+				// penalized with a 20%
+				// @notice as regards the borrower will not be able to make any
+				// new transfer until future incomes cover the debts
 				// @return money lender reputation penalized
 				if (member[_borrower].balance < 0) {					
 					member[_moneyLender].trust += _creditTrust - _reward;
 					community[_community].totalTrustAvailable += _creditTrust - _reward;
 				}
-				// @notice if balance is not negative the credit was returned, the money lender balanceReputation is restored and is rewardRateed with a 20%
+				// @notice if balance is not negative the credit was returned,
+				// the money lender balanceReputation is restored and is
+				// rewardRateed with a 20%
 				// @return money lender reputation rewarded
 				else {
 					_success = true;
@@ -454,27 +477,6 @@ contract ehtyclos {
 			}
 		}
 	
-	function transfer () {}
-	function exchange () {}
-	function payAccTax (uint _amount) internal {
-		uint _community = member[msg.sender].memberCommunity;
-		address _commune = community[_community].commune;
-		uint _timeYears = (now - member[msg.sender].lastTransaction)/(1 years);
-		uint _taxRate = community[_community].accumulationTax;
-		if (member[msg.sender].balance > 0) {uint _tax = uint(member[msg.sender].balance) * _taxRate * _timeYears / 100;} else {_tax = 0;}
-		member[msg.sender].balance -= int(_tax);
-		member[_commune].balance += int(_tax);		
-	}
-	
-	function payTrnsTax (address _to, uint _amount) internal {
-		uint _community = member[_to].memberCommunity;
-		address _commune = community[_community].commune;
-		uint _taxRate = community[_community].transferTax;
-		uint _tax = _amount * _taxRate / 100;
-		member[msg.sender].balance -= int(_tax);
-		member[_commune].balance += int(_tax);	
-	}
-		
 		struct sells {
 		address seller;
 		address buyer;
@@ -503,7 +505,7 @@ contract ehtyclos {
 
 	function paysell (uint _sellNumber) {
 		if (sell[_sellNumber].buyer == msg.sender) {
-			transfer (sell[_sellNumber].seller, sell[_sellNumber].sellAmount);
+			transfer (msg.sender, sell[_sellNumber].seller, sell[_sellNumber].sellAmount);
 			sell[_sellNumber].paid = true;
 			}    	
 	}	

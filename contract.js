@@ -9,6 +9,7 @@ contract ehtyclos {
 		uint nrMembers;
 		uint nrCommunities;
 		uint nrProposals;
+		uint nrGoods;
 		uint nrSells;
 	
 	// @notice at creating the contract we declare the general variables
@@ -19,11 +20,12 @@ contract ehtyclos {
 			    nrMembers = 0;
 			    nrCommunities = 0;
 			    nrProposals = 0;
+			    nrGoods = 0;
 			    nrSells = 0;
         }
 	
-    function getTotals () constant returns (uint, uint, uint, uint) {
-    	return (nrMembers, nrCommunities, nrProposals, nrSells);
+    function getTotals () constant returns (uint, uint, uint, uint, uint) {
+    	return (nrMembers, nrCommunities, nrProposals, nrGoods, nrSells);
     }
 	
 	event NewCommunity(address indexed _creator, uint indexed _community, string _communityName, uint _TimeStamp);
@@ -325,7 +327,7 @@ contract ehtyclos {
     	_getCommunityID = communityIndex[_gIndex];
     }
     
-    event Transaction (address indexed _sender, uint _senderAmount, address indexed _receiver, int _receiverAmount, uint _TimeStamp);
+    event Transfer (uint indexed _community, address indexed _sender, address indexed _receiver, uint _amount, uint _TimeStamp);
     event Credit(address indexed _MoneyLender, address indexed _borrowerAddress, uint _cDealine, uint _endorsedUoT);
     event CreditExp(address indexed _moneyLender, address indexed _borrower, uint _creditCost, bool _success, uint _TimeStamp);
     event Sell (uint _sellNumber, address indexed _seller, address indexed _buyer, string _description, uint _sellAmount, uint _TimeStamp);
@@ -340,36 +342,36 @@ contract ehtyclos {
 		// @notice check if both accounts are in the same community
 		if (member[msg.sender].memberCommunity == member[_to].memberCommunity) {
 			transfer (_from, _to, _amount);
+			payTrnsTax (_to, _amount);
 		} else {
 			exchange (_from, _to, _amount);
-		}
-			payTrnsTax (_to, _toAmount);
- 			Transaction (msg.sender, _fromAmount, _to, _toAmount, now);
+			}
 		}
 	
 	function transfer (address _from, address _to, uint _amount) internal {
 		int _intAmount = int(_amount);
 		if ((member[_from].balance - _intAmount) > - int((member[_from].creditLine)))  { 
-			member[_from].balance -= _intAmount);
+			member[_from].balance -= _intAmount;
 			member[_to].balance += _intAmount;
+			Transfer (member[msg.sender].memberCommunity, msg.sender, _to, _amount, now);
 		}
 	}
 		
 	function exchange (address _from, address _to, uint _amount) internal {		
 		address _fromExchange = community[member[_from].memberCommunity].exchangeAccount;
 		address _toExchange = community[member[_to].memberCommunity].exchangeAccount;
-		transfer (_from, _fromExchange, uint _amount);
+		transfer (_from, _fromExchange, _amount);
 		uint _rateFrom = community[member[_from].memberCommunity].rate;
 		uint _rateTo = community[member[_from].memberCommunity].rate;
 		uint _amountTo = _amount * _rateFrom/_rateTo;
 		int _intAmountFrom = int(_amount);
 		int _intAmountTo = int(_amountTo);
 		if ((member[_fromExchange].balance - _intAmountFrom) > - int((member[_fromExchange].creditLine)))  { 
-			member[_fromExchange].balance -= _intAmountFrom);
+			member[_fromExchange].balance -= _intAmountFrom;
 			member[_toExchange].balance += _intAmountTo;
 		}
 		transfer (_toExchange, _to, _amountTo);
-		_toAmount = _amountTo;
+		payTrnsTax (_to, _amountTo);
 	}
 	
 	function payAccTax (uint _amount) internal {
@@ -377,9 +379,13 @@ contract ehtyclos {
 		address _commune = community[_community].commune;
 		uint _timeYears = (now - member[msg.sender].lastTransaction)/(1 years);
 		uint _taxRate = community[_community].accumulationTax;
-		if (member[msg.sender].balance > 0) {uint _tax = uint(member[msg.sender].balance) * _taxRate * _timeYears / 100;} else {_tax = 0;}
-		member[msg.sender].balance -= int(_tax);
-		member[_commune].balance += int(_tax);		
+		if (member[msg.sender].balance > 0) {
+			uint _tax = uint(member[msg.sender].balance) * _taxRate * _timeYears / 100;
+			} else {
+				_tax = 0;
+			}
+		member[msg.sender].lastTransaction = now;
+		transfer (msg.sender, _commune,  _tax);
 	}
 	
 	function payTrnsTax (address _to, uint _amount) internal {
@@ -387,8 +393,7 @@ contract ehtyclos {
 		address _commune = community[_community].commune;
 		uint _taxRate = community[_community].transferTax;
 		uint _tax = _amount * _taxRate / 100;
-		member[msg.sender].balance -= int(_tax);
-		member[_commune].balance += int(_tax);	
+		transfer (_to, _commune,  _tax);	
 	}
 	
 	// @notice function authorize a credit
@@ -479,35 +484,50 @@ contract ehtyclos {
 			}
 		}
 	
-		struct sells {
-		address seller;
+		struct Goods {
+			address seller;
+			string cathegory;
+			string description;
+			string goodImageLink;
+			uint unitPrice; 
+			bool onOffer;
+		}
+		
+		mapping(uint => Goods) good; 
+		
+		function offer ()
+	
+		struct Sells {
+		uint good;
+		uint units;
 		address buyer;
-		string description;
-		string sImageLink;
-		uint unitPrice; 
-		uint sellAmount;
-		uint sellTax;
+		uint price;
 		uint sellDateTime;
+		bool bill;
 		bool paid;
 	    }
 
-	mapping(uint => sells) sell;    
+	mapping(uint => Sells) sell;    
 
-	function createsell (address _buyer, string _description, uint _sellAmount) {
+	function buy (uint _good, uint _units) {
 	    nrSells ++;
 		uint sellNumber = nrSells;
-		sell[sellNumber].seller = msg.sender;
-		sell[sellNumber].buyer = _buyer;
-		sell[sellNumber].description = _description;
-		sell[sellNumber].sellAmount = _sellAmount;
+		sell[sellNumber].good = _good;
+		sell[sellNumber].units = _units;
+		sell[sellNumber].buyer = msg.sender;
+		sell[sellNumber].price = good[_good].unitPrice * _units;
 		sell[sellNumber].sellDateTime = now;
-		sell[sellNumber].paid = false;	
-		Sell (nrSells, msg.sender, _buyer, _description, _sellAmount, now);
+		sell[sellNumber].bill = false;	
+		sell[sellNumber].paid = false;
+		address _seller = good[good].seller;
+		uint _communitySeller = member[].memberCommunity;	
+		uint _communityBuyer = member[msg.sender].memberCommunity;	
+		Sell (nrSells, msg.sender, _good, sell[sellNumber].price, now);
 	}
 
 	function paysell (uint _sellNumber) {
 		if (sell[_sellNumber].buyer == msg.sender) {
-			transfer (sell[_sellNumber].seller, sell[_sellNumber].sellAmount);
+			transfer (msg.sender, sell[_sellNumber].seller, sell[_sellNumber].sellAmount);
 			sell[_sellNumber].paid = true;
 			}    	
 	}	
