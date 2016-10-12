@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-<title>Transfers</title>
+<title>Shopping</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -23,63 +23,9 @@
 				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
 				+ "</b> Is Commune: <b>" + isCommune + "</b>";
 
-		document.getElementById('myBalance').innerHTML = "<h2>" + myBalance
-				+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
-		document.getElementById('myDebitLimit').innerHTML = myDebitLimit
-				+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
 	}
-
-	function transfer() {
-		var payee = document.getElementById('payee').value;
-		var amount = document.getElementById('amount').value;
-		creditCommons.transfer(payee, amount);
-		location.reload();
-	}
-
-	var incomes = creditCommons.Transaction({
-		'_receiver' : myCoinbase
-	}, {
-		fromBlock : 1400000,
-		toBlock : 'latest'
-	}, function(error, result) {
-		var row = "";
-		var d;
-		incomes.watch(function(error, result) {
-			d = new Date(result.args._tTimeStamp * 1000);
-			row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> " + d
-					+ "<br/>From: <b>" + result.args._sender
-					+ "</b><br/>Quantity sent in senders currency: <b>"
-					+ result.args._senderAmount + "</b><br/>To: <b>"
-					+ result.args._receiver
-					+ "</b><br/>Quantity received in receivers currency: <b>"
-					+ result.args._receiverAmount + "</b><br/>";
-			document.getElementById('listIncomes').innerHTML = row;
-		});
-	});
-
-	var spenditures = creditCommons.Transaction({
-		'_sender' : myCoinbase
-	}, {
-		fromBlock : 1400000,
-		toBlock : 'latest'
-	}, function(error, result) {
-		var row = "";
-		var d;
-		spenditures.watch(function(error, result) {
-			d = new Date(result.args._tTimeStamp * 1000);
-			row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> " + d
-					+ "<br/>From: <b>" + result.args._sender
-					+ "</b><br/>Quantity sent in senders currency: <b>"
-					+ result.args._senderAmount + "</b><br/>To: <b>"
-					+ result.args._receiver
-					+ "</b><br/>Quantity received in receivers currency: <b>"
-					+ result.args._receiverAmount + "</b><br/>";
-			document.getElementById('listSpenditures').innerHTML = row;
-		});
-	});
 </script>
 <style>
-
 </style>
 </head>
 <body>
@@ -88,67 +34,103 @@
 		<script type="text/javascript" src="navbar.js"></script>
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
-			<h3>Transfers</h3>
-			<div class="col-sm-6">
-				<div class="well">
-					<h4>
-						<span class="glyphicon glyphicon-user"></span> My Wallet
-					</h4>
-					<table class="table">
-						<thead>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="text-right col-sm-3">My Balance:</td>
-								<td class="text-right col-sm-3""><p id="myBalance"></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-3">My Debit Limit:</td>
-								<td class="text-right col-sm-3"><p id="myDebitLimit"></p></td>
-							</tr>
-						</tbody>
-					</table>
+			<h3>Shopping</h3>
+			<div class="col-sm-12">
+				<div class="form-group">
+					<label for="sel1">Select cathegory:</label> <select
+						class="form-control" class="col-sm-6" id="cathegory">
+						<optgroup label="Community">
+							<option>Activities</option>
+							<option>Artists</option>
+							<option>Childcare</option>
+							<option>Musicians</option>
+							<option>Local news</option>
+							<option>Politics</option>
+							<option>Rideshare</option>
+							<option>Volunteers</option>
+							<option>Classes</option>
+							<option>Other</option>
+						</optgroup>
+						<optgroup label="Food">
+							<option>Baking</option>
+							<option>Beverages</option>
+							<option>Catering</option>
+							<option>Meal Preparation</option>
+							<option>Pastry</option>
+							<option>Vegetarian</option>
+							<option>Other</option>
+						</optgroup>
+						<optgroup label="Goods">
+							<option>Clothing</option>
+							<option>Consumer electronics</option>
+							<option>House, Garden</option>
+							<option>Sports Equipment</option>
+							<option>Vehicles</option>
+							<option>Antiques</option>
+							<option>Other</option>
+						</optgroup>
+						<optgroup label="Housing ">
+							<option>Apartments / housing</option>
+							<option>Rooms / shared</option>
+							<option>Sublets / temporary</option>
+							<option>Vacation rentals</option>
+							<option>Parking</option>
+							<option>Storage</option>
+							<option>Office / commercial</option>
+							<option>Real estate for sale</option>
+							<option>Other</option>
+						</optgroup>
+						<optgroup label="Labor">
+							<option>Electrical</option>
+							<option>General</option>
+							<option>Mechanical</option>
+							<option>Painting</option>
+							<option>Plumbing</option>
+							<option>Renovation</option>
+							<option>Agriculture</option>
+							<option>Other</option>
+						</optgroup>
+						<optgroup label="Leisure ">
+							<option>Concerts</option>
+							<option>Events</option>
+							<option>Hotels</option>
+							<option>Restaurants, Bars</option>
+							<option>Sports</option>
+							<option>Traveling</option>
+							<option>Other</option>
+						</optgroup>
+						<optgroup label="Jobs">
+							<option>Art / media / design</option>
+							<option>Business / management</option>
+							<option>Customer service</option>
+							<option>Education</option>
+							<option>Human resources</option>
+							<option>Manufacturing</option>
+							<option>Marketing / pr / ad</option>
+							<option>Medical / health</option>
+							<option>Nonprofit sector</option>
+							<option>Retail / wholesale</option>
+							<option>Security</option>
+							<option>Transport</option>
+							<option>Web / info design</option>
+							<option>Writing / editing</option>
+							<option>Other</option>
+						</optgroup>
+						<optgroup label="Services">
+							<option>Beauty</option>
+							<option>Consulting</option>
+							<option>Education</option>
+							<option>Entertainment</option>
+							<option>Financial</option>
+							<option>Health</option>
+							<option>IT, Telecom</option>
+							<option>Personal</option>
+							<option>Transportation</option>
+							<option>Other</option>
+						</optgroup>
+					</select>
 				</div>
 			</div>
-			<div class="col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h4>Payment</h4>
-					</div>
-					<div class="panel-body">
-						<form class="form-horizontal" role="form">
-							<div class="form-group">
-								<label class="control-label col-sm-2" for="payee">Payee
-									account:</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="payee"
-										placeholder="Enter payee account">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-2" for="amount">Amount:</label>
-								<div class="col-sm-4">
-									<input type="text" class="form-control" id="amount"
-										placeholder="Enter amount">
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="panel-footer">
-						<button type="submit" class="btn btn-default"
-							onClick="transfer();">Make Payment</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<hr />
-			<h4>My Incomes</h4>
-			<div class="text-left" id="listIncomes"></div>
-			<hr />
-			<h4>My Spenditures</h4>
-			<div class="text-left" id="listSpenditures"></div>
-			<hr />
 		</div>
 	</div>
 

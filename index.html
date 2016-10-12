@@ -16,61 +16,60 @@
 <script type="text/javascript">
 	window.onload = function() {
 		document.getElementById('me').innerHTML = "ETH Account: <b>"
-				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
+				+ myCoinbase				
+				+ "<br></b> eThyclos Member: <b>"
 				+ myIsMember + "</b> Alias: <b>" + myAlias
 				+ "<br></b> Whisper Account: <b>" + myWhisper
-				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
-				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
-				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+				+ "<br></b>Group: <b>" + myCommunity + "</b> Group Name: <b>"
+				+ myCommunityName + "<br></b> Is Commune: <b>" + isCommune
+				+ "</b> Is Bank: <b>" + isBank + "</b>";
+
 
 		document.getElementById('alias').innerHTML = "<b>" + myAlias + "</b>";
 		document.getElementById('description').innerHTML = "<small><i>"
-				+ myDescription + "</i><small>";
+		+ myDescription + "</i><small>";
 		document.getElementById('balance').innerHTML = "<h2>" + myBalance
-				+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
+		+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
 		document.getElementById('creditLine').innerHTML = myCreditLine
-				+ " <li><span class=\"badge\">" + myCurrencyName + "</span>";
+		+ " <span class=\"badge\">" + myCurrencyName + "</span>";
 		document.getElementById('available').innerHTML = myBalance
-				+ myCreditLine + " <li><span class=\"badge\">" + myCurrencyName
-				+ "</span>";
-		document.getElementById('isIntertrade').innerHTML = isIntertrade;
+		+ myCreditLine + " <span class=\"badge\">" + myCurrencyName
+		+ "</span>";
+		document.getElementById('isBank').innerHTML = isBank;
 		document.getElementById('isCommune').innerHTML = isCommune;
-		document.getElementById('myGroupName').innerHTML = "<b>" + myGroupName
-				+ "</b>";
-		document.getElementById('myGroupDescription').innerHTML = "<i>"
-				+ myGroupDescription + "</i>";
-		document.getElementById('myGroupNr').innerHTML = "<b>" + myGroupNr
-				+ "</b>";
-		document.getElementById('myGroupNrM').innerHTML = myGroupNrM;
-		document.getElementById('myCurrencyName').innerHTML = "<li><span class=\"badge\">"
-				+ myCurrencyName + "</span>";
-		document.getElementById('myRate').innerHTML = myRate;
-		document.getElementById('myGroupDebitLimit').innerHTML = myGroupDebitLimit
-				+ " <li><span class=\"badge\">" + myCurrencyName + "</span>";
-		document.getElementById('myGroupCreditLimit').innerHTML = myGroupCreditLimit
-				+ " <li><span class=\"badge\">" + myCurrencyName + "</span>";
-		document.getElementById('myGroupOpen').innerHTML = myGroupOpen;
-		document.getElementById('communeAccount').innerHTML = communeAccount;
-		document.getElementById('intertradeAccount').innerHTML = intertradeAccount;
-		document.getElementById('intertradeBalance').innerHTML = intertradeBalance
-				+ " <li><span class=\"badge\">" + myCurrencyName + "</span>";
-		document.getElementById('intertradeDebitLimit').innerHTML = intertradeDebitLimit
-				+ " <li><span class=\"badge\">" + myCurrencyName + "</span>";
-		document.getElementById('intertradeCreditLimit').innerHTML = intertradeCreditLimit
-				+ " <li><span class=\"badge\">" + myCurrencyName + "</span>";
-	}
+		document.getElementById('reputation').innerHTML = myReputation  + " <span class=\"badge\"><span class=\"glyphicon glyphicon-star-empty\"></span> Stars</span>";
+		document.getElementById('trust').innerHTML = myTrust  + " <span class=\"badge\"><span class=\"glyphicon glyphicon-thumbs-up\"></span> Credits</span>";
+		document.getElementById('myImage').src = myImage;
 
+		document.getElementById('myCommunityName').innerHTML = "<b>" + myCommunityName
+		+ "</b>";
+		document.getElementById('myCommunityDescription').innerHTML = "<i>"
+		+ myCommunityDescription + "</i>";
+		document.getElementById('myCommunityNr').innerHTML = "<b>" + myCommunity
+		+ "</b>";
+		document.getElementById('myCommunityNrM').innerHTML = myCommunityNrM;
+		document.getElementById('myCurrencyName').innerHTML = "<span class=\"badge\">"
+		+ myCurrencyName + "</span>";
+		document.getElementById('myRate').innerHTML = myRate;
+		document.getElementById('myCommunityCreditLine').innerHTML = myCommunityCreditLine
+		+ " <span class=\"badge\">" + myCurrencyName + "</span>";
+		document.getElementById('myCommunityCreditLimit').innerHTML = myCommunityCreditLimit
+		+ " <span class=\"badge\">" + myCurrencyName + "</span>";
+		document.getElementById('myCommunityOpen').innerHTML = myCommunityOpen;
+		document.getElementById('communeAccount').innerHTML = communeAccount;
+		document.getElementById('bankAccount').innerHTML = bankAccount;
+		
+		document.getElementById('myMoneyLender').innerHTML = "<b>Lender <b/>" + myMoneyLender;
+		document.getElementById('myCreditTrust').innerHTML = "<b>Trust Cost <b/>" + myCreditTrust + " <span class=\"badge\"> Credits</span>";
+		document.getElementById('myCredit').innerHTML = "<b>Credit Amount <b/>" + myCredit + " <span class=\"badge\">" + myCurrencyName
+        + "</span>";
+        var d;        
+        d = new Date(myCreditDeadline * 1000);
+		document.getElementById('myCreditDeadline').innerHTML = "<b>Dealine <b/><span class=\"glyphicon glyphicon-time\"></span> " + d;
+		
+	}
 </script>
 <style type="text/css">
-.navbar {
-	margin-bottom: 0;
-	border-radius: 0;
-	background: green;
-}
-
-.well {
-	border: 5px solid green;
-}
 </style>
 </head>
 <body>
@@ -82,11 +81,12 @@
 			<h3>My account</h3>
 			<div class="col-sm-6">
 				<div class="well">
+
 					<div class="media">
 						<div class="media-left">
-							<img
-								src="http://i2.mirror.co.uk/incoming/article5428583.ece/BINARY/archetypal-male-fa_3249635c.jpg"
-								class="media-object" style="width: 60px">
+						<img id="myImage" 
+                                src="blank.png"
+                                class="media-object" style="width: 100px">
 						</div>
 						<div class="media-body">
 							<h4>
@@ -94,6 +94,7 @@
 							</h4>
 						</div>
 					</div>
+
 					<br />
 					<table class="table">
 						<thead>
@@ -101,10 +102,10 @@
 						<tbody>
 							<tr>
 								<td class="text-right col-sm-1">Alias:</td>
-								<td class="text-left"><p id="alias"></p></td>
+								<td class="text-left"><p class="name" id="alias"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-1">Description:</td>
+								<td class="text-right col-sm-1">Who I am:</td>
 								<td class="text-left col-sm-5"><p id="description"></p></td>
 							</tr>
 							<tr>
@@ -112,66 +113,54 @@
 								<td class="text-right"><p id="balance"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-1">Debit Limit:</td>
-								<td class="text-right"><p id="debitLimit"></p></td>
+								<td class="text-right col-sm-1">Credit Line:</td>
+								<td class="text-right"><p id="creditLine"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-1">Available:</td>
 								<td class="text-right"><p id="available"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-1">Intertrade:</td>
-								<td class="text-center"><p id="isIntertrade"></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-1">Commune:</td>
+								<td class="text-right col-sm-1">Is Commune:</td>
 								<td class="text-center"><p id="isCommune"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-1">Seller Reputation:</td>
-								<td class="text-center"><p id=""></p></td>
+								<td class="text-right col-sm-1">Is Bank:</td>
+								<td class="text-center"><p id="isBank"></p></td>
+							</tr>
+
+							<tr>
+								<td class="text-right col-sm-1">Reputation:</td>
+								<td class="text-right"><p id="reputation"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-1">Moneylender Trust:</td>
-								<td class="text-center"><p id=""></p></td>
+								<td class="text-right col-sm-1">Trust:</td>
+								<td class="text-right"><p id="trust"></p></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-
+<div class="well">
 				<h3>
 					<span class="glyphicon glyphicon-thumbs-down"></span> Liabilities
 				</h3>
-				<div id="amountCredit"></div>
-				<div id="unitsOfTrust"></div>
-				<div id="deadline"></div>
-				<div id="moneyLender"></div>
-				<h3>
-					<span class="glyphicon glyphicon-thumbs-up"></span> Endorsed
-					Credits
-				</h3>
-				<h4>
-					<span class="glyphicon glyphicon-ok"></span> Ongoing Credits
-				</h4>
-				<div id="listCredit"></div>
-				<h4>
-					<span class="glyphicon glyphicon-remove"></span> Expired Credits
-				</h4>
-				<div id="listCreditEx"></div>
+				<div id="myCredit"></div>
+				<div id="myCreditTrust"></div>
+				<div id="myCreditDeadline"></div>
+				<div id="myMoneyLender"></div>
+</div>
 			</div>
 			<div class="col-sm-6">
 				<div class="well">
 					<div class="media">
 						<div class="media-left">
 							<img
-								src="https://avatars0.githubusercontent.com/u/6016780?v=3&s=466"
-								class="media-object" style="width: 60px">
+								src="./images/lotus.jpg"
+								class="media-object" style="width: 100px">
 						</div>
 						<div class="media-body">
 							<h4>
-								<img
-									src="https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png"
-									class="img-circle" width="50" height="50"> My Community
+                            <span class="glyphicon glyphicon-flag"></span> My Community
 							</h4>
 						</div>
 					</div>
@@ -182,19 +171,19 @@
 						<tbody>
 							<tr>
 								<td class="text-right col-sm-2">Name:</td>
-								<td class="text-left"><p id="myGroupName"></p></td>
+								<td class="text-left"><p class="name" id="myCommunityName"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-2">Description:</td>
-								<td class="text-left col-sm-4"><p id="myGroupDescription"></p></td>
+								<td class="text-right col-sm-2">Who we are:</td>
+								<td class="text-left col-sm-4"><p id="myCommunityDescription"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-2">Group ID:</td>
-								<td class="text-left"><p id="myGroupNr"></p></td>
+								<td class="text-right col-sm-2">Community ID:</td>
+								<td class="text-left"><p id="myCommunity"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Number of Members:</td>
-								<td class="text-center"><p id="myGroupNrM"></p></td>
+								<td class="text-center"><p id="myCommunityNrM"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Currency:</td>
@@ -205,16 +194,16 @@
 								<td class="text-right"><p id="myRate"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-2">Default Debit:</td>
-								<td class="text-right"><p id="myGroupDebitLimit"></p></td>
+								<td class="text-right col-sm-2">Default Credit:</td>
+								<td class="text-right"><p id="myCommunityCreditLine"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-2">Default Credit:</td>
-								<td class="text-right"><p id="myGroupCreditLimit"></p></td>
+								<td class="text-right col-sm-2">Default Trust:</td>
+								<td class="text-right"><p id="mydefaultMemberTrust"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Open:</td>
-								<td class="text-center"><p id="myGroupOpen"></p></td>
+								<td class="text-center"><p id="myCommunityOpen"></p></td>
 							</tr>
 
 							<tr>
@@ -222,20 +211,8 @@
 								<td class="text-left"><p id="communeAccount"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-2">Intertrade Account::</td>
-								<td class="text-left"><p id="intertradeAccount"></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-2">Intertrade Balance:</td>
-								<td class="text-right" id="intertradeBalance"><p></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-2">Intertrade Debit:</td>
-								<td class="text-right"><p id="intertradeDebitLimit"></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-2">Intertrade Credit:</td>
-								<td class="text-right"><p id="intertradeCreditLimit"></p></td>
+								<td class="text-right col-sm-2">Bank Account::</td>
+								<td class="text-left"><p id="bankAccount"></p></td>
 							</tr>
 						</tbody>
 					</table>

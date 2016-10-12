@@ -1,0 +1,638 @@
+[
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_proposalNumber",
+			"type": "uint256"
+		}],
+		"name": "closeProposal",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_communityID",
+			"type": "uint256"
+		}],
+		"name": "acceptAtCommunity",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_goodNumber",
+			"type": "uint256"
+		}],
+		"name": "offerOff",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_sellNumber",
+			"type": "uint256"
+		}],
+		"name": "sendBill",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_bankTrust",
+			"type": "uint256"
+		}],
+		"name": "createCommunity",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "sysAdmin",
+		"outputs": {
+			"name": "",
+			"type": "address"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_goodNumber",
+			"type": "uint256"
+		}],
+		"name": "offerOn",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_newCommune",
+			"type": "address"
+		}],
+		"name": "transferCommunityCommune",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_imageLink",
+			"type": "string"
+		}],
+		"name": "modifyMemberInfo",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_unitPrice",
+			"type": "uint256"
+		}],
+		"name": "offer",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_proposalNumber",
+			"type": "uint256"
+		}],
+		"name": "getProposalVotes",
+		"outputs": {
+			"name": "",
+			"type": "bool"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_bankTrust",
+			"type": "uint256"
+		}],
+		"name": "modifyCommunityRates",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_gIndex",
+			"type": "uint256"
+		}],
+		"name": "getCommunitybyIndex",
+		"outputs": {
+			"name": "_getCommunityID",
+			"type": "uint256"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "newSysAdmin",
+			"type": "address"
+		}],
+		"name": "transferSysAdmin",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_mIndex",
+			"type": "uint256"
+		}],
+		"name": "getMPbyIndex",
+		"outputs": {
+			"name": "_getMemberID",
+			"type": "address"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_goodNumber",
+			"type": "uint256"
+		}],
+		"name": "getGood",
+		"outputs": {
+			"name": "",
+			"type": "bool"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_member",
+			"type": "address"
+		}],
+		"name": "getMemberInfo",
+		"outputs": {
+			"name": "",
+			"type": "uint256"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_userSatisfaction",
+			"type": "int256"
+		}],
+		"name": "paysell",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_newBank",
+			"type": "address"
+		}],
+		"name": "transferCommunityBank",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_daysAfter",
+			"type": "uint256"
+		}],
+		"name": "endorseCredit",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getTotals",
+		"outputs": {
+			"name": "",
+			"type": "uint256"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_member",
+			"type": "address"
+		}],
+		"name": "getMemberCredit",
+		"outputs": {
+			"name": "",
+			"type": "uint256"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_communityID",
+			"type": "uint256"
+		}],
+		"name": "getCommunityRates",
+		"outputs": {
+			"name": "",
+			"type": "uint256"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_amount",
+			"type": "uint256"
+		}],
+		"name": "transaction",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_quorum",
+			"type": "uint256"
+		}],
+		"name": "newProposal",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_imageLink",
+			"type": "string"
+		}],
+		"name": "registerSystem",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_communityID",
+			"type": "uint256"
+		}],
+		"name": "joinCommunity",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_cImageLink",
+			"type": "string"
+		}],
+		"name": "modifyCommunityInfo",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_candidateCommunity",
+			"type": "uint256"
+		}],
+		"name": "proposeAcceptanceAsMember",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_sellNumber",
+			"type": "uint256"
+		}],
+		"name": "getsell",
+		"outputs": {
+			"name": "",
+			"type": "bool"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_proposalNumber",
+			"type": "uint256"
+		}],
+		"name": "getProposal",
+		"outputs": {
+			"name": "",
+			"type": "address"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_sellNumber",
+			"type": "uint256"
+		}],
+		"name": "getSellAgents",
+		"outputs": {
+			"name": "",
+			"type": "address"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_member",
+			"type": "address"
+		}],
+		"name": "getIfVoted",
+		"outputs": {
+			"name": "",
+			"type": "bool"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_units",
+			"type": "uint256"
+		}],
+		"name": "buy",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_member",
+			"type": "address"
+		}],
+		"name": "getMemberWallet",
+		"outputs": {
+			"name": "",
+			"type": "uint256"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_member",
+			"type": "address"
+		}],
+		"name": "getMemberStatus",
+		"outputs": {
+			"name": "",
+			"type": "bool"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_communityID",
+			"type": "uint256"
+		}],
+		"name": "getCommunityManagement",
+		"outputs": {
+			"name": "",
+			"type": "address"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_choice",
+			"type": "int8"
+		}],
+		"name": "vote",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_member",
+			"type": "address"
+		}],
+		"name": "getMemberLinks",
+		"outputs": {
+			"name": "",
+			"type": "string"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": {
+			"name": "_communityID",
+			"type": "uint256"
+		}],
+		"name": "kickOutCommunity",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "resignFromCommunity",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": {
+			"name": "_communityID",
+			"type": "uint256"
+		}],
+		"name": "getCommunityDescription",
+		"outputs": {
+			"name": "",
+			"type": "uint256"
+		}],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "ethyclos",
+		"outputs": [],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "_TimeStamp",
+			"type": "uint256"
+		}],
+		"name": "NewMember",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "_TimeStamp",
+			"type": "uint256"
+		}],
+		"name": "JoinCommunity",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "_TimeStamp",
+			"type": "uint256"
+		}],
+		"name": "ResignCommunity",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": true,
+			"name": "_communityID",
+			"type": "uint256"
+		}],
+		"name": "NewCommunity",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "_TimeStamp",
+			"type": "uint256"
+		}],
+		"name": "ModifyCommunity",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "_TimeStamp",
+			"type": "uint256"
+		}],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "_endorsedUoT",
+			"type": "uint256"
+		}],
+		"name": "Credit",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "_TimeStamp",
+			"type": "uint256"
+		}],
+		"name": "CreditExp",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "_TimeStamp",
+			"type": "uint256"
+		}],
+		"name": "Sell",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "creator",
+			"type": "address"
+		}],
+		"name": "ProposalAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "result",
+			"type": "int256"
+		}],
+		"name": "Voted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": {
+			"indexed": false,
+			"name": "active",
+			"type": "bool"
+		}],
+		"name": "ProposalResult",
+		"type": "event"
+	}
+]
+

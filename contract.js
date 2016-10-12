@@ -28,11 +28,9 @@ contract ehtyclos {
     	return (nrMembers, nrCommunities, nrProposals, nrGoods, nrSells);
     }
 	
-	event NewCommunity(address indexed _creator, uint indexed _community, string _communityName, uint _TimeStamp);
-	event ModifyCommunity (address indexed _modifier, uint indexed _community, string _communityName, uint _TimeStamp);
-	event NewMember (address indexed _memberAddress, string _memberAlias, string _description, uint _TimeStamp);
-	event JoinCommunity (address _member, string _alias, uint _community, string _communityName, uint _TimeStamp);
-	event ResignCommunity (address _member, string _alias, uint _community, string _communityName, uint _TimeStamp);
+	event NewMember (address indexed _memberAddress, string _memberAlias, string _narrative, uint _TimeStamp);
+	event JoinCommunity (address _member, string _alias, uint _communityID, string _communityName, uint _TimeStamp);
+	event ResignCommunity (address _member, string _alias, uint _communityID, string _communityName, uint _TimeStamp);
 
 	// @notice function to name a new sysAdmin
     function transferSysAdmin(address newSysAdmin) {
@@ -42,7 +40,7 @@ contract ehtyclos {
     }
 	
 	// @notice create a structure to file all members
-	struct members {
+	struct Members {
 		// @parameter key ID parameters
 		bool isMember;
 		string alias;
@@ -50,7 +48,7 @@ contract ehtyclos {
 		string memberDescription;
 		string mImagelink;
 		uint memberCommunity;	
-		bool isExchange;
+		bool isBank;
 		bool isCommune;
 		// @parameter balance is expressed in the member currency. Can only be
 		// modified by system operations
@@ -66,13 +64,13 @@ contract ehtyclos {
 	
 	// @notice map the members structure into an array indexed by the members
 	// ethereum address
-	mapping(address => members) member;
+	mapping(address => Members) member;
 	
 	// @notice create an index of members for listing purposes
 	address[] memberIndex;
 	
 	// @notice anybody with an ethereum account can register in the system
-	function registerSystem (string _alias, string _whisperID, string _description, string _imageLink) {
+	function registerSystem (string _alias, string _whisperID, string _narrative, string _imageLink) {
 		// @notice the caller provides a valid alias
 		if (bytes(_alias).length != 0) {
 		// @notice the caller is not already the system
@@ -80,134 +78,139 @@ contract ehtyclos {
 			member[msg.sender].isMember = true;
 			member[msg.sender].alias = _alias;
 			member[msg.sender].whisperID = _whisperID;
-			member[msg.sender].memberDescription = _description;
+			member[msg.sender].memberDescription = _narrative;
 			member[msg.sender].mImagelink = _imageLink;
 			member[msg.sender].memberCommunity = 0;
-			member[msg.sender].isExchange = false;
+			member[msg.sender].isBank = false;
 			member[msg.sender].isCommune = false;
 			member[msg.sender].balance = 0;
 			member[msg.sender].creditLine = 0;
 			member[msg.sender].creditDeadline = 0;	
 			member[msg.sender].lastTransaction = now;
-		NewMember (msg.sender, _alias, _description, now);
+		NewMember (msg.sender, _alias, _narrative, now);
 		memberIndex[memberIndex.length ++] = msg.sender;
-		nrMembers = nrMembers + 1;
+		nrMembers ++;
 				} 
 			} 
 		}
 	
-	function modifyMemberInfo (string _alias, string _whisperID, string _description, string _imageLink) {
+	function modifyMemberInfo (string _alias, string _whisperID, string _narrative, string _imageLink) {
 		if (bytes(_alias).length != 0) {member[msg.sender].alias = _alias;}
 		if (bytes(_whisperID).length != 0) {member[msg.sender].whisperID = _whisperID;}
-		if (bytes(_description).length != 0) {member[msg.sender].memberDescription = _description;}
+		if (bytes(_narrative).length != 0) {member[msg.sender].memberDescription = _narrative;}
 		if (bytes(_imageLink).length != 0) {member[msg.sender].mImagelink = _imageLink;}
 		}
 	
 	// @notice anybody in the system can join a community if the community is
 	// open
-	function joinCommunity (uint _communityJ) {
+	function joinCommunity (uint _communityID) {
 					// @notice if the community is open
-					if (community[_communityJ].open = true) {
-						makeMemberOfCommunity (msg.sender, _communityJ);
+					if (community[_communityID].open = true) {
+						makeMemberOfCommunity (msg.sender, _communityID);
 					} 
 					// @notice if the community is not open "proposeNewMember"
 	}
 	
-	function acceptAtCommunity ( address _newMember, uint _communityJ) {
+	function acceptAtCommunity ( address _newMember, uint _communityID) {
 		// @notice the commune can accept a new member in the community
-		if (community[_communityJ].commune == msg.sender) {
-			makeMemberOfCommunity (_newMember, _communityJ);	
+		if (community[_communityID].commune == msg.sender) {
+			makeMemberOfCommunity (_newMember, _communityID);	
 		}
 	}
 	
-	function makeMemberOfCommunity (address _newMember, uint _communityJ) internal {
+	function makeMemberOfCommunity (address _newMember, uint _communityID) internal {
 		// @notice the member is in the system
 		// @notice the member is not in a community
 		if ((member[_newMember].isMember = true) && (member[_newMember].memberCommunity == 0)) {
-		member[_newMember].memberCommunity = _communityJ;
+		member[_newMember].memberCommunity = _communityID;
 		member[_newMember].balance = 0;
-		member[_newMember].creditLine = community[_communityJ].defaultMemberCreditLine;
-		community[_communityJ].nrMembers = community[_communityJ].nrMembers + 1;
-		JoinCommunity (_newMember, member[_newMember].alias, _communityJ, community[_communityJ].communityName, now);
+		member[_newMember].creditLine = community[_communityID].defaultCreditLine;
+		community[_communityID].nrMembers ++;
+		JoinCommunity (_newMember, member[_newMember].alias, _communityID, community[_communityID].communityName, now);
 		}
 	}
 	
 	function resignFromCommunity () {
-				uint _communityD = member[msg.sender].memberCommunity; 
+				uint _communityID = member[msg.sender].memberCommunity; 
 				// @notice balance cannot be negative
 				if (member[msg.sender].balance >= 0) {
-					deleteMemberOfCommunity (msg.sender, _communityD);
+					deleteMemberOfCommunity (msg.sender, _communityID);
 				}
 			}	
 	
-	function kickOutCommunity (address _memberOfCommunity, uint _communityD) {
+	function kickOutCommunity (address _memberOfCommunity, uint _communityID) {
 		// @notice the commune can delete a new member in the community
-		if (community[_communityD].commune == msg.sender) {
-			deleteMemberOfCommunity (_memberOfCommunity, _communityD);
+		if (community[_communityID].commune == msg.sender) {
+			deleteMemberOfCommunity (_memberOfCommunity, _communityID);
 		}
 	}
 	
-	function deleteMemberOfCommunity (address _memberOfCommunity, uint _communityD) internal {
+	function deleteMemberOfCommunity (address _memberOfCommunity, uint _communityID) internal {
 		// @notice the account is not a community account and the member is not
 		// commune of the community
 		if ((member[_memberOfCommunity].isCommune == false) && (member[msg.sender].isCommune == false)) {
-		member[community[_communityD].commune].balance += member[_memberOfCommunity].balance;
+		member[community[_communityID].commune].balance += member[_memberOfCommunity].balance;
 		member[_memberOfCommunity].balance = 0;
 		member[_memberOfCommunity].memberCommunity = 0;
 		member[_memberOfCommunity].creditLine = 0;
-		community[_communityD].nrMembers = community[_communityD].nrMembers - 1;
-		ResignCommunity (_memberOfCommunity, member[_memberOfCommunity].alias, _communityD, community[_communityD].communityName, now);		
+		community[_communityID].nrMembers --;
+		ResignCommunity (_memberOfCommunity, member[_memberOfCommunity].alias, _communityID, community[_communityID].communityName, now);		
 		}
 	}
 
-	function getMember (address _memberG) constant returns (bool, string, string, uint, int, uint) {
-	    return (member[_memberG].isMember, member[_memberG].alias, member[_memberG].memberDescription, member[_memberG].memberCommunity, member[_memberG].balance, member[_memberG].creditLine);
+	function getMemberInfo (address _member) constant returns (bool, string, string, uint) {
+	    return (member[_member].isMember, member[_member].alias, member[_member].memberDescription, member[_member].memberCommunity);
 	}
 	
-	function getMemberStatus (address _memberG) constant returns (bool, bool) {
-	   return (member[_memberG].isExchange, member[_memberG].isCommune);
+	function getMemberWallet (address _member) constant returns (int, uint, uint, int, uint) {
+		return (member[_member].balance, member[_member].creditLine, member[_member].trust, member[_member].reputation, member[_member].lastTransaction);
 	}
 	
-	function getMemberWhisper (address _memberG) constant returns (string, string) {
-	   return (member[_memberG].whisperID, member[_memberG].mImagelink);
+	function getMemberCredit (address _member) constant returns (address, uint, uint, uint) {
+		return (member[_member].moneyLender, member[_member].creditTrust, member[_member].creditLine, member[_member].creditDeadline);
+	}
+	
+	function getMemberStatus (address _member) constant returns (bool, bool) {
+	   return (member[_member].isBank, member[_member].isCommune);
+	}
+	
+	function getMemberLinks (address _member) constant returns (string, string) {
+	   return (member[_member].whisperID, member[_member].mImagelink);
 	}
 			
 	function getMPbyIndex (uint _mIndex) constant returns (address _getMemberID) {
 		_getMemberID = memberIndex[_mIndex];
 	}
+	
+	event NewCommunity(address indexed _creator, uint indexed _communityID);
+	event ModifyCommunity (address indexed _modifier, uint indexed _communityID, uint _TimeStamp);
 
     // @notice create a structure to file all communities and their parameters
-    struct communities {
+    struct Communities {
     	string communityName;
     	string communityDescription;
     	string currencyName;
-    	string gImageLink;
+    	string cImageLink;
     	address commune;
-    	address exchangeAccount;
-    	// @parameter the exchange rate against the base currency is given in
+    	address communityBank;
+    	// @parameter the bank exchangeRate against the base currency is given in
 		// percentage (100 = 1/1)
-    	uint rate;
+    	uint exchangeRate;
     	uint transferTax;
     	uint accumulationTax;
-    	uint rewardRate;
-    	uint defaultMemberCreditLine;
-    	uint defaultMemberCreditLimit;	
+    	uint creditRewardRate;
+    	uint defaultCreditLine;
+    	uint defaultTrust;	
     	bool open;
     	uint nrMembers;
-    	uint quorum;
-    	uint goalIncomes;
-    	uint goalSpenditures;
-    	int totalMinted;
-    	uint totalCredit;
-    	uint totalTrustCost;
-    	uint totalTrustAvailable;    	
+    	uint quorum; 	
     }
 
-    // @notice map the exchanges structure into an array indexed by a string
+    // @notice map the banks structure into an array indexed by a string
 	// (the string we use is the CES Exchange ID)
-    mapping(uint => communities) community;
+    mapping(uint => Communities) community;
     
-    // @notice create an index of exchanges for listing purposes
+    // @notice create an index of banks for listing purposes
     uint[] communityIndex;
     
     // @notice A community can be created by any account in the system that is
@@ -215,63 +218,65 @@ contract ehtyclos {
     // @notice A community is also an account and is identified by its account
 	// number.
     // @notice A community has two special members:
-    // @notice the exchange account holding the external balance against other
+    // @notice the bank account holding the external balance against other
 	// communities
     // @notice the commune account holding the community common moneys, such as
 	// taxes
-    function createCommunity (string _communityName, string _description, string _currencyName, uint _creditLine, uint _creditLimit, uint _exchangeCreditLine, bool _open) {
+    function createCommunity (string _communityName, string _narrative, string _currencyName, string _cImageLink, uint _exchangeRate, uint _transferTax, uint _accumulationTax, uint _creditRewardRate, uint _defaultCreditLine, uint _defaultTrust, bool _open, uint _quorum, uint _bankCreditLine, uint _bankTrust) {
     	// @notice the member exists in the system and the member is not in a
 		// community and the name is valid
     	if (member[msg.sender].isMember = true) {
     		if (member[msg.sender].memberCommunity == 0) { 
     				if (bytes(_communityName).length != 0) {
-    					uint communityID = now;	
-    					community[communityID].communityName = _communityName;
-    					community[communityID].currencyName = _currencyName;
-    					community[communityID].exchangeAccount = msg.sender;
-    					community[communityID].commune = msg.sender;
-    					community[communityID].rate = 100;
-    			    	community[communityID].transferTax = 0;
-    			    	community[communityID].accumulationTax = 0;
-    			    	community[communityID].rewardRate = 0;
-    					community[communityID].defaultMemberCreditLine = _creditLine;
-    					community[communityID].defaultMemberCreditLimit = _creditLimit;
-    					community[communityID].open = _open;
-    					community[communityID].nrMembers = 1;
-    					community[communityID].quorum = 3;
-    					community[communityID].goalIncomes;
-    			    	community[communityID].goalSpenditures;
-    			    	community[communityID].totalMinted;
-    			    	community[communityID].totalCredit;
-    			    	community[communityID].totalTrustCost;
-    			    	community[communityID].totalTrustAvailable = 0; 
-    						NewCommunity(msg.sender, communityID, _communityName, now);
-    						// @notice make the creator member of the community
-							// and set the community exchange limits
-    						member[msg.sender].memberCommunity = communityID;
-    						member[msg.sender].isExchange = true;
+    					uint _communityID = now;	
+    					community[_communityID].communityName = _communityName;
+    	    			community[_communityID].communityDescription = _narrative;
+    	    			community[_communityID].currencyName = _currencyName;
+                        community[_communityID].cImageLink = _cImageLink;
+                        community[_communityID].commune = msg.sender;
+                        community[_communityID].communityBank = msg.sender;
+    	    			community[_communityID].exchangeRate = _exchangeRate;
+    	    			community[_communityID].transferTax = _transferTax;
+    	    			community[_communityID].accumulationTax = _accumulationTax;
+    	    			community[_communityID].creditRewardRate = _creditRewardRate;
+    	    			community[_communityID].defaultCreditLine = _defaultCreditLine;
+    	    			community[_communityID].defaultTrust = _defaultTrust;
+    	    			community[_communityID].open = false;
+    	    			community[_communityID].nrMembers = 1;
+    	    			community[_communityID].quorum = _quorum;
+                        	// @notice make the creator member of the community
+							// and set the community bank limits
+    						member[msg.sender].memberCommunity = _communityID;
+    						member[msg.sender].isBank = true;
     						member[msg.sender].isCommune = true;
     						member[msg.sender].balance = 0;
-    						member[msg.sender].creditLine = _exchangeCreditLine;
-    					communityIndex[communityIndex.length ++] = communityID;
+    						member[msg.sender].creditLine = _bankCreditLine;
+    						member[msg.sender].trust = _bankTrust;
+    					communityIndex[communityIndex.length ++] =_communityID;
     					nrCommunities = nrCommunities +1;
+    					NewCommunity(msg.sender, _communityID);
     				} 
     			}
     	    } 
     	} 
 
-    // @notice transfer community exchange account. Old exchange or sysAdmin can
-	// transfer community exchange to another member of the community
+    // @notice transfer community bank account. Old bank or sysAdmin can
+	// transfer community bank to another member of the community
     // @notice the reason to include sysAdmin is for the case the old commune
 	// disappears
-    function transferCommunityExchange (uint _communityID, address _newExchange) {
-    	if ((msg.sender == community[_communityID].exchangeAccount) || (msg.sender == sysAdmin)) {
-    		if (member[_newExchange].memberCommunity == _communityID) {
-        		member[community[_communityID].exchangeAccount].isExchange = false;
-        		community[_communityID].exchangeAccount = _newExchange;
-        		member[_newExchange].isExchange = true;
+    function transferCommunityBank (uint _communityID, address _newBank) {
+    	address _oldBank = community[_communityID].communityBank;    
+    	if ((msg.sender == _oldBank) || (msg.sender == sysAdmin)) {
+    		if (member[_newBank].memberCommunity == _communityID) {
+	    			member[_newBank].creditLine = member[_oldBank].creditLine;
+	    			member[_newBank].trust = member[_oldBank].trust;
+	    			member[_newBank].isBank = true;
+	    			member[_oldBank].creditLine = community[_communityID].defaultCreditLine;
+	    			member[_oldBank].trust = community[_communityID].defaultTrust;
+	        		member[_oldBank].isBank = false;
+	        		community[_communityID].communityBank = _newBank;
     			string _communityName = community[_communityID].communityName;
-    			ModifyCommunity (msg.sender, _communityID, _communityName, now);
+    			ModifyCommunity (msg.sender, _communityID, now);
     	} 
     	} 
     }
@@ -281,59 +286,79 @@ contract ehtyclos {
     // @notice the reason to include sysAdmin is for the case the old commune
 	// disappears
     function transferCommunityCommune (uint _communityID, address _newCommune) {
-    	if ((msg.sender == community[_communityID].commune) || (msg.sender == sysAdmin)) {
+    	address _oldCommune = community[_communityID].commune;
+    	if ((msg.sender == _oldCommune) || (msg.sender == sysAdmin)) {
     		if (member[_newCommune].memberCommunity == _communityID) {
-        		member[community[_communityID].commune].isCommune = false;
-        		community[_communityID].commune = _newCommune;
-        		member[_newCommune].isCommune = true;
+	    			member[_newCommune].creditLine = member[_oldCommune].creditLine;
+	    			member[_newCommune].trust = member[_oldCommune].trust;
+	    			member[_newCommune].isCommune = true;
+	    			member[_oldCommune].creditLine = community[_communityID].defaultCreditLine;
+	    			member[_oldCommune].trust = community[_communityID].defaultTrust;
+	        		member[_oldCommune].isCommune = false;
     			string _communityName = community[_communityID].communityName;
-    			ModifyCommunity (msg.sender, _communityID, _communityName, now);
+    			ModifyCommunity (msg.sender, _communityID, now);
     	} 
     	} 
     }
     	
     // @notice the commune can modify one, several or all parameters of a
 	// community. If one parameter is left empty, it remains the same. Only the
-	// exchange commune can change its parameters
-    function modifyCommunity (uint _communityID, string _communityName, string _description, string _currencyName, uint _rate, uint _creditLine, uint _exchangeCreditLine, uint _exchangeCreditLimit, bool _open, uint _newQuorum) {
-    	        if (msg.sender == community[_communityID].commune) {
+	// bank commune can change its parameters
+    function modifyCommunityInfo (uint _communityID, string _communityName, string _narrative, string _currencyName, string _cImageLink) {
+    	        address _commune = community[_communityID].commune;
+    	        if (msg.sender == _commune) {
     			// @notice if a value for a parameter is given, change the
 				// parameter, if empty retain old value
     			if (bytes(_communityName).length != 0) {community[_communityID].communityName = _communityName;}
-    			if (bytes(_description).length != 0) {community[_communityID].communityDescription = _description;}
-    			if (bytes(_currencyName).length != 0) {community[_communityID].currencyName = _currencyName;}
-    			if (_rate != 0) {community[_communityID].rate = _rate;}	
-    			if (_creditLine != 0) {community[_communityID].defaultMemberCreditLine = _creditLine;}
-    			if (_exchangeCreditLine != 0) {member[community[_communityID].exchangeAccount].creditLine = _exchangeCreditLine;}
-    			if (_open == true) {community[_communityID].open = true;}	
-    			if (_newQuorum != 0) {community[_communityID].quorum = _newQuorum;}	
-    			ModifyCommunity (msg.sender, _communityID, _communityName, now);				
+    			if (bytes(_narrative).length != 0) {community[_communityID].communityDescription = _narrative;}
+    			if (bytes(_currencyName).length != 0) {community[_communityID].currencyName = _currencyName;} 
+    			if (bytes(_cImageLink).length != 0) {community[_communityID].cImageLink = _cImageLink;} 
+    			ModifyCommunity (msg.sender, _communityID, now);				
     				}     					
     }
     
-    function getCommunityDescription (uint _communityG) constant returns (string, string, string, bool, uint) {
-    return (community[_communityG].communityName, community[_communityG].communityDescription, community[_communityG].currencyName, community[_communityG].open, community[_communityG].nrMembers);
+        function modifyCommunityRates (uint _communityID, uint _exchangeRate, uint _transferTax, uint _accumulationTax, uint _creditRewardRate, uint _defaultCreditLine, uint _defaultTrust, bool _open, uint _quorum, uint _bankCreditLine, uint _bankTrust) {
+    	        address _commune = community[_communityID].commune;
+    	        address _bank = community[_communityID].communityBank;
+    	        if (msg.sender == _commune) {
+    			// @notice if a value for a parameter is given, change the
+				// parameter, if empty retain old value
+    			if (_transferTax != 0) {community[_communityID].transferTax = _transferTax;} 
+    			if (_accumulationTax != 0) {community[_communityID].accumulationTax = _accumulationTax;} 
+    			if (_creditRewardRate != 0) {community[_communityID].creditRewardRate = _creditRewardRate;} 
+    			if (_defaultCreditLine != 0) {community[_communityID].defaultCreditLine = _defaultCreditLine;} 
+    			if (_defaultTrust != 0) {community[_communityID].defaultTrust = _defaultTrust;}
+    			if (_bankCreditLine != 0) {member[_bank].creditLine = _bankCreditLine;}
+    			if (_bankTrust != 0) {member[_bank].trust = _bankCreditLine;}
+    			if (_open == false) {community[_communityID].open = false;} 
+    			if (_quorum != 0) {community[_communityID].quorum = _quorum;} 
+    			ModifyCommunity (msg.sender, _communityID, now);				
+    				}     					
     }
     
-    function getCommunityRates (uint _communityG) constant returns (uint, uint, uint) {
-    return (community[_communityG].rate, community[_communityG].defaultMemberCreditLine, community[_communityG].defaultMemberCreditLimit);
+    function getCommunityDescription (uint _communityID) constant returns (string, string, string, string, bool, uint) {
+    return (community[_communityID].communityName, community[_communityID].communityDescription, community[_communityID].currencyName, community[_communityID].cImageLink, community[_communityID].open, community[_communityID].nrMembers);
     }
     
-    function getCommunityManagement (uint _communityG) constant returns (address, address) {
-    return (community[_communityG].exchangeAccount, community[_communityG].commune);
+    function getCommunityRates (uint _communityID) constant returns (uint, uint, uint) {
+    return (community[_communityID].exchangeRate, community[_communityID].defaultCreditLine, community[_communityID].defaultTrust);
+    }
+    
+    function getCommunityManagement (uint _communityID) constant returns (address, address) {
+    return (community[_communityID].communityBank, community[_communityID].commune);
     }    
    
     function getCommunitybyIndex (uint _gIndex) constant returns (uint _getCommunityID) {
     	_getCommunityID = communityIndex[_gIndex];
     }
     
-    event Transfer (uint indexed _community, address indexed _sender, address indexed _receiver, uint _amount, uint _TimeStamp);
-    event Credit(address indexed _MoneyLender, address indexed _borrowerAddress, uint _cDealine, uint _endorsedUoT);
-    event CreditExp(address indexed _moneyLender, address indexed _borrower, uint _creditCost, bool _success, uint _TimeStamp);
-    event Sell (uint _sellNumber, address indexed _seller, address indexed _buyer, string _description, uint _sellAmount, uint _TimeStamp);
+    event Transfer (uint indexed _communityID, address indexed _sender, address indexed _receiver, uint _amount, uint _TimeStamp);
+    event Credit (address indexed _MoneyLender, address indexed _borrowerAddress, uint _cDealine, uint _endorsedUoT);
+    event CreditExp (address indexed _moneyLender, address indexed _borrower, uint _creditCost, bool _success, uint _TimeStamp);
+	event Sell (uint _sellNumber, uint _buyerCommunity, address indexed _buyer, uint _sellerCommunity, address indexed _seller, uint _good, uint _price, uint _TimeStamp);
 
-	// @notice function transfer from the member of the same exchange or to the
-	// member of another exchange. The amount is expressed in the sender
+	// @notice function transfer from the member of the same bank or to the
+	// member of another bank. The amount is expressed in the sender
 	// currency
 	function transaction (address _to, uint _amount) {		
 		address _from = msg.sender;
@@ -358,12 +383,12 @@ contract ehtyclos {
 	}
 		
 	function exchange (address _from, address _to, uint _amount) internal {		
-		address _fromExchange = community[member[_from].memberCommunity].exchangeAccount;
-		address _toExchange = community[member[_to].memberCommunity].exchangeAccount;
+		address _fromExchange = community[member[_from].memberCommunity].communityBank;
+		address _toExchange = community[member[_to].memberCommunity].communityBank;
 		transfer (_from, _fromExchange, _amount);
-		uint _rateFrom = community[member[_from].memberCommunity].rate;
-		uint _rateTo = community[member[_from].memberCommunity].rate;
-		uint _amountTo = _amount * _rateFrom/_rateTo;
+		uint _exchangeRateFrom = community[member[_from].memberCommunity].exchangeRate;
+		uint _exchangeRateTo = community[member[_from].memberCommunity].exchangeRate;
+		uint _amountTo = _amount * _exchangeRateFrom/_exchangeRateTo;
 		int _intAmountFrom = int(_amount);
 		int _intAmountTo = int(_amountTo);
 		if ((member[_fromExchange].balance - _intAmountFrom) > - int((member[_fromExchange].creditLine)))  { 
@@ -375,10 +400,10 @@ contract ehtyclos {
 	}
 	
 	function payAccTax (uint _amount) internal {
-		uint _community = member[msg.sender].memberCommunity;
-		address _commune = community[_community].commune;
+		uint _communityID = member[msg.sender].memberCommunity;
+		address _commune = community[_communityID].commune;
 		uint _timeYears = (now - member[msg.sender].lastTransaction)/(1 years);
-		uint _taxRate = community[_community].accumulationTax;
+		uint _taxRate = community[_communityID].accumulationTax;
 		if (member[msg.sender].balance > 0) {
 			uint _tax = uint(member[msg.sender].balance) * _taxRate * _timeYears / 100;
 			} else {
@@ -389,9 +414,9 @@ contract ehtyclos {
 	}
 	
 	function payTrnsTax (address _to, uint _amount) internal {
-		uint _community = member[_to].memberCommunity;
-		address _commune = community[_community].commune;
-		uint _taxRate = community[_community].transferTax;
+		uint _communityID = member[_to].memberCommunity;
+		address _commune = community[_communityID].commune;
+		uint _taxRate = community[_communityID].transferTax;
 		uint _tax = _amount * _taxRate / 100;
 		transfer (_to, _commune,  _tax);	
 	}
@@ -405,7 +430,7 @@ contract ehtyclos {
 	// from today
 	function endorseCredit (address _borrower, uint _credit, uint _daysAfter)  {
 		if (member[msg.sender].memberCommunity == member[_borrower].memberCommunity) {
-			uint _community = member[msg.sender].memberCommunity;
+			uint _communityID = member[msg.sender].memberCommunity;
 			updateCredit (_borrower); 	
 		if (member[_borrower].creditLine > 0) {cancelCredit (_borrower);}
 			uint _unitsOfTrust = _credit * _daysAfter;
@@ -418,29 +443,23 @@ contract ehtyclos {
 				uint _creditDeadline = now + _daysAfter * 1 days; 
 				member[_borrower].creditDeadline = _creditDeadline; 
 				member[_borrower].creditTrust = _unitsOfTrust;
-				community[_community].totalCredit += _credit;
-				community[_community].totalTrustCost += _unitsOfTrust;
-				community[_community].totalTrustAvailable -= _unitsOfTrust;
 				Credit(msg.sender, _borrower, _creditDeadline, _unitsOfTrust);		
 			}
 		}
 	}
 	
 	function cancelCredit (address _borrower) internal {
-		uint _community = member[_borrower].memberCommunity;
+		uint _communityID = member[_borrower].memberCommunity;
 		uint _credit = member[_borrower].creditLine;
 		address _moneyLender = member[_borrower].moneyLender;
 		uint _unitsOfTrust = member[_borrower].creditTrust;
 		member[_moneyLender].trust += _unitsOfTrust;
 		member[_borrower].creditLine = 0;
 		member[_borrower].creditDeadline = 0;	
-		community[_community].totalCredit -= _credit;
-		community[_community].totalTrustCost -= _unitsOfTrust;
-		community[_community].totalTrustAvailable += _unitsOfTrust;
 	}
 	
 	function updateCredit (address _borrower) internal {
-		uint _community = member[_borrower].memberCommunity;
+		uint _communityID = member[_borrower].memberCommunity;
 		// @notice update the credit status
 		if (member[_borrower].creditLine > 0) {
 		// @notice check if deadline is over
@@ -448,13 +467,11 @@ contract ehtyclos {
 				bool _success = false;
 				uint _credit = member[_borrower].creditLine;
 				uint _creditTrust = member[_borrower].creditTrust;
-				uint _reward = _creditTrust * community[_community].rewardRate/100;
+				uint _reward = _creditTrust * community[_communityID].creditRewardRate/100;
 				address _moneyLender = member[_borrower].moneyLender;
 			// @notice if time is over reset credit to zero, deadline to zero
 				member[_borrower].creditDeadline = 0;
-				community[_community].totalCredit -= _credit;
 				member[_borrower].creditLine = 0;				
-				community[_community].totalTrustCost -= _creditTrust;
 				// @notice if balance is negative the credit was not returned,
 				// the money lender balanceReputation is not restored and is
 				// penalized with a 20%
@@ -463,16 +480,14 @@ contract ehtyclos {
 				// @return money lender reputation penalized
 				if (member[_borrower].balance < 0) {					
 					member[_moneyLender].trust += _creditTrust - _reward;
-					community[_community].totalTrustAvailable += _creditTrust - _reward;
 				}
 				// @notice if balance is not negative the credit was returned,
 				// the money lender balanceReputation is restored and is
-				// rewardRateed with a 20%
+				// creditRewarded
 				// @return money lender reputation rewarded
 				else {
 					_success = true;
 					member[_moneyLender].trust += _creditTrust + _reward;
-					community[_community].totalTrustAvailable += _creditTrust + _reward;
 				}
 				// @notice reset money lender information
 				// @return money lender information deleted
@@ -487,15 +502,45 @@ contract ehtyclos {
 		struct Goods {
 			address seller;
 			string cathegory;
-			string description;
+			string narrative;
 			string goodImageLink;
 			uint unitPrice; 
+			uint nrSells;
+			int userSatisfaction;
 			bool onOffer;
 		}
 		
 		mapping(uint => Goods) good; 
 		
-		function offer ()
+		function offer (string _cathegory, string _narrative, string _goodImageLink, uint _unitPrice) {
+			nrGoods ++;
+			uint goodNumber = nrGoods;
+			good[goodNumber].seller = msg.sender;
+			good[goodNumber].cathegory = _cathegory;
+			good[goodNumber].narrative = _narrative;
+			good[goodNumber].goodImageLink = _goodImageLink;
+			good[goodNumber].unitPrice = _unitPrice;
+			good[goodNumber].nrSells = 0;
+			good[goodNumber].userSatisfaction = 0;
+			good[goodNumber].onOffer = true;
+		}
+		
+		function getGood (uint _goodNumber) constant returns (address, string, string, string, uint, bool) {
+			return (good[_goodNumber].seller, good[_goodNumber].cathegory, good[_goodNumber].narrative, good[_goodNumber].goodImageLink, good[_goodNumber].unitPrice, good[_goodNumber].onOffer);
+		}
+		
+		function offerOn (uint _goodNumber) {
+			if (good[_goodNumber].seller == msg.sender) {
+				good[_goodNumber].onOffer = true;
+			}
+		}
+
+		function offerOff (uint _goodNumber) {
+			if (good[_goodNumber].seller == msg.sender) {
+				good[_goodNumber].onOffer = false;
+			}
+		}
+		
 	
 		struct Sells {
 		uint good;
@@ -519,24 +564,45 @@ contract ehtyclos {
 		sell[sellNumber].sellDateTime = now;
 		sell[sellNumber].bill = false;	
 		sell[sellNumber].paid = false;
-		address _seller = good[good].seller;
-		uint _communitySeller = member[].memberCommunity;	
-		uint _communityBuyer = member[msg.sender].memberCommunity;	
-		Sell (nrSells, msg.sender, _good, sell[sellNumber].price, now);
+		good[_good].nrSells ++;
+		address _seller = good[_good].seller;
+		uint _sellerCommunity = member[_seller].memberCommunity;	
+		uint _buyerCommunity = member[msg.sender].memberCommunity;	
+		Sell (nrSells, _buyerCommunity, msg.sender, _sellerCommunity, _seller, _good, sell[sellNumber].price, now);
 	}
-
-	function paysell (uint _sellNumber) {
+	
+	function sendBill (uint _sellNumber) {
+	    uint _good = sell[_sellNumber].good;
+	    address _seller = good[_good].seller;
+		if (_seller == msg.sender) {
+			sell[_sellNumber].bill = true;	
+			}    	
+	}	
+	
+	function paysell (uint _sellNumber, int _userSatisfaction) {
 		if (sell[_sellNumber].buyer == msg.sender) {
-			transfer (msg.sender, sell[_sellNumber].seller, sell[_sellNumber].sellAmount);
+		    uint _good = sell[_sellNumber].good;
+	        address _seller = good[_good].seller;
+			good[_good].userSatisfaction += _userSatisfaction;
+			member[_seller].reputation += _userSatisfaction;
+			transaction (_seller, sell[_sellNumber].price);
 			sell[_sellNumber].paid = true;
 			}    	
 	}	
 	
-	function getsell (uint _sellNumber) constant returns (address, address, string, uint, uint, bool) {
-		return (sell[_sellNumber].seller, sell[_sellNumber].buyer, sell[_sellNumber].description, sell[_sellNumber].sellAmount, sell[_sellNumber].sellDateTime, sell[_sellNumber].paid);
+	function getsell (uint _sellNumber) constant returns (uint, uint, uint, uint, bool, bool) {
+	    uint _good = sell[_sellNumber].good;
+	    address _seller = good[_good].seller;
+		return (_good, sell[_sellNumber].units, sell[_sellNumber].price, sell[_sellNumber].sellDateTime, sell[_sellNumber].bill, sell[_sellNumber].paid);
+	}
+	
+	function getSellAgents (uint _sellNumber) constant returns (uint,address, address) {
+	    uint _good = sell[_sellNumber].good;
+	    address _seller = good[_good].seller;
+		return (_good, _seller, sell[_sellNumber].buyer);
 	}
     
-    event ProposalAdded(uint proposalNumber, uint community, string description, address creator);
+    event ProposalAdded(uint proposalNumber, uint community, string narrative, address creator);
     event Voted(address voter, uint proposalNumber, int8 vote, int result);
     event ProposalResult(uint proposalNumber, int result, uint quorum, bool active);
 	
@@ -544,10 +610,10 @@ contract ehtyclos {
 		address creator;
     	uint proposalCommunity;
     	string title;
-        string description;
+        string narrative;
         uint votingDeadline;
         uint quorumProposal;
-        bool closed;
+        bool ended;
         bool proposalPassed;
         uint numberOfVotes;
         int currentResult;
@@ -561,21 +627,21 @@ contract ehtyclos {
 	mapping (uint => Proposals) proposal;
 	
 	// @ notice Function to create a new proposal
-    function newProposal (uint _proposalCommunity, string _title, string _description, uint _days, uint _quorum) {   
+    function newProposal (uint _proposalCommunity, string _title, string _narrative, uint _days, uint _quorum) {   
         nrProposals ++;
         uint proposalNumber = nrProposals;
 		proposal[proposalNumber].creator = msg.sender;
         proposal[proposalNumber].proposalCommunity = _proposalCommunity;
         proposal[proposalNumber].title = _title;
-        proposal[proposalNumber].description = _description;
+        proposal[proposalNumber].narrative = _narrative;
         proposal[proposalNumber].votingDeadline = now + _days * 1 days;
         proposal[proposalNumber].quorumProposal = _quorum;
-        proposal[proposalNumber].closed = false;
+        proposal[proposalNumber].ended = false;
         proposal[proposalNumber].proposalPassed = false;
         proposal[proposalNumber].numberOfVotes = 0;
         proposal[proposalNumber].currentResult = 0;
 		proposal[proposalNumber].voters[msg.sender].alreadyVoted = false; 		
-        ProposalAdded(proposalNumber, _proposalCommunity, _description, msg.sender);
+        ProposalAdded(proposalNumber, _proposalCommunity, _narrative, msg.sender);
     }
 	
 	function proposeAcceptanceAsMember (uint _candidateCommunity) {
@@ -586,7 +652,7 @@ contract ehtyclos {
 	
     function vote(uint _proposalNumber, int8 _choice) {
 		if (now > proposal[_proposalNumber].votingDeadline) {closeProposal(_proposalNumber);}	
-		if (proposal[_proposalNumber].closed == false) {
+		if (proposal[_proposalNumber].ended == false) {
 		if (member[msg.sender].memberCommunity == proposal[_proposalNumber].proposalCommunity) {
 					if (proposal[_proposalNumber].voters[msg.sender].alreadyVoted == false) {                
         				proposal[_proposalNumber].numberOfVotes += 1;    
@@ -603,7 +669,7 @@ contract ehtyclos {
     function closeProposal(uint _proposalNumber) {           
         /* If difference between support and opposition is larger than margin */
 		if (now > proposal[_proposalNumber].votingDeadline) {
-		if (proposal[_proposalNumber].closed == false) {
+		if (proposal[_proposalNumber].ended == false) {
         if ((proposal[_proposalNumber].numberOfVotes > proposal[_proposalNumber].quorumProposal) 
         		|| (proposal[_proposalNumber].currentResult > 0))
         {
@@ -615,10 +681,11 @@ contract ehtyclos {
         ProposalResult(_proposalNumber, proposal[_proposalNumber].currentResult, proposal[_proposalNumber].numberOfVotes, proposal[_proposalNumber].proposalPassed);
 			}}}    
   
-    function getProposal (uint _proposalNumber) constant returns (uint, string, uint, uint, address) {
+    function getProposal (uint _proposalNumber) constant returns (uint, string, string, uint, uint, address) {
 		if (now > proposal[_proposalNumber].votingDeadline) {closeProposal(_proposalNumber);}	
     	return (proposal[_proposalNumber].proposalCommunity, 
-    			proposal[_proposalNumber].description, 
+    	        proposal[_proposalNumber].title, 
+    			proposal[_proposalNumber].narrative, 
     			proposal[_proposalNumber].quorumProposal,
     			proposal[_proposalNumber].votingDeadline,
 				proposal[_proposalNumber].creator
@@ -632,7 +699,7 @@ contract ehtyclos {
     function getProposalVotes (uint _proposalNumber) constant returns (uint, int, bool, bool) {
     	return (proposal[_proposalNumber].numberOfVotes, 
     			proposal[_proposalNumber].currentResult,
-    			proposal[_proposalNumber].closed,
+    			proposal[_proposalNumber].ended,
     			proposal[_proposalNumber].proposalPassed    			
     			);
     }	

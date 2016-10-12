@@ -1,3 +1,7 @@
+img {
+    border: 2px solid green;
+}
+
 .navbar {
 	margin-bottom: 0;
 	border-radius: 0;
@@ -6,4 +10,16 @@
 
 .well {
 	border: 5px solid green;
+}
+
+.panel {
+    border: 1px solid green;
+}
+
+
+.name {
+	font-size: 160%;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: green;
 }

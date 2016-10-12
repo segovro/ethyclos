@@ -3,7 +3,7 @@ if (typeof web3 !== 'undefined')
 else
 	web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
-var creditcommonsContract = web3.eth.contract([ {
+var ethyclosContract = web3.eth.contract([ {
 	"constant" : false,
 	"inputs" : [ {
 		"name" : "_proposalNumber",
@@ -19,10 +19,79 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_newMember",
 		"type" : "address"
 	}, {
-		"name" : "_communityJ",
+		"name" : "_communityID",
 		"type" : "uint256"
 	} ],
 	"name" : "acceptAtCommunity",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_goodNumber",
+		"type" : "uint256"
+	} ],
+	"name" : "offerOff",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_sellNumber",
+		"type" : "uint256"
+	} ],
+	"name" : "sendBill",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_communityName",
+		"type" : "string"
+	}, {
+		"name" : "_narrative",
+		"type" : "string"
+	}, {
+		"name" : "_currencyName",
+		"type" : "string"
+	}, {
+		"name" : "_cImageLink",
+		"type" : "string"
+	}, {
+		"name" : "_exchangeRate",
+		"type" : "uint256"
+	}, {
+		"name" : "_transferTax",
+		"type" : "uint256"
+	}, {
+		"name" : "_accumulationTax",
+		"type" : "uint256"
+	}, {
+		"name" : "_creditRewardRate",
+		"type" : "uint256"
+	}, {
+		"name" : "_defaultCreditLine",
+		"type" : "uint256"
+	}, {
+		"name" : "_defaultTrust",
+		"type" : "uint256"
+	}, {
+		"name" : "_open",
+		"type" : "bool"
+	}, {
+		"name" : "_quorum",
+		"type" : "uint256"
+	}, {
+		"name" : "_bankCreditLine",
+		"type" : "uint256"
+	}, {
+		"name" : "_bankTrust",
+		"type" : "uint256"
+	} ],
+	"name" : "createCommunity",
 	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
@@ -37,31 +106,13 @@ var creditcommonsContract = web3.eth.contract([ {
 	"payable" : false,
 	"type" : "function"
 }, {
-	"constant" : true,
+	"constant" : false,
 	"inputs" : [ {
-		"name" : "_memberG",
-		"type" : "address"
-	} ],
-	"name" : "getMember",
-	"outputs" : [ {
-		"name" : "",
-		"type" : "bool"
-	}, {
-		"name" : "",
-		"type" : "string"
-	}, {
-		"name" : "",
-		"type" : "string"
-	}, {
-		"name" : "",
-		"type" : "uint256"
-	}, {
-		"name" : "",
-		"type" : "int256"
-	}, {
-		"name" : "",
+		"name" : "_goodNumber",
 		"type" : "uint256"
 	} ],
+	"name" : "offerOn",
+	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
 }, {
@@ -86,13 +137,32 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_whisperID",
 		"type" : "string"
 	}, {
-		"name" : "_description",
+		"name" : "_narrative",
 		"type" : "string"
 	}, {
 		"name" : "_imageLink",
 		"type" : "string"
 	} ],
 	"name" : "modifyMemberInfo",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_cathegory",
+		"type" : "string"
+	}, {
+		"name" : "_narrative",
+		"type" : "string"
+	}, {
+		"name" : "_goodImageLink",
+		"type" : "string"
+	}, {
+		"name" : "_unitPrice",
+		"type" : "uint256"
+	} ],
+	"name" : "offer",
 	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
@@ -116,6 +186,46 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "",
 		"type" : "bool"
 	} ],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_communityID",
+		"type" : "uint256"
+	}, {
+		"name" : "_exchangeRate",
+		"type" : "uint256"
+	}, {
+		"name" : "_transferTax",
+		"type" : "uint256"
+	}, {
+		"name" : "_accumulationTax",
+		"type" : "uint256"
+	}, {
+		"name" : "_creditRewardRate",
+		"type" : "uint256"
+	}, {
+		"name" : "_defaultCreditLine",
+		"type" : "uint256"
+	}, {
+		"name" : "_defaultTrust",
+		"type" : "uint256"
+	}, {
+		"name" : "_open",
+		"type" : "bool"
+	}, {
+		"name" : "_quorum",
+		"type" : "uint256"
+	}, {
+		"name" : "_bankCreditLine",
+		"type" : "uint256"
+	}, {
+		"name" : "_bankTrust",
+		"type" : "uint256"
+	} ],
+	"name" : "modifyCommunityRates",
+	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
 }, {
@@ -157,17 +267,77 @@ var creditcommonsContract = web3.eth.contract([ {
 }, {
 	"constant" : true,
 	"inputs" : [ {
-		"name" : "_memberG",
-		"type" : "address"
+		"name" : "_goodNumber",
+		"type" : "uint256"
 	} ],
-	"name" : "getMemberWhisper",
+	"name" : "getGood",
 	"outputs" : [ {
+		"name" : "",
+		"type" : "address"
+	}, {
 		"name" : "",
 		"type" : "string"
 	}, {
 		"name" : "",
 		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "bool"
 	} ],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [ {
+		"name" : "_member",
+		"type" : "address"
+	} ],
+	"name" : "getMemberInfo",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "bool"
+	}, {
+		"name" : "",
+		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	} ],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_sellNumber",
+		"type" : "uint256"
+	}, {
+		"name" : "_userSatisfaction",
+		"type" : "int256"
+	} ],
+	"name" : "paysell",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_communityID",
+		"type" : "uint256"
+	}, {
+		"name" : "_newBank",
+		"type" : "address"
+	} ],
+	"name" : "transferCommunityBank",
+	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
 }, {
@@ -202,13 +372,38 @@ var creditcommonsContract = web3.eth.contract([ {
 	}, {
 		"name" : "",
 		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
 	} ],
 	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : true,
 	"inputs" : [ {
-		"name" : "_communityG",
+		"name" : "_member",
+		"type" : "address"
+	} ],
+	"name" : "getMemberCredit",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "address"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	} ],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [ {
+		"name" : "_communityID",
 		"type" : "uint256"
 	} ],
 	"name" : "getCommunityRates",
@@ -222,34 +417,6 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "",
 		"type" : "uint256"
 	} ],
-	"payable" : false,
-	"type" : "function"
-}, {
-	"constant" : false,
-	"inputs" : [ {
-		"name" : "_communityName",
-		"type" : "string"
-	}, {
-		"name" : "_description",
-		"type" : "string"
-	}, {
-		"name" : "_currencyName",
-		"type" : "string"
-	}, {
-		"name" : "_creditLine",
-		"type" : "uint256"
-	}, {
-		"name" : "_creditLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_exchangeCreditLine",
-		"type" : "uint256"
-	}, {
-		"name" : "_open",
-		"type" : "bool"
-	} ],
-	"name" : "createCommunity",
-	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
 }, {
@@ -274,7 +441,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_title",
 		"type" : "string"
 	}, {
-		"name" : "_description",
+		"name" : "_narrative",
 		"type" : "string"
 	}, {
 		"name" : "_days",
@@ -290,29 +457,13 @@ var creditcommonsContract = web3.eth.contract([ {
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_buyer",
-		"type" : "address"
-	}, {
-		"name" : "_description",
-		"type" : "string"
-	}, {
-		"name" : "_sellAmount",
-		"type" : "uint256"
-	} ],
-	"name" : "createsell",
-	"outputs" : [],
-	"payable" : false,
-	"type" : "function"
-}, {
-	"constant" : false,
-	"inputs" : [ {
 		"name" : "_alias",
 		"type" : "string"
 	}, {
 		"name" : "_whisperID",
 		"type" : "string"
 	}, {
-		"name" : "_description",
+		"name" : "_narrative",
 		"type" : "string"
 	}, {
 		"name" : "_imageLink",
@@ -327,45 +478,30 @@ var creditcommonsContract = web3.eth.contract([ {
 	"inputs" : [ {
 		"name" : "_communityID",
 		"type" : "uint256"
-	}, {
-		"name" : "_communityName",
-		"type" : "string"
-	}, {
-		"name" : "_description",
-		"type" : "string"
-	}, {
-		"name" : "_currencyName",
-		"type" : "string"
-	}, {
-		"name" : "_rate",
-		"type" : "uint256"
-	}, {
-		"name" : "_creditLine",
-		"type" : "uint256"
-	}, {
-		"name" : "_exchangeCreditLine",
-		"type" : "uint256"
-	}, {
-		"name" : "_exchangeCreditLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_open",
-		"type" : "bool"
-	}, {
-		"name" : "_newQuorum",
-		"type" : "uint256"
 	} ],
-	"name" : "modifyCommunity",
+	"name" : "joinCommunity",
 	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_communityJ",
+		"name" : "_communityID",
 		"type" : "uint256"
+	}, {
+		"name" : "_communityName",
+		"type" : "string"
+	}, {
+		"name" : "_narrative",
+		"type" : "string"
+	}, {
+		"name" : "_currencyName",
+		"type" : "string"
+	}, {
+		"name" : "_cImageLink",
+		"type" : "string"
 	} ],
-	"name" : "joinCommunity",
+	"name" : "modifyCommunityInfo",
 	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
@@ -388,19 +524,19 @@ var creditcommonsContract = web3.eth.contract([ {
 	"name" : "getsell",
 	"outputs" : [ {
 		"name" : "",
-		"type" : "address"
+		"type" : "uint256"
 	}, {
 		"name" : "",
-		"type" : "address"
-	}, {
-		"name" : "",
-		"type" : "string"
+		"type" : "uint256"
 	}, {
 		"name" : "",
 		"type" : "uint256"
 	}, {
 		"name" : "",
 		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "bool"
 	}, {
 		"name" : "",
 		"type" : "bool"
@@ -422,10 +558,32 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "string"
 	}, {
 		"name" : "",
+		"type" : "string"
+	}, {
+		"name" : "",
 		"type" : "uint256"
 	}, {
 		"name" : "",
 		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "address"
+	} ],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [ {
+		"name" : "_sellNumber",
+		"type" : "uint256"
+	} ],
+	"name" : "getSellAgents",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "address"
 	}, {
 		"name" : "",
 		"type" : "address"
@@ -449,9 +607,47 @@ var creditcommonsContract = web3.eth.contract([ {
 	"payable" : false,
 	"type" : "function"
 }, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_good",
+		"type" : "uint256"
+	}, {
+		"name" : "_units",
+		"type" : "uint256"
+	} ],
+	"name" : "buy",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
 	"constant" : true,
 	"inputs" : [ {
-		"name" : "_memberG",
+		"name" : "_member",
+		"type" : "address"
+	} ],
+	"name" : "getMemberWallet",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "int256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "int256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	} ],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [ {
+		"name" : "_member",
 		"type" : "address"
 	} ],
 	"name" : "getMemberStatus",
@@ -467,7 +663,7 @@ var creditcommonsContract = web3.eth.contract([ {
 }, {
 	"constant" : true,
 	"inputs" : [ {
-		"name" : "_communityG",
+		"name" : "_communityID",
 		"type" : "uint256"
 	} ],
 	"name" : "getCommunityManagement",
@@ -494,16 +690,19 @@ var creditcommonsContract = web3.eth.contract([ {
 	"payable" : false,
 	"type" : "function"
 }, {
-	"constant" : false,
+	"constant" : true,
 	"inputs" : [ {
-		"name" : "_communityID",
-		"type" : "uint256"
-	}, {
-		"name" : "_newExchange",
+		"name" : "_member",
 		"type" : "address"
 	} ],
-	"name" : "transferCommunityExchange",
-	"outputs" : [],
+	"name" : "getMemberLinks",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "string"
+	} ],
 	"payable" : false,
 	"type" : "function"
 }, {
@@ -512,7 +711,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_memberOfCommunity",
 		"type" : "address"
 	}, {
-		"name" : "_communityD",
+		"name" : "_communityID",
 		"type" : "uint256"
 	} ],
 	"name" : "kickOutCommunity",
@@ -527,23 +726,16 @@ var creditcommonsContract = web3.eth.contract([ {
 	"payable" : false,
 	"type" : "function"
 }, {
-	"constant" : false,
-	"inputs" : [ {
-		"name" : "_sellNumber",
-		"type" : "uint256"
-	} ],
-	"name" : "paysell",
-	"outputs" : [],
-	"payable" : false,
-	"type" : "function"
-}, {
 	"constant" : true,
 	"inputs" : [ {
-		"name" : "_communityG",
+		"name" : "_communityID",
 		"type" : "uint256"
 	} ],
 	"name" : "getCommunityDescription",
 	"outputs" : [ {
+		"name" : "",
+		"type" : "string"
+	}, {
 		"name" : "",
 		"type" : "string"
 	}, {
@@ -572,48 +764,6 @@ var creditcommonsContract = web3.eth.contract([ {
 	"anonymous" : false,
 	"inputs" : [ {
 		"indexed" : true,
-		"name" : "_creator",
-		"type" : "address"
-	}, {
-		"indexed" : true,
-		"name" : "_community",
-		"type" : "uint256"
-	}, {
-		"indexed" : false,
-		"name" : "_communityName",
-		"type" : "string"
-	}, {
-		"indexed" : false,
-		"name" : "_TimeStamp",
-		"type" : "uint256"
-	} ],
-	"name" : "NewCommunity",
-	"type" : "event"
-}, {
-	"anonymous" : false,
-	"inputs" : [ {
-		"indexed" : true,
-		"name" : "_modifier",
-		"type" : "address"
-	}, {
-		"indexed" : true,
-		"name" : "_community",
-		"type" : "uint256"
-	}, {
-		"indexed" : false,
-		"name" : "_communityName",
-		"type" : "string"
-	}, {
-		"indexed" : false,
-		"name" : "_TimeStamp",
-		"type" : "uint256"
-	} ],
-	"name" : "ModifyCommunity",
-	"type" : "event"
-}, {
-	"anonymous" : false,
-	"inputs" : [ {
-		"indexed" : true,
 		"name" : "_memberAddress",
 		"type" : "address"
 	}, {
@@ -622,7 +772,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_description",
+		"name" : "_narrative",
 		"type" : "string"
 	}, {
 		"indexed" : false,
@@ -643,7 +793,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_community",
+		"name" : "_communityID",
 		"type" : "uint256"
 	}, {
 		"indexed" : false,
@@ -668,7 +818,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "string"
 	}, {
 		"indexed" : false,
-		"name" : "_community",
+		"name" : "_communityID",
 		"type" : "uint256"
 	}, {
 		"indexed" : false,
@@ -685,6 +835,40 @@ var creditcommonsContract = web3.eth.contract([ {
 	"anonymous" : false,
 	"inputs" : [ {
 		"indexed" : true,
+		"name" : "_creator",
+		"type" : "address"
+	}, {
+		"indexed" : true,
+		"name" : "_communityID",
+		"type" : "uint256"
+	} ],
+	"name" : "NewCommunity",
+	"type" : "event"
+}, {
+	"anonymous" : false,
+	"inputs" : [ {
+		"indexed" : true,
+		"name" : "_modifier",
+		"type" : "address"
+	}, {
+		"indexed" : true,
+		"name" : "_communityID",
+		"type" : "uint256"
+	}, {
+		"indexed" : false,
+		"name" : "_TimeStamp",
+		"type" : "uint256"
+	} ],
+	"name" : "ModifyCommunity",
+	"type" : "event"
+}, {
+	"anonymous" : false,
+	"inputs" : [ {
+		"indexed" : true,
+		"name" : "_communityID",
+		"type" : "uint256"
+	}, {
+		"indexed" : true,
 		"name" : "_sender",
 		"type" : "address"
 	}, {
@@ -700,7 +884,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_TimeStamp",
 		"type" : "uint256"
 	} ],
-	"name" : "Transaction",
+	"name" : "Transfer",
 	"type" : "event"
 }, {
 	"anonymous" : false,
@@ -755,20 +939,28 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_sellNumber",
 		"type" : "uint256"
 	}, {
-		"indexed" : true,
-		"name" : "_seller",
-		"type" : "address"
+		"indexed" : false,
+		"name" : "_buyerCommunity",
+		"type" : "uint256"
 	}, {
 		"indexed" : true,
 		"name" : "_buyer",
 		"type" : "address"
 	}, {
 		"indexed" : false,
-		"name" : "_description",
-		"type" : "string"
+		"name" : "_sellerCommunity",
+		"type" : "uint256"
+	}, {
+		"indexed" : true,
+		"name" : "_seller",
+		"type" : "address"
 	}, {
 		"indexed" : false,
-		"name" : "_sellAmount",
+		"name" : "_good",
+		"type" : "uint256"
+	}, {
+		"indexed" : false,
+		"name" : "_price",
 		"type" : "uint256"
 	}, {
 		"indexed" : false,
@@ -789,7 +981,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "uint256"
 	}, {
 		"indexed" : false,
-		"name" : "description",
+		"name" : "narrative",
 		"type" : "string"
 	}, {
 		"indexed" : false,
@@ -842,8 +1034,8 @@ var creditcommonsContract = web3.eth.contract([ {
 	"type" : "event"
 } ]);
 
-var creditCommons = creditcommonsContract
-		.at("0xbfDdEAE75d5e0F97934691F017e968F0CD22c637");
+var ethyclos = ethyclosContract
+		.at("0x0cA976C446D948ce48d5C3cD561F797c123551FF");
 
 var accounts = web3.eth.accounts;
 var nrAcc = accounts.length;
@@ -851,62 +1043,52 @@ var nrAcc = accounts.length;
 web3.eth.defaultAccount = accounts[0];
 var myCoinbase = web3.eth.defaultAccount;
 
-var totals = creditCommons.getTotals();
+var totals = ethyclos.getTotals();
 var nrMembers = totals[0];
 var nrGroups = totals[1];
 var nrProposals = totals[2];
+var nrGoods = totals[3];
+var nrSells = totals[4];
 
-var myMembership = creditCommons.getMember(myCoinbase);
-var myIsMember = myMembership[0];
-var myAlias = myMembership[1];
-var myDescription = myMembership[2];
-var myGroupNr = myMembership[3];
-var myBalance = myMembership[4];
-var myCreditLine = myMembership[5];
+var memberInfo = ethyclos.getMemberInfo(myCoinbase);
+var myIsMember = memberInfo[0];
+var myAlias = memberInfo[1];
+var myDescription = memberInfo[2];
+var myCommunity = memberInfo[3];
 
-var myStatus = creditCommons.getMemberStatus(myCoinbase);
-var isIntertrade = myStatus[0];
-var isCommune = myStatus[1];
+var wallet = ethyclos.getMemberWallet(myCoinbase);
+var myBalance = wallet[0];
+var myCreditLine = wallet[1];
+var myTrust = wallet[2];
+var myReputation = wallet[3];
+var myLastTransaction = wallet[4];
 
-var myWhisper = creditCommons.getMemberWhisper(myCoinbase);
+var credit = ethyclos.getMemberCredit(myCoinbase);
+var myMoneyLender = credit[0];
+var myCreditTrust = credit[1];
+var myCredit = credit[2];
+var myCreditDeadline = credit[3];
 
-var myGroup = creditCommons.getGroupDescription(myGroupNr);
-var myGroupName = myGroup[0];
-var myGroupDescription = myGroup[1];
-var myCurrencyName = myGroup[2];
-var myGroupOpen = myGroup[3];
-var myGroupNrM = myGroup[4];
+var status = ethyclos.getMemberStatus(myCoinbase);
+var isBank = status[0];
+var isCommune = status[1];
 
-var myGroupRates = creditCommons.getGroupRates(myGroupNr);
-var myRate = myGroupRates[0];
-var myGroupDebitLimit = myGroupRates[1];
-var myGroupCreditLimit = myGroupRates[2];
+var links = ethyclos.getMemberLinks(myCoinbase);
+var myWhisper = links[0];
+var myImage = links[1];
 
-var groupManagement = creditCommons.getGroupManagement(myGroupNr);
-var intertradeAccount = groupManagement[0];
-var communeAccount = groupManagement[1];
+var myCommunityDescription = ethyclos.getCommunityDescription(myCommunity);
+var myCommunityName = myCommunityDescription[0];
+var myCommunityDescription = myCommunityDescription[1];
+var myCurrencyName = myCommunityDescription[2];
+var myCommunityOpen = myCommunityDescription[3];
+var myCommunityNrM = myCommunityDescription[4];
 
-var intertradeWallet = creditCommons.getMember(intertradeAccount);
-var intertradeIsMember = intertradeWallet[0];
-var intertradeAlias = intertradeWallet[1];
-var intertradeDescription = intertradeWallet[2];
-var intertradeGroup = intertradeWallet[3];
-var intertradeBalance = intertradeWallet[4];
-var intertradeDebitLimit = intertradeWallet[5];
-var intertradeCreditLimit = intertradeWallet[6];
+var myCommunityRates = ethyclos.getCommunityRates(myCommunity);
+var myRate = myCommunityRates[0];
+var mydefaultMemberCreditLine = myCommunityRates[1];
+var mydefaultMemberTrust = myCommunityRates[2];
 
-var intertradeWallet = creditCommons.getMember(intertradeAccount);
-var intertradeIsMember = intertradeWallet[0];
-var intertradeAlias = intertradeWallet[1];
-var intertradeDescription = intertradeWallet[2];
-var intertradeGroup = intertradeWallet[3];
-var intertradeBalance = intertradeWallet[4];
-var intertradeDebitLimit = intertradeWallet[5];
-var intertradeCreditLimit = intertradeWallet[6];
-
-var me = "ETH Account: <b>" + myCoinbase
-		+ "<br></b> Credit Commons Member: <b>" + myIsMember
-		+ "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
-		+ myWhisper + "<br></b>Group ID: <b>" + myGroup
-		+ "</b> Group Name: <b>" + groupName + "<br></b> Is Intertrade: <b>"
-		+ isIntertrade + "</b> Is Commune: <b>" + isCommune + "</b>";
+var myCommunityManagement = ethyclos.getCommunityManagement(myCommunity);
+var myCommunityBankAccount = myCommunityManagement[0];
+var myCommunityCommuneAccount = myCommunityManagement[1];
