@@ -1,4 +1,6 @@
-contract ehtyclos {
+pragma solidity ^0.4.0;
+
+contract ethyclos {
 
         // @title ethyclos
         // @author Rogelio SEGOVIA
@@ -351,11 +353,14 @@ contract ehtyclos {
     function getCommunitybyIndex (uint _gIndex) constant returns (uint _getCommunityID) {
     	_getCommunityID = communityIndex[_gIndex];
     }
+
+}
+
+contract money is ethyclos {
     
     event Transfer (uint indexed _communityID, address indexed _sender, address indexed _receiver, uint _amount, uint _TimeStamp);
     event Credit (address indexed _MoneyLender, address indexed _borrowerAddress, uint _cDealine, uint _endorsedUoT);
     event CreditExp (address indexed _moneyLender, address indexed _borrower, uint _creditCost, bool _success, uint _TimeStamp);
-	event Sell (uint _sellNumber, uint _buyerCommunity, address indexed _buyer, uint _sellerCommunity, address indexed _seller, uint _good, uint _price, uint _TimeStamp);
 
 	// @notice function transfer from the member of the same bank or to the
 	// member of another bank. The amount is expressed in the sender
@@ -499,6 +504,12 @@ contract ehtyclos {
 			}
 		}
 	
+}
+
+contract shopping is ethyclos {
+    
+	event Sell (uint _sellNumber, uint _buyerCommunity, address indexed _buyer, uint _sellerCommunity, address indexed _seller, uint _good, uint _price, uint _TimeStamp);
+	
 		struct Goods {
 			address seller;
 			string cathegory;
@@ -549,7 +560,7 @@ contract ehtyclos {
 		uint price;
 		uint sellDateTime;
 		bool bill;
-		bool paid;
+		bool received;
 	    }
 
 	mapping(uint => Sells) sell;    
@@ -563,7 +574,7 @@ contract ehtyclos {
 		sell[sellNumber].price = good[_good].unitPrice * _units;
 		sell[sellNumber].sellDateTime = now;
 		sell[sellNumber].bill = false;	
-		sell[sellNumber].paid = false;
+		sell[sellNumber].received = false;
 		good[_good].nrSells ++;
 		address _seller = good[_good].seller;
 		uint _sellerCommunity = member[_seller].memberCommunity;	
@@ -579,21 +590,20 @@ contract ehtyclos {
 			}    	
 	}	
 	
-	function paysell (uint _sellNumber, int _userSatisfaction) {
+	function signReceipt (uint _sellNumber, int _userSatisfaction) {
 		if (sell[_sellNumber].buyer == msg.sender) {
 		    uint _good = sell[_sellNumber].good;
 	        address _seller = good[_good].seller;
 			good[_good].userSatisfaction += _userSatisfaction;
 			member[_seller].reputation += _userSatisfaction;
-			transaction (_seller, sell[_sellNumber].price);
-			sell[_sellNumber].paid = true;
+		sell[_sellNumber].received = true;
 			}    	
 	}	
 	
 	function getsell (uint _sellNumber) constant returns (uint, uint, uint, uint, bool, bool) {
 	    uint _good = sell[_sellNumber].good;
 	    address _seller = good[_good].seller;
-		return (_good, sell[_sellNumber].units, sell[_sellNumber].price, sell[_sellNumber].sellDateTime, sell[_sellNumber].bill, sell[_sellNumber].paid);
+		return (_good, sell[_sellNumber].units, sell[_sellNumber].price, sell[_sellNumber].sellDateTime, sell[_sellNumber].bill, sell[_sellNumber].received);
 	}
 	
 	function getSellAgents (uint _sellNumber) constant returns (uint,address, address) {
@@ -601,6 +611,10 @@ contract ehtyclos {
 	    address _seller = good[_good].seller;
 		return (_good, _seller, sell[_sellNumber].buyer);
 	}
+	
+}
+
+contract polls is ethyclos {
     
     event ProposalAdded(uint proposalNumber, uint community, string narrative, address creator);
     event Voted(address voter, uint proposalNumber, int8 vote, int result);
