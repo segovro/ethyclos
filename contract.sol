@@ -1,6 +1,6 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.2;
 
-contract ethyclos {
+contract ehtyclos {
 
         // @title ethyclos
         // @author Rogelio SEGOVIA
@@ -30,9 +30,6 @@ contract ethyclos {
     	return (nrMembers, nrCommunities, nrProposals, nrGoods, nrSells);
     }
 	
-	event NewMember (address indexed _memberAddress, string _memberAlias, string _narrative, uint _TimeStamp);
-	event JoinCommunity (address _member, string _alias, uint _communityID, string _communityName, uint _TimeStamp);
-	event ResignCommunity (address _member, string _alias, uint _communityID, string _communityName, uint _TimeStamp);
 
 	// @notice function to name a new sysAdmin
     function transferSysAdmin(address newSysAdmin) {
@@ -86,10 +83,13 @@ contract ethyclos {
 			member[msg.sender].isBank = false;
 			member[msg.sender].isCommune = false;
 			member[msg.sender].balance = 0;
+			member[msg.sender].trust = 0;
+			member[msg.sender].reputation = 0;
+			member[msg.sender].moneyLender = msg.sender;
+			member[msg.sender].creditTrust = 0;
 			member[msg.sender].creditLine = 0;
 			member[msg.sender].creditDeadline = 0;	
 			member[msg.sender].lastTransaction = now;
-		NewMember (msg.sender, _alias, _narrative, now);
 		memberIndex[memberIndex.length ++] = msg.sender;
 		nrMembers ++;
 				} 
@@ -126,9 +126,11 @@ contract ethyclos {
 		if ((member[_newMember].isMember = true) && (member[_newMember].memberCommunity == 0)) {
 		member[_newMember].memberCommunity = _communityID;
 		member[_newMember].balance = 0;
+		member[_newMember].trust = community[_communityID].defaultTrust;
+		member[_newMember].reputation = 0;
 		member[_newMember].creditLine = community[_communityID].defaultCreditLine;
+		member[_newMember].lastTransaction = now;
 		community[_communityID].nrMembers ++;
-		JoinCommunity (_newMember, member[_newMember].alias, _communityID, community[_communityID].communityName, now);
 		}
 	}
 	
@@ -140,23 +142,25 @@ contract ethyclos {
 				}
 			}	
 	
-	function kickOutCommunity (address _memberOfCommunity, uint _communityID) {
+	function kickOutCommunity (address _exMember, uint _communityID) {
 		// @notice the commune can delete a new member in the community
 		if (community[_communityID].commune == msg.sender) {
-			deleteMemberOfCommunity (_memberOfCommunity, _communityID);
+			deleteMemberOfCommunity (_exMember, _communityID);
 		}
 	}
 	
-	function deleteMemberOfCommunity (address _memberOfCommunity, uint _communityID) internal {
+	function deleteMemberOfCommunity (address _exMember, uint _communityID) internal {
 		// @notice the account is not a community account and the member is not
 		// commune of the community
-		if ((member[_memberOfCommunity].isCommune == false) && (member[msg.sender].isCommune == false)) {
-		member[community[_communityID].commune].balance += member[_memberOfCommunity].balance;
-		member[_memberOfCommunity].balance = 0;
-		member[_memberOfCommunity].memberCommunity = 0;
-		member[_memberOfCommunity].creditLine = 0;
+		if ((member[_exMember].isCommune == false) && (member[msg.sender].isCommune == false)) {
+		member[community[_communityID].commune].balance += member[_exMember].balance;
+		member[_exMember].memberCommunity = 0;
+		member[_exMember].balance = 0;
+		member[_exMember].trust = 0;
+		member[_exMember].reputation = 0;
+		member[_exMember].creditLine = 0;
+		member[_exMember].moneyLender = msg.sender;
 		community[_communityID].nrMembers --;
-		ResignCommunity (_memberOfCommunity, member[_memberOfCommunity].alias, _communityID, community[_communityID].communityName, now);		
 		}
 	}
 
@@ -184,8 +188,6 @@ contract ethyclos {
 		_getMemberID = memberIndex[_mIndex];
 	}
 	
-	event NewCommunity(address indexed _creator, uint indexed _communityID);
-	event ModifyCommunity (address indexed _modifier, uint indexed _communityID, uint _TimeStamp);
 
     // @notice create a structure to file all communities and their parameters
     struct Communities {
@@ -256,7 +258,6 @@ contract ethyclos {
     						member[msg.sender].trust = _bankTrust;
     					communityIndex[communityIndex.length ++] =_communityID;
     					nrCommunities = nrCommunities +1;
-    					NewCommunity(msg.sender, _communityID);
     				} 
     			}
     	    } 
@@ -278,7 +279,6 @@ contract ethyclos {
 	        		member[_oldBank].isBank = false;
 	        		community[_communityID].communityBank = _newBank;
     			string _communityName = community[_communityID].communityName;
-    			ModifyCommunity (msg.sender, _communityID, now);
     	} 
     	} 
     }
@@ -298,7 +298,6 @@ contract ethyclos {
 	    			member[_oldCommune].trust = community[_communityID].defaultTrust;
 	        		member[_oldCommune].isCommune = false;
     			string _communityName = community[_communityID].communityName;
-    			ModifyCommunity (msg.sender, _communityID, now);
     	} 
     	} 
     }
@@ -315,7 +314,6 @@ contract ethyclos {
     			if (bytes(_narrative).length != 0) {community[_communityID].communityDescription = _narrative;}
     			if (bytes(_currencyName).length != 0) {community[_communityID].currencyName = _currencyName;} 
     			if (bytes(_cImageLink).length != 0) {community[_communityID].cImageLink = _cImageLink;} 
-    			ModifyCommunity (msg.sender, _communityID, now);				
     				}     					
     }
     
@@ -333,8 +331,7 @@ contract ethyclos {
     			if (_bankCreditLine != 0) {member[_bank].creditLine = _bankCreditLine;}
     			if (_bankTrust != 0) {member[_bank].trust = _bankCreditLine;}
     			if (_open == false) {community[_communityID].open = false;} 
-    			if (_quorum != 0) {community[_communityID].quorum = _quorum;} 
-    			ModifyCommunity (msg.sender, _communityID, now);				
+    			if (_quorum != 0) {community[_communityID].quorum = _quorum;} 		
     				}     					
     }
     
@@ -353,10 +350,6 @@ contract ethyclos {
     function getCommunitybyIndex (uint _gIndex) constant returns (uint _getCommunityID) {
     	_getCommunityID = communityIndex[_gIndex];
     }
-
-}
-
-contract money is ethyclos {
     
     event Transfer (uint indexed _communityID, address indexed _sender, address indexed _receiver, uint _amount, uint _TimeStamp);
     event Credit (address indexed _MoneyLender, address indexed _borrowerAddress, uint _cDealine, uint _endorsedUoT);
@@ -460,11 +453,13 @@ contract money is ethyclos {
 		uint _unitsOfTrust = member[_borrower].creditTrust;
 		member[_moneyLender].trust += _unitsOfTrust;
 		member[_borrower].creditLine = 0;
-		member[_borrower].creditDeadline = 0;	
+		member[_borrower].creditDeadline = 0;
+		member[_borrower].moneyLender = _borrower;	
 	}
 	
 	function updateCredit (address _borrower) internal {
 		uint _communityID = member[_borrower].memberCommunity;
+		int _standardCreditLIne = int(community[_communityID].defaultCreditLine);
 		// @notice update the credit status
 		if (member[_borrower].creditLine > 0) {
 		// @notice check if deadline is over
@@ -474,16 +469,16 @@ contract money is ethyclos {
 				uint _creditTrust = member[_borrower].creditTrust;
 				uint _reward = _creditTrust * community[_communityID].creditRewardRate/100;
 				address _moneyLender = member[_borrower].moneyLender;
-			// @notice if time is over reset credit to zero, deadline to zero
+			// @notice if time is over reset credit to standard, deadline to zero
 				member[_borrower].creditDeadline = 0;
-				member[_borrower].creditLine = 0;				
-				// @notice if balance is negative the credit was not returned,
+				member[_borrower].creditLine = _standardCreditLIne;				
+				// @notice if balance is more negative than standard credit line the credit was not returned,
 				// the money lender balanceReputation is not restored and is
 				// penalized with a 20%
 				// @notice as regards the borrower will not be able to make any
 				// new transfer until future incomes cover the debts
 				// @return money lender reputation penalized
-				if (member[_borrower].balance < 0) {					
+				if (member[_borrower].balance < -_standardCreditLIne) {					
 					member[_moneyLender].trust += _creditTrust - _reward;
 				}
 				// @notice if balance is not negative the credit was returned,
@@ -495,20 +490,13 @@ contract money is ethyclos {
 					member[_moneyLender].trust += _creditTrust + _reward;
 				}
 				// @notice reset money lender information
-				// @return money lender information deleted
-				// @notice close access to monitor the account to money lender
 				member[_borrower].moneyLender = _borrower; 
 				member[_borrower].creditTrust = 0;
+				member[_borrower].creditLine = community[_communityID].defaultCreditLine;
 				CreditExp(_moneyLender, _borrower, _creditTrust , _success, now);
 				} 
 			}
 		}
-	
-}
-
-contract shopping is ethyclos {
-    
-	event Sell (uint _sellNumber, uint _buyerCommunity, address indexed _buyer, uint _sellerCommunity, address indexed _seller, uint _good, uint _price, uint _TimeStamp);
 	
 		struct Goods {
 			address seller;
@@ -518,6 +506,7 @@ contract shopping is ethyclos {
 			uint unitPrice; 
 			uint nrSells;
 			int userSatisfaction;
+			bool isShop;
 			bool onOffer;
 		}
 		
@@ -533,11 +522,12 @@ contract shopping is ethyclos {
 			good[goodNumber].unitPrice = _unitPrice;
 			good[goodNumber].nrSells = 0;
 			good[goodNumber].userSatisfaction = 0;
-			good[goodNumber].onOffer = true;
+			good[goodNumber].isShop = false;
+			good[goodNumber].onOffer = false;
 		}
 		
-		function getGood (uint _goodNumber) constant returns (address, string, string, string, uint, bool) {
-			return (good[_goodNumber].seller, good[_goodNumber].cathegory, good[_goodNumber].narrative, good[_goodNumber].goodImageLink, good[_goodNumber].unitPrice, good[_goodNumber].onOffer);
+		function getGood (uint _goodNumber) constant returns (address, string, string, string, uint, bool, bool) {
+			return (good[_goodNumber].seller, good[_goodNumber].cathegory, good[_goodNumber].narrative, good[_goodNumber].goodImageLink, good[_goodNumber].unitPrice, good[goodNumber].isShop, good[_goodNumber].onOffer);
 		}
 		
 		function offerOn (uint _goodNumber) {
@@ -560,7 +550,7 @@ contract shopping is ethyclos {
 		uint price;
 		uint sellDateTime;
 		bool bill;
-		bool received;
+		bool paid;
 	    }
 
 	mapping(uint => Sells) sell;    
@@ -574,12 +564,11 @@ contract shopping is ethyclos {
 		sell[sellNumber].price = good[_good].unitPrice * _units;
 		sell[sellNumber].sellDateTime = now;
 		sell[sellNumber].bill = false;	
-		sell[sellNumber].received = false;
+		sell[sellNumber].paid = false;
 		good[_good].nrSells ++;
 		address _seller = good[_good].seller;
 		uint _sellerCommunity = member[_seller].memberCommunity;	
 		uint _buyerCommunity = member[msg.sender].memberCommunity;	
-		Sell (nrSells, _buyerCommunity, msg.sender, _sellerCommunity, _seller, _good, sell[sellNumber].price, now);
 	}
 	
 	function sendBill (uint _sellNumber) {
@@ -590,20 +579,21 @@ contract shopping is ethyclos {
 			}    	
 	}	
 	
-	function signReceipt (uint _sellNumber, int _userSatisfaction) {
+	function paysell (uint _sellNumber, int _userSatisfaction) {
 		if (sell[_sellNumber].buyer == msg.sender) {
 		    uint _good = sell[_sellNumber].good;
 	        address _seller = good[_good].seller;
 			good[_good].userSatisfaction += _userSatisfaction;
 			member[_seller].reputation += _userSatisfaction;
-		sell[_sellNumber].received = true;
+			transaction (_seller, sell[_sellNumber].price);
+			sell[_sellNumber].paid = true;
 			}    	
 	}	
 	
 	function getsell (uint _sellNumber) constant returns (uint, uint, uint, uint, bool, bool) {
 	    uint _good = sell[_sellNumber].good;
 	    address _seller = good[_good].seller;
-		return (_good, sell[_sellNumber].units, sell[_sellNumber].price, sell[_sellNumber].sellDateTime, sell[_sellNumber].bill, sell[_sellNumber].received);
+		return (_good, sell[_sellNumber].units, sell[_sellNumber].price, sell[_sellNumber].sellDateTime, sell[_sellNumber].bill, sell[_sellNumber].paid);
 	}
 	
 	function getSellAgents (uint _sellNumber) constant returns (uint,address, address) {
@@ -611,14 +601,8 @@ contract shopping is ethyclos {
 	    address _seller = good[_good].seller;
 		return (_good, _seller, sell[_sellNumber].buyer);
 	}
-	
-}
-
-contract polls is ethyclos {
     
-    event ProposalAdded(uint proposalNumber, uint community, string narrative, address creator);
     event Voted(address voter, uint proposalNumber, int8 vote, int result);
-    event ProposalResult(uint proposalNumber, int result, uint quorum, bool active);
 	
     struct Proposals {
 		address creator;
@@ -655,7 +639,6 @@ contract polls is ethyclos {
         proposal[proposalNumber].numberOfVotes = 0;
         proposal[proposalNumber].currentResult = 0;
 		proposal[proposalNumber].voters[msg.sender].alreadyVoted = false; 		
-        ProposalAdded(proposalNumber, _proposalCommunity, _narrative, msg.sender);
     }
 	
 	function proposeAcceptanceAsMember (uint _candidateCommunity) {
@@ -692,7 +675,6 @@ contract polls is ethyclos {
             proposal[_proposalNumber].proposalPassed = false;
         }
         // Fire Events
-        ProposalResult(_proposalNumber, proposal[_proposalNumber].currentResult, proposal[_proposalNumber].numberOfVotes, proposal[_proposalNumber].proposalPassed);
 			}}}    
   
     function getProposal (uint _proposalNumber) constant returns (uint, string, string, uint, uint, address) {
@@ -716,6 +698,5 @@ contract polls is ethyclos {
     			proposal[_proposalNumber].ended,
     			proposal[_proposalNumber].proposalPassed    			
     			);
-    }	
-	
+    }		
 }

@@ -13,7 +13,7 @@ img {
 }
 
 .panel {
-    border: 1px solid green;
+    border: 1px solid red;
 }
 
 
@@ -23,3 +23,4 @@ img {
 	text-transform: uppercase;
 	color: green;
 }
+

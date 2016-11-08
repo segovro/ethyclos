@@ -14,111 +14,163 @@
 <script type="text/javascript" src="bignumber.js"></script>
 <script type="text/javascript" src="ethyclos.js"></script>
 <script type="text/javascript">
-	window.onload = function() {
-		document.getElementById('me').innerHTML = "ETH Account: <b>"
-				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
-				+ myIsMember + "</b> Alias: <b>" + myAlias
-				+ "<br></b> Whisper Account: <b>" + myWhisper
-				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
-				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
-				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+window.onload = function() {
+    document.getElementById('me').innerHTML = "ETH Account: <b>"
+            + myCoinbase + "<br></b> eThyclos Member: <b>" + myIsMember
+            + "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
+            + myWhisper + "<br></b>Group: <b>" + myCommunity
+            + "</b> Group Name: <b>" + myCommunityName
+            + "<br></b> Is Commune: <b>" + isCommune + "</b> Is Bank: <b>"
+            + isBank + "</b>";
 
-		document.getElementById('myBalance').innerHTML = "<h2>" + myBalance
-				+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
-		document.getElementById('myDebitLimit').innerHTML = myDebitLimit
-				+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
+    var wallet = "";
+    var available = myBalance + myCreditLine;
+    wallet = "<div class=\"well text-left\">"
+            + "<div class=\"media\"><div class=\"media-left\">"
+            + "<img src=\"" + myImage 
+                    + "\" class=\"media-object img-circle\" style=\"width: 100px\">"
+            + "</div><div class=\"media-body\">" + "<p class=\"name\">"
+            + myAlias
+            + "</p>"
+            + "<p>My community: <strong>"
+            + myCommunityName
+            + "</p></strong>"
+            + "<p>Balance: "
+            + myBalance
+            + " <span class=\"badge\">"
+            + myCurrencyName
+            + " </span></p>"
+            + "<p>Credit Line: "
+            + myCreditLine
+            + " <span class=\"badge\">"
+            + myCurrencyName
+            + " </span></p>"
+            + "<p>Available: "
+            + available
+            + " <span class=\"badge\">"
+            + myCurrencyName + " </span></p>" + "</div></div>" + "</div>";
+
+    document.getElementById('wallet').innerHTML = wallet;
+}
+
+	function  viewPayment() {
+		var payeeAccount = document.getElementById("payee").value;
+		var amount = document.getElementById("amount").value;        
+		var payeeImage = ethyclos.getMemberLinks(payeeAccount)[1];
+		var payeeAlias = ethyclos.getMemberInfo(payeeAccount)[1];
+		var payeeCommunity = ethyclos.getMemberInfo(payeeAccount)[3]; 
+		var payeeCommunityName = ethyclos.getCommunityDescription(payeeCommunity)[0];
+		var payeeCurrencyName = ethyclos.getCommunityDescription(payeeCommunity)[3];
+		var payeeRate = ethyclos.getCommunityRates(payeeCommunity)[0];
+		var payeeReceives = amount * payeeRate / myRate;
+		var payeeInfo = "<div class=\"well text-left\">"
+				+ "<div class=\"media\"><div class=\"media-left\">"
+				+ "<img src=\"" + payeeImage 
+                    + "\" class=\"media-object img-circle\" style=\"width: 100px\">"
+				+ "</div><div class=\"media-body\">" 
+				+ "Payee"
+				+ "<p class=\"name\">"
+				+ payeeAlias + "</p>" + "<p>Community: <strong>"
+				+ payeeCommunityName + "</p></strong>" + "<p>Receives: "
+				+ payeeReceives + " <span class=\"badge\">" + payeeCurrencyName
+				+ " </span></p>" + "</div></div>"
+				+ "</div>";
+
+		document.getElementById("payeeInfo").innerHTML = payeeInfo;
 	}
 
-	function transfer() {
-		var payee = document.getElementById('payee').value;
-		var amount = document.getElementById('amount').value;
-		creditCommons.transfer(payee, amount);
-		location.reload();
+	function transaction () {
+		var payeeAccount = document.getElementById("payee").value;
+        var amount = document.getElementById("amount").value; 
+        ethyclos.tansaction (payeeAccount, amount); 
+        location.reload();
 	}
+    /*  
+	   var incomes = ethyclos.Transaction({
+	        '_receiver' : myCoinbase
+	    }, {
+	        fromBlock : 1400000,
+	        toBlock : 'latest'
+	    }, function(error, result) {
+	        var row = "";
+	        var d;   
+	        incomes.watch(function(error, result) {
+	            d = new Date(result.args._TimeStamp * 1000);
+	            var payerAlias = ethyclos.getMemberInfo(result.args._sender)[1];
+	            var payerCommunityName = ethyclos.getCommunityDescription(result.args._communityID)[0];
+	            var payerCurrencyName = ethyclos.getCommunityDescription(result.args._communityID)[3];
+	            var payerRate = ethyclos.getCommunityRates(result.args._communityID)[0];
+	            var receiverAmount = amount * myRate / payerRate;
+	            row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> " + d
+	                    + "<br/>From: <b>" + result.args._sender
+	                    + "</b><br/>Quantity sent: <b>"
+	                    + result.args._amount + "</b>
+	                    + "<br/>Quantity received: <b>"
+	                    + receiverAmount + "</b><br/>";
+	            document.getElementById('listIncomes').innerHTML = row;
+	        });
+	    });
 
-	var incomes = creditCommons.Transaction({
-		'_receiver' : myCoinbase
-	}, {
-		fromBlock : 1400000,
-		toBlock : 'latest'
-	}, function(error, result) {
-		var row = "";
-		var d;
-		incomes.watch(function(error, result) {
-			d = new Date(result.args._tTimeStamp * 1000);
-			row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> " + d
-					+ "<br/>From: <b>" + result.args._sender
-					+ "</b><br/>Quantity sent in senders currency: <b>"
-					+ result.args._senderAmount + "</b><br/>To: <b>"
-					+ result.args._receiver
-					+ "</b><br/>Quantity received in receivers currency: <b>"
-					+ result.args._receiverAmount + "</b><br/>";
-			document.getElementById('listIncomes').innerHTML = row;
-		});
-	});
-
-	var spenditures = creditCommons.Transaction({
-		'_sender' : myCoinbase
-	}, {
-		fromBlock : 1400000,
-		toBlock : 'latest'
-	}, function(error, result) {
-		var row = "";
-		var d;
-		spenditures.watch(function(error, result) {
-			d = new Date(result.args._tTimeStamp * 1000);
-			row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> " + d
-					+ "<br/>From: <b>" + result.args._sender
-					+ "</b><br/>Quantity sent in senders currency: <b>"
-					+ result.args._senderAmount + "</b><br/>To: <b>"
-					+ result.args._receiver
-					+ "</b><br/>Quantity received in receivers currency: <b>"
-					+ result.args._receiverAmount + "</b><br/>";
-			document.getElementById('listSpenditures').innerHTML = row;
-		});
-	});
+	    var spenditures = ethyclos.Transaction({
+	        '_sender' : myCoinbase
+	    }, {
+	        fromBlock : 1400000,
+	        toBlock : 'latest'
+	    }, function(error, result) {
+	        var row = "";
+	        var d;      
+            var payeeImage = ethyclos.getMemberLinks(result.args._receiver)[1];
+            var payeeAlias = ethyclos.getMemberInfo(result.args._receiver)[1];
+            var payeeCommunity = ethyclos.getMemberInfo(result.args._receiver)[3]; 
+            var payeeCommunityName = ethyclos.getCommunityDescription(payeeCommunity)[0];
+            var payeeCurrencyName = ethyclos.getCommunityDescription(payeeCommunity)[3];
+            var payeeRate = ethyclos.getCommunityRates(payeeCommunity)[0];
+            var payeeReceives = result.args._amount * payeeRate / myRate;
+	        spenditures.watch(function(error, result) {
+	            d = new Date(result.args._TimeStamp * 1000);
+	            row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> " + d
+	                    + "<br/>
+	                    + "Quantity sent: <b>"
+	                    + result.args._amount + "</b><br/>To: <b>"
+	                    + result.args._receiver
+	                    + "</b><br/>Quantity received: <b>"
+	                    + receiverAmount + "</b><br/>";
+	            document.getElementById('listSpenditures').innerHTML = row;
+	        });
+	    });
+	    */  
 </script>
 <style>
+.navbar {
+	margin-bottom: 0;
+	border-radius: 0;
+}
 </style>
 </head>
 <body>
+    <div class="container bg-3 text-center">
+        <script type="text/javascript" src="navbar.js"></script>
+        <small><p class="bg-info" id="me"></p></small>
+        <div class="row">
+            <h3>Transfers</h3>
+            <div class="col-sm-6">
+                <p id="wallet"></p>
+<br/>
+				<p id="payeeInfo"></p>
 
-	<div class="container bg-3 text-center">
-		<script type="text/javascript" src="navbar.js"></script>
-		<small><p class="bg-info" id="me"></p></small>
-		<div class="row">
-			<h3>Transfers</h3>
-			<div class="col-sm-6">
-				<div class="well">
-					<h4>
-						<span class="glyphicon glyphicon-user"></span> My Wallet
-					</h4>
-					<table class="table">
-						<thead>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="text-right col-sm-3">My Balance:</td>
-								<td class="text-right col-sm-3""><p id="myBalance"></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-3">My Debit Limit:</td>
-								<td class="text-right col-sm-3"><p id="myDebitLimit"></p></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
+            </div>
+
 			<div class="col-sm-6">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h4>Payment</h4>
 					</div>
 					<div class="panel-body">
+						<p id="display"></p>
 						<form class="form-horizontal" role="form">
 							<div class="form-group">
-								<label class="control-label col-sm-2" for="payee">Payee
-									account:</label>
+								<label class="control-label col-sm-2" for="payee">
+									Account:</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control" id="payee"
 										placeholder="Enter payee account">
@@ -131,23 +183,35 @@
 										placeholder="Enter amount">
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-sm-2" for="comment">Comment:</label>
+								<textarea rows="3" cols="50" id="comment"></textarea>
+							</div>
 						</form>
 					</div>
 					<div class="panel-footer">
-						<button type="submit" class="btn btn-default"
-							onClick="transfer();">Make Payment</button>
+						<div class="btn-group">
+							<button type="submit" class="btn btn-warning"
+								onClick="viewPayment();">Review Payment</button>
+							<button type="submit" class="btn btn-success"
+								onClick="transfer();">Make Payment</button>
+						</div>
 					</div>
 				</div>
 			</div>
+
 		</div>
 		<div class="row">
-			<hr />
-			<h4>My Incomes</h4>
-			<div class="text-left" id="listIncomes"></div>
-			<hr />
-			<h4>My Spenditures</h4>
-			<div class="text-left" id="listSpenditures"></div>
-			<hr />
+			<div class="col-sm-12">
+				<hr />
+				<h4>Transfers received</h4>
+				<p id="billsReceivedUnpaid"></p>
+				<hr />
+				<h4>Transfers sent</h4>
+				<p id="billsSentUnpaid"></p>
+
+				<hr />
+			</div>
 		</div>
 	</div>
 

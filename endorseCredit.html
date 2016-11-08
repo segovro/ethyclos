@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	<link rel="stylesheet" href="ethyclos.css">
+<link rel="stylesheet" href="ethyclos.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script
@@ -16,16 +16,76 @@
 <script type="text/javascript">
 	window.onload = function() {
 		document.getElementById('me').innerHTML = "ETH Account: <b>"
-				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
-				+ myIsMember + "</b> Alias: <b>" + myAlias
-				+ "<br></b> Whisper Account: <b>" + myWhisper
-				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
-				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
-				+ "</b> Is Commune: <b>" + isCommune + "</b>";
-		document.getElementById('me').innerHTML = "alias: " + myAlias
-				+ "<br/> account: " + coinbase;
-		document.getElementById('reputation').innerHTML = myReputation
-				/ baseUnits + " UoT";
+				+ myCoinbase + "<br></b> eThyclos Member: <b>" + myIsMember
+				+ "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
+				+ myWhisper + "<br></b>Group: <b>" + myCommunity
+				+ "</b> Group Name: <b>" + myCommunityName
+				+ "<br></b> Is Commune: <b>" + isCommune + "</b> Is Bank: <b>"
+				+ isBank + "</b>";
+
+		var wallet = "";
+		var available = myBalance + myCreditLine;
+		wallet = "<div class=\"well text-left\">"
+				+ "<div class=\"media\"><div class=\"media-left\">"
+				+ "<img src=\"" + myImage 
+	                        + "\" class=\"media-object img-circle\" style=\"width: 100px\">"
+				+ "</div><div class=\"media-body\">"
+				+ "<p class=\"name\">"
+				+ myAlias
+				+ "</p>"
+				+ "<p>My community: <strong>"
+				+ myCommunityName
+				+ "</p></strong>"
+				+ "<p>Balance: "
+				+ myBalance
+				+ " <span class=\"badge\">"
+				+ myCurrencyName
+				+ " </span></p>"
+				+ "<p>Credit Line: "
+				+ myCreditLine
+				+ " <span class=\"badge\">"
+				+ myCurrencyName
+				+ " </span></p>"
+				+ "<p>Trust : "
+				+ myTrust
+				+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-thumbs-up\"></span> trusts</span></p>"
+				+ "</div></div>" 
+				+ "</div>";
+
+		document.getElementById('wallet').innerHTML = wallet;
+
+		var liabilities = "";
+		var moneyLenderName = ethyclos.getMemberInfo(myMoneyLender)[1];
+		var moneyLenderImage;
+		if (myMoneyLender != 0) {
+			moneyLenderImage = ethyclos.getMemberLinks(myMoneyLender)[1];
+		} else {
+			moneyLenderImage = "./images/person.jpg"
+		}
+		var deadline;
+		deadline = new Date(myCreditDeadline * 1000);
+		liabilities = "<div class=\"well text-left\">"
+				+ "<div class=\"media\"><div class=\"media-left\">"
+				+ "<img src=\"" + moneyLenderImage
+	                        + "\" class=\"media-object img-circle\" style=\"width: 75px\">"
+				+ "</div><div class=\"media-body\">"
+				+ "<p><span class=\"glyphicon glyphicon-thumbs-up\"></span> <b>Credit</b> endorsed by</p>"
+				+ "<p class=\"name\">"
+				+ moneyLenderName
+				+ "</p>"
+				+ "<p>Credit: "
+				+ myCredit
+				+ " <span class=\"badge\">"
+				+ myCurrencyName
+				+ " </span></p>"
+				+ "<p>Credit Cost: "
+				+ myCreditTrust
+				+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-thumbs-up\"></span> trusts</span></p>"
+				+ "</div></div>"
+				+ "<p>Dealine: <span class=\"glyphicon glyphicon-time\"></span> "
+				+ deadline + "<p>" + myMoneyLender + "</p>" + "</div>";
+
+		document.getElementById('liabilities').innerHTML = liabilities;
 
 		var credits = communityCurrency.Credit({
 			'_MoneyLender' : coinbase
@@ -90,10 +150,14 @@
 <body>
 
 	<div class="container bg-3 text-center">
-		<div class=container">
-			<script type="text/javascript" src="navbar.js"></script>
-		</div>
+		<script type="text/javascript" src="navbar.js"></script>
+		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
+		<h3>Credits</h3>
+			<div class="col-sm-6">
+				<p id="wallet"></p>
+				<p id="liabilities"></p>
+			</div>
 			<div class="col-sm-6">
 				<small><p id="me"></p></small>
 
@@ -138,7 +202,8 @@
 						<span class="glyphicon glyphicon-ok"></span> Endorse Credit
 					</button>
 				</div>
-
+			</div>
+			<div class="row">
 				<h3>
 					<span class="glyphicon glyphicon-thumbs-up"></span> Endorsed
 					Credits

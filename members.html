@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	<link rel="stylesheet" href="ethyclos.css">
+<link rel="stylesheet" href="ethyclos.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script
@@ -16,111 +16,97 @@
 <script type="text/javascript">
 	window.onload = function() {
 		document.getElementById('me').innerHTML = "ETH Account: <b>"
-				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
-				+ myIsMember + "</b> Alias: <b>" + myAlias
-				+ "<br></b> Whisper Account: <b>" + myWhisper
-				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
-				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
-				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+				+ myCoinbase + "<br></b> eThyclos Member: <b>" + myIsMember
+				+ "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
+				+ myWhisper + "<br></b>Group: <b>" + myCommunity
+				+ "</b> Group Name: <b>" + myCommunityName
+				+ "<br></b> Is Commune: <b>" + isCommune + "</b> Is Bank: <b>"
+				+ isBank + "</b>";
 
-		document.getElementById('nrMembers').innerHTML = nrMembers;
+		document.getElementById('nrMembers').innerHTML = "Number of members in <b>eThyclos</b> system: <b>"
+				+ nrMembers + "</b>";
 
-		document.getElementById('myAlias').innerHTML = "<b>" + myAlias + "</b>";
-		document.getElementById('myWhisper').innerHTML = "<small>" + myWhisper
-				+ "</small>";
-		document.getElementById('myDescription').innerHTML = "<i>"
-				+ myDescription + "</i>";
+		var listMembers = "";
+			for (i = 0; i < nrMembers; i++) {
+	                var memberCoinbase = ethyclos.getMPbyIndex(i);
+	                var memberInformation = ethyclos.getMemberInfo(memberCoinbase);	                
+					var memberIsMember = memberInformation[0];
+					var memberAlias = memberInformation[1];
+					var memberDescription = memberInformation[2];
+					var memberCommunity = ethyclos.getMemberInfo(memberCoinbase)[3];
+					var memberCommunityName = ethyclos
+							.getCommunityDescription(memberCommunity)[0];
 
-		/*
-		var membersList = "";
-		var indexAddress = myCoinbase;
-		for (i = 0; i < nrMembers) ; i++) {
-		    indexAddress = creditCommons.getMPbyIndex(i)[0];
-		    membersList += "<hr/>Address: <b>" + indexAddress
-		            + "</b> Alias: <b>"
-		            + creditCommons.getMember(indexAddress)[1]
-		            + "</b><br> Description: <b>"
-		            + creditCommons.getMember(indexAddress)[2]
-		            + "</b> Group: <b>"
-		            + creditCommons.getMember(indexAddress)[3]
-		            + "</b><br/> Balance: <b>"
-		            + creditCommons.getMember(indexAddress)[4]
-		            + "</b> Debit Limit: <b>"
-		            + creditCommons.getMember(indexAddress)[5]
-		            + "</b> Credit Limit: <b>"
-		            + creditCommons.getMember(indexAddress)[6]
-		            + "</b><br/>";
-		    document.getElementById('listMembers').innerHTML = membersList;
+					var memberWallet = ethyclos.getMemberWallet(memberCoinbase);
+					var memberBalance = memberWallet[0];
+					var memberCreditLine = memberWallet[1];
+					var memberTrust = memberWallet[2];
+					var memberReputation = memberWallet[3];
+					var memberLastTransaction = memberWallet[4];
+
+					var memberCurrencyName = ethyclos
+							.getCommunityDescription(memberCommunity)[2];
+
+					var memberCredit = ethyclos.getMemberCredit(memberCoinbase);
+					var memberMoneyLender = memberCredit[0];
+					var memberCreditTrust = memberCredit[1];
+					var memberCredit = memberCredit[2];
+					var memberCreditDeadline = memberCredit[3];
+
+					var memberStatus = ethyclos.getMemberStatus(memberCoinbase);
+					var memberisBank = memberStatus[0];
+					var memberisCommune = memberStatus[1];
+
+					var memberlinks = ethyclos.getMemberLinks(memberCoinbase);
+					var memberWhisper = memberlinks[0];
+					var memberImage = memberlinks[1];
+
+					var member = "";
+					member = "<div class=\"well col-sm-4 text-left\">"
+							+ "<div class=\"media\"><div class=\"media-left\">"
+							+ "<img src=\"" + memberImage 
+				+ "\" class=\"media-object img-circle\" style=\"width: 50px\">"
+							+ "</div><div class=\"media-body\">"
+							+ "<p class=\"name\">"
+							+ memberAlias
+							+ "</p>"
+							+ "<p><strong>"
+							+ memberCommunityName
+							+ "</p></strong>"
+							+ "</div></div>"
+							+ "<p><small><i>"
+							+ memberDescription
+							+ " </i></small></p>"
+							+ "<p>Balance: "
+							+ memberBalance
+							+ " <span class=\"badge\">"
+							+ memberCurrencyName
+							+ " </span></p>"
+							+ "<p>Credit Line: "
+							+ memberCreditLine
+							+ " <span class=\"badge\">"
+							+ memberCurrencyName
+							+ " </span></p>"
+							+ "<p>Reputation: "
+							+ memberReputation
+							+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-star-empty\"></span> stars</span></p>"
+							+ "<p>Trust :"
+							+ memberTrust
+							+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-thumbs-up\"></span> trusts</span></p>"
+							+ "<p><small>"
+							+ memberCoinbase
+							+ "</small></p>"
+							+ "<span class=\"glyphicon glyphicon-envelope\"><span><a href=\"\"> post</a>"
+							+ "</div>";
+
+					listMembers += member;
 		}
-		 */
-	}
 
-	function displayMember() {
-		var mAddress = document.getElementById('mAddress').value;
-		var infoMembership = creditCommons.getMember(mAddress);
-		var infoIsMember = infoMembership[0];
-		var infoAlias = infoMembership[1];
-		var infoDescription = infoMembership[2];
-		var infoGroupNr = infoMembership[3];
-		var infoBalance = infoMembership[4];
-		var infoDebitLimit = infoMembership[5];
-		var infoCreditLimit = infoMembership[6];
-		document.getElementById('infoIsMember').innerHTML = infoIsMember;
-		document.getElementById('infoAlias').innerHTML = "<b>" + infoAlias
-				+ "</b>";
-		document.getElementById('infoDescription').innerHTML = "<i>"
-				+ infoDescription + "</i>";
-		document.getElementById('infoGroupNr').innerHTML = infoGroupNr;
-		document.getElementById('infoBalance').innerHTML = infoBalance;
-		document.getElementById('infoDebitLimit').innerHTML = infoDebitLimit;
-		document.getElementById('infoCreditLimit').innerHTML = infoCreditLimit;
-	}
+		document.getElementById('listMembers').innerHTML = listMembers;
 
-	function modifyMemberInfo() {
-		var newAlias = document.getElementById('newAlias').value;
-		var newWhisper = document.getElementById('newWhisper').value;
-		var newDescription = document.getElementById('newDescription').value;
-		creditCommons.modifyMember(newAlias);
-		location.reload();
 	}
-
-	function modifyMemberLimits() {
-		var mAddress = document.getElementById('mAddress').value;
-		var nDebitLimit = document.getElementById('nDebitLimit').value;
-		var nCreditLimit = document.getElementById('nCreditLimit').value;
-		creditCommons.modifyMemberLimits(mAddress, nDebitLimit, nCreditLimit);
-		location.reload();
-	}
-
-	var newMember = creditCommons
-			.NewMember(
-					{},
-					{
-						fromBlock : 1400000,
-						toBlock : 'latest'
-					},
-					function(error, result) {
-						var row = "";
-						var d;
-						newMember
-								.watch(function(error, result) {
-									d = new Date(
-											result.args._NMTimeStamp * 1000);
-									row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> "
-											+ d
-											+ "</b><br/><span class=\"glyphicon glyphicon-user\"></span> Alias: <b>"
-											+ result.args._memberAliasN
-											+ "</b> Address: <b>"
-											+ result.args._memberAddressN
-											+ "</b><br/>Description : <i>"
-											+ result.args._descriptionN
-											+ "</i>";
-									document.getElementById('listNewMembers').innerHTML = row;
-								});
-					});
 </script>
 <style>
-
 </style>
 </head>
 <body>
@@ -131,137 +117,16 @@
 		</div>
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
-			<div class="col-sm-6">
-				<h3>Change My Member Info</h3>
-				<form class="form-horizontal" role="form">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="newAlias">New
-							alias:</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="newAlias"
-								placeholder="Enter your new alias">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="newWhisper">New
-							Whisper Address:</label>
-						<div class="col-sm-8">
-							<input type="text" class="form-control" id="newWhisper"
-								placeholder="Enter your whisper address">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="newDescription">New
-							Description</label>
-						<div>
-							<textarea class="form-control" rows="5" id="newDescription"
-								placeholder="Introduce yourself. Geolocation. Country code. Phones, email, etc."
-								cols=""></textarea>
-						</div>
-					</div>
-				</form>
-				<button type="submit" class="btn btn-default" onClick="newAlias();">Modify
-					My Member Info</button>
-			</div>
-			<div class="col-sm-6">
-
-				<form class="form-horizontal" role="form">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="mAddress">Member
-							address:</label>
-						<div class="col-sm-8">
-							<input class="form-control" placeholder="Member address"
-								id="mAddress">
-						</div>
-					</div>
-				</form>
-				<button type="submit" class="btn btn-default"
-					onClick="displayMember();">Display Member Info</button>
-				<h4>
-					<span class="glyphicon glyphicon-user"></span> Member Info
-				</h4>
-				<div class="well">
-					<table class="table">
-						<thead>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="text-right col-sm-1">Registered:</td>
-								<td class="text-left"><p id="infoMembership"></p></td>
-							</tr
-							<tr>
-								<td class="text-right col-sm-1">Alias:</td>
-								<td class="text-left"><p id="infoAlias"></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-1">Description:</td>
-								<td class="text-left col-sm-5"><p id="infoDescription"></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-1">Balance:</td>
-								<td class="text-right"><p id="infoBalance"></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-1">Debit Limit:</td>
-								<td class="text-right"><p id="infoDebitLimit"></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-1">Credit Limit:</td>
-								<td class="text-right"><p id="infoCreditLimit"></p></td>
-							</tr>
-							<tr>
-								<td class="text-right col-sm-1">Group Number:</td>
-								<td class="text-center"><p id="infoGroupNr"></p></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<h3>Change Member Limits</h3>
-				<div class="alert alert-warning">Only the commune account can
-					change the member limits</div>
-				<form class="form-horizontal" role="form">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="mAddress">Member
-							address:</label>
-						<div class="col-sm-6">
-							<input class="form-control" placeholder="Member address"
-								id="mAddress">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="nDebitLimit">New
-							Debit Limit:</label>
-						<div class="col-sm-4">
-							<input class="form-control"
-								placeholder="New
-                            Debit Limit"
-								id="nDebitLimit">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="nCreditLimit">New
-							Credit Limit:</label>
-						<div class="col-sm-4">
-							<input class="form-control"
-								placeholder="New
-                            Credit Limit"
-								id="nCreditLimit">
-						</div>
-					</div>
-				</form>
-				<button type="submit" class="btn btn-default"
-					onClick="modifyMemberLimits();">Change</button>
-			</div>
 			<div class="col-sm-12">
-				<hr />
-				<h3>List of Members of Credit Commons</h3>
+				<h3>List of Members of eThyclos</h3>
 				<p id="nrMembers"></p>
-				<div class="text-left" id="listNewMembers"></div>
+				<p id="info"></p>
+
+				<div id="listMembers"></div>
 			</div>
 		</div>
 	</div>
-	</div>
-	</div>
+
 
 	<div class="panel-footer">
 		<p>

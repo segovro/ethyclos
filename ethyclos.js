@@ -25,7 +25,7 @@ var myCoinbase = web3.eth.defaultAccount;
 
 var totals = ethyclos.getTotals();
 var nrMembers = totals[0];
-var nrGroups = totals[1];
+var nrCommunities = totals[1];
 var nrProposals = totals[2];
 var nrGoods = totals[3];
 var nrSells = totals[4];
@@ -50,8 +50,8 @@ var myCredit = credit[2];
 var myCreditDeadline = credit[3];
 
 var status = ethyclos.getMemberStatus(myCoinbase);
-var isBank = status[0];
-var isCommune = status[1];
+var isBank = ethyclos.getMemberStatus(myCoinbase)[0];
+var isCommune = ethyclos.getMemberStatus(myCoinbase)[1];
 
 var links = ethyclos.getMemberLinks(myCoinbase);
 var myWhisper = links[0];
