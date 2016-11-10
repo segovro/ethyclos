@@ -31,6 +31,8 @@ contract ethyclos {
     }
 	
 	event NewMember (address indexed _memberAddress, string _memberAlias, string _narrative, uint _TimeStamp);
+	event NewCommunity(address indexed _creator, uint indexed _communityID);
+	event ModifyCommunity (address indexed _modifier, uint indexed _communityID, uint _TimeStamp);
 	event JoinCommunity (address _member, string _alias, uint _communityID, string _communityName, uint _TimeStamp);
 	event ResignCommunity (address _member, string _alias, uint _communityID, string _communityName, uint _TimeStamp);
 
@@ -86,6 +88,8 @@ contract ethyclos {
 			member[msg.sender].isBank = false;
 			member[msg.sender].isCommune = false;
 			member[msg.sender].balance = 0;
+			member[msg.sender].reputation = 0;
+			member[msg.sender].trust = 0;			
 			member[msg.sender].creditLine = 0;
 			member[msg.sender].creditDeadline = 0;	
 			member[msg.sender].lastTransaction = now;
@@ -127,6 +131,7 @@ contract ethyclos {
 		member[_newMember].memberCommunity = _communityID;
 		member[_newMember].balance = 0;
 		member[_newMember].creditLine = community[_communityID].defaultCreditLine;
+		member[_newMember].trust = community[_communityID].defaultTrust;		
 		community[_communityID].nrMembers ++;
 		JoinCommunity (_newMember, member[_newMember].alias, _communityID, community[_communityID].communityName, now);
 		}
@@ -155,6 +160,7 @@ contract ethyclos {
 		member[_memberOfCommunity].balance = 0;
 		member[_memberOfCommunity].memberCommunity = 0;
 		member[_memberOfCommunity].creditLine = 0;
+		member[_memberOfCommunity].trust = 0;
 		community[_communityID].nrMembers --;
 		ResignCommunity (_memberOfCommunity, member[_memberOfCommunity].alias, _communityID, community[_communityID].communityName, now);		
 		}
@@ -184,9 +190,6 @@ contract ethyclos {
 		_getMemberID = memberIndex[_mIndex];
 	}
 	
-	event NewCommunity(address indexed _creator, uint indexed _communityID);
-	event ModifyCommunity (address indexed _modifier, uint indexed _communityID, uint _TimeStamp);
-
     // @notice create a structure to file all communities and their parameters
     struct Communities {
     	string communityName;
@@ -208,8 +211,6 @@ contract ethyclos {
     	uint quorum; 	
     }
 
-    // @notice map the banks structure into an array indexed by a string
-	// (the string we use is the CES Exchange ID)
     mapping(uint => Communities) community;
     
     // @notice create an index of banks for listing purposes
