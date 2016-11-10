@@ -1,4 +1,4 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.2;
 
 contract ethyclos {
 
@@ -354,10 +354,6 @@ contract ethyclos {
     function getCommunitybyIndex (uint _gIndex) constant returns (uint _getCommunityID) {
     	_getCommunityID = communityIndex[_gIndex];
     }
-
-}
-
-contract money is ethyclos {
     
     event Transfer (uint indexed _communityID, address indexed _sender, address indexed _receiver, uint _amount, uint _TimeStamp);
     event Credit (address indexed _MoneyLender, address indexed _borrowerAddress, uint _cDealine, uint _endorsedUoT);
@@ -503,12 +499,8 @@ contract money is ethyclos {
 				CreditExp(_moneyLender, _borrower, _creditTrust , _success, now);
 				} 
 			}
-		}
-	
-}
-
-contract shopping is ethyclos {
-    
+		}	
+  
 	event Sell (uint _sellNumber, uint _buyerCommunity, address indexed _buyer, uint _sellerCommunity, address indexed _seller, uint _good, uint _price, uint _TimeStamp);
 	
 		struct Goods {
@@ -613,9 +605,6 @@ contract shopping is ethyclos {
 		return (_good, _seller, sell[_sellNumber].buyer);
 	}
 	
-}
-
-contract polls is ethyclos {
     
     event ProposalAdded(uint proposalNumber, uint community, string narrative, address creator);
     event Voted(address voter, uint proposalNumber, int8 vote, int result);
