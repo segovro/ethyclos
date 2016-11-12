@@ -62,10 +62,10 @@
 					var memberImage = memberlinks[1];
 
 					var member = "";
-					member = "<div class=\"well col-sm-4 text-left\">"
-							+ "<div class=\"media\"><div class=\"media-left\">"
+					member = "<div class=\"well col-sm-12 text-left\">"
+							+ "<div class=\"media col-sm-6\"><div class=\"media-left\">"
 							+ "<img src=\"" + memberImage 
-				+ "\" class=\"media-object img-circle\" style=\"width: 50px\">"
+							+ "\" class=\"media-object img-circle\" style=\"width: 50px\">"
 							+ "</div><div class=\"media-body\">"
 							+ "<p class=\"name\">"
 							+ memberAlias
@@ -73,31 +73,31 @@
 							+ "<p><strong>"
 							+ memberCommunityName
 							+ "</p></strong>"
-							+ "</div></div>"
 							+ "<p><small><i>"
 							+ memberDescription
 							+ " </i></small></p>"
-							+ "<p>Balance: "
+							+ "</div></div>"
+							+ "<div class=\"col-sm-6\"><b>"
+							+ memberCoinbase
+							+ "</b><br/>"
+							+ "Balance: "
 							+ memberBalance
 							+ " <span class=\"badge\">"
 							+ memberCurrencyName
-							+ " </span></p>"
-							+ "<p>Credit Line: "
+							+ " </span><br/>"
+							+ "Credit Line: "
 							+ memberCreditLine
 							+ " <span class=\"badge\">"
 							+ memberCurrencyName
-							+ " </span></p>"
-							+ "<p>Reputation: "
+							+ " </span><br/>"
+							+ "Reputation: "
 							+ memberReputation
-							+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-star-empty\"></span> stars</span></p>"
-							+ "<p>Trust :"
+							+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-star-empty\"></span> stars</span><br/>"
+							+ "Trust: "
 							+ memberTrust
 							+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-thumbs-up\"></span> trusts</span></p>"
-							+ "<p><small>"
-							+ memberCoinbase
-							+ "</small></p>"
 							+ "<span class=\"glyphicon glyphicon-envelope\"><span><a href=\"\"> post</a>"
-							+ "</div>";
+							+ "</div></div></div>";
 
 					listMembers += member;
 		}
