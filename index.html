@@ -18,8 +18,8 @@
 		document.getElementById('me').innerHTML = "ETH Account: <b>"
 				+ myCoinbase + "<br></b> eThyclos Member: <b>" + myIsMember
 				+ "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
-				+ myWhisper + "<br></b>Group: <b>" + myCommunity
-				+ "</b> Group Name: <b>" + myCommunityName
+				+ myWhisper + "<br></b>Community: <b>" + myCommunity
+				+ "</b> Community Name: <b>" + myCommunityName
 				+ "<br></b> Is Commune: <b>" + isCommune + "</b> Is Bank: <b>"
 				+ isBank + "</b>";
 
@@ -82,7 +82,7 @@
 				+ "<img src=\"" + moneyLenderImage
                         + "\" class=\"media-object img-circle\" style=\"width: 75px\">"
 				+ "</div><div class=\"media-body\">"
-				+ "<p><span class=\"glyphicon glyphicon-thumbs-up\"></span> <b>Credit</b> endorsed by</p>"
+				+ "<p><h3>LIABILITIES</h3><span class=\"glyphicon glyphicon-thumbs-up\"></span> <b>Credit</b> endorsed by</p>"
 				+ "<p class=\"name\">"
 				+ moneyLenderName
 				+ "</p>"
@@ -102,19 +102,22 @@
 
 		var community = "";
 		community = "<div class=\"well text-left\">"
-				+ "<div class=\"media\"><div class=\"media-left\">"
-				+ "<img src=\"" + myCummunityImage 
+				+ "<div class=\"media\">"
+				+ "<div class=\"media-left\">"
+				+ "<img src=\"" + myCommunityImage
                 + "\" class=\"media-object img-circle\" style=\"width: 100px\">"
-				+ "</div><div class=\"media-body\">" 
+				+ "</div>"
+                + "<div class=\"media-body\">" 
 				+ "<p><span class=\"glyphicon glyphicon-flag\"></span>  <b>My Community</b></p>"
 				+ "<p class=\"name\">"
 				+ myCommunityName
 				+ "</p>"
+				+ "Community ID: <b>" + myCommunity + "</b>"
 				+ "</div></div>"
 				+ "<p><i>"
 				+ myCommunityDescription
 				+ " </i></p>"
-				+ "<p>Currency name: <span class=\"badge\">"
+				+ "<p>Currency name: <span class=\"badge\">"				
 				+ myCurrencyName
 				+ " </span></p>"
 				+ "<p>Open : <b>"
@@ -123,10 +126,10 @@
 				+ "<p>Number of Members: <b>"
 				+ myCommunityNrM
 				+ "</b></p>"
-				+ "<p>Exchange Rate : <b>"
+				+ "<p>Exchange Rate: <b>"
 				+ myRate
 				+ "%</b></p>"
-				+ "<p>Transfer Tax : <b>"
+				+ "<p>Transfer Tax: <b>"
 				+ "%</b></p>"
 				+ "<p>Accumulation Tax : <b>"
 				+ "%</b> per year</p>"
@@ -140,10 +143,9 @@
 				+ "<p>Default Member Trust : <b>"
 				+ mydefaultMemberTrust
 				+ "</b> <span class=\"badge\"><span class=\"glyphicon glyphicon-thumbs-up\"></span> trusts</span></p>"
-				+ "<p>Commune : "
-				+ myCommunityBankAccount
-				+ "</p>"
-				+ "<p>Bank : " + myCommunityCommuneAccount + "</p>" + "</div>";
+				+ "<p>Commune Account: <b>" + myCommunityCommuneAccount + "</b></p>"
+				+ "<p>Central Bank Account: <b>" + myCommunityBankAccount + "</b></p>" 
+				+ "</div>";
 
 		document.getElementById('community').innerHTML = community;
 	}

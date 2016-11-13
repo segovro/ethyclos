@@ -48,11 +48,12 @@ var myWhisper = links[0];
 var myImage = links[1];
 
 var myCommunityDescription = ethyclos.getCommunityDescription(myCommunity);
-var myCommunityName = myCommunityDescription[0];
-var myCommunityDescription = myCommunityDescription[1];
+var myCommunityName = ethyclos.getCommunityDescription(myCommunity)[0];
+var myCommunityDescription = ethyclos.getCommunityDescription(myCommunity)[1];
 var myCurrencyName = ethyclos.getCommunityDescription(myCommunity)[2];
-var myCommunityOpen = myCommunityDescription[3];
-var myCommunityNrM = myCommunityDescription[4];
+var myCommunityImage = ethyclos.getCommunityDescription(myCommunity)[3]
+var myCommunityOpen = ethyclos.getCommunityDescription(myCommunity)[4];
+var myCommunityNrM = ethyclos.getCommunityDescription(myCommunity)[5];
 
 var myCommunityRates = ethyclos.getCommunityRates(myCommunity);
 var myRate = myCommunityRates[0];
