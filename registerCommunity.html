@@ -84,6 +84,78 @@
 		}
 	}
 
+	function viewCommunity() {
+		var cTJ = document.getElementById("communityToJoin").value;
+		var cTJDescription = ethyclos.getCommunityDescription(cTJ);
+		var cTJName = ethyclos.getCommunityDescription(cTJ)[0];
+		var cTJDescription = ethyclos.getCommunityDescription(cTJ)[1];
+		var cTJCurrencyName = ethyclos.getCommunityDescription(cTJ)[2];
+		var cTJImage = ethyclos.getCommunityDescription(cTJ)[3]
+		var cTJOpen = ethyclos.getCommunityDescription(cTJ)[4];
+		var cTJNrM = ethyclos.getCommunityDescription(cTJ)[5];
+		var cTJRates = ethyclos.getCommunityRates(cTJ);
+		var cTJRate = ethyclos.getCommunityRates(cTJ)[0];
+		var cTJdefaultMemberCreditLine = ethyclos.getCommunityRates(cTJ)[1];
+		var cTJdefaultMemberTrust = ethyclos.getCommunityRates[2];
+		var cTJManagement = ethyclos.getCommunityManagement(cTJ);
+		var cTJBankAccount = ethyclos.getCommunityManagement(cTJ)[0];
+		var cTJCommuneAccount = ethyclos.getCommunityManagement(cTJ)[1];
+		var communityTJ = "";
+		communityTJ = "<div class=\"well text-left\">"
+				+ "<div class=\"media\">"
+				+ "<div class=\"media-left\">"
+				+ "<img src=\"" + cTJImage
+	                + "\" class=\"media-object img-circle\" style=\"width: 100px\">"
+				+ "</div>"
+				+ "<div class=\"media-body\">"
+				+ "<p><span class=\"glyphicon glyphicon-flag\"></span>  <b>Community</b></p>"
+				+ "<p class=\"name\">"
+				+ cTJName
+				+ "</p>"
+				+ "Community ID: <b>"
+				+ cTJ
+				+ "</b>"
+				+ "</div></div>"
+				+ "<p><i>"
+				+ cTJDescription
+				+ " </i></p>"
+				+ "<p>Currency name: <span class=\"badge\">"
+				+ cTJCurrencyName
+				+ " </span></p>"
+				+ "<p>Open : <b>"
+				+ cTJOpen
+				+ "</b></p>"
+				+ "<p>Number of Members: <b>"
+				+ cTJNrM
+				+ "</b></p>"
+				+ "<p>Exchange Rate: <b>"
+				+ cTJRate
+				+ "%</b></p>"
+				+ "<p>Transfer Tax: <b>"
+				+ "%</b></p>"
+				+ "<p>Accumulation Tax : <b>"
+				+ "%</b> per year</p>"
+				+ "<p>Credit Trust Reward : <b>"
+				+ "%</b></p>"
+				+ "<p>Default Member Credit Line : <b>"
+				+ cTJdefaultMemberCreditLine
+				+ "</b> <span class=\"badge\">"
+				+ cTJCurrencyName
+				+ " </span></p>"
+				+ "<p>Default Member Trust : <b>"
+				+ cTJdefaultMemberTrust
+				+ "</b> <span class=\"badge\"><span class=\"glyphicon glyphicon-thumbs-up\"></span> trusts</span></p>"
+				+ "<p>Commune Account: <b>"
+				+ cTJCommuneAccount
+				+ "</b></p>"
+				+ "<p>Central Bank Account: <b>"
+				+ cTJBankAccount
+				+ "</b></p>"
+				+ "</div>";
+
+		document.getElementById('communityTJ').innerHTML = communityTJ;
+	}
+
 	function joinCommunity() {
 		if (myGroupID = 0) {
 			var group = document.getElementById('group').value;
@@ -104,34 +176,36 @@
 			<h3>My Community Membership</h3>
 			<div class="col-sm-6">
 				<p id="community"></p>
-				<button type="submit" class="btn btn-default" onClick="resign();">Resign
+				<button type="submit" class="btn btn-danger" onClick="resign();">Resign
 					from your Community</button>
 			</div>
 			<div class="col-sm-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h4>
-						Join Community
+				<div class="panel panel-default">
+					<div class="panel-heading">
 						<h4>
-				</div>
-				<div class="panel-body">
+							Join Community
+							<h4>
+					</div>
+					<div class="panel-body">
 
-					<form class="form-horizontal" role="form" action="">
-						<div class="form-group">
-							<input type="text" class="form-control" id="groupToJoin"
-								placeholder="Enter the group ID">
-						</div>
-					</form>
-				</div>
-				<div class="panel-footer">
+						<form class="form-horizontal" role="form" action="">
+							<div class="form-group">
+								<input type="text" class="form-control" id="communityToJoin"
+									placeholder="Enter the Community ID">
+							</div>
+						</form>
+					</div>
+					<div class="panel-footer">
 						<div class="btn-group">
 							<button type="submit" class="btn btn-warning"
 								onClick="viewCommunity();">Review Community</button>
 							<button type="submit" class="btn btn-success"
 								onClick="joinCommunity();">Join Community</button>
 						</div>
+					</div>
 				</div>
-			</div>
+				<br />
+				<p id="communityTJ"></p>
 			</div>
 		</div>
 	</div>
