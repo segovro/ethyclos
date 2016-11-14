@@ -65,8 +65,8 @@ document.write(
 		'        </li>'+
 		'      <li class="dropdown-submenu"><a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-pencil"></span> Registration</a>'+
 		'          <ul class="dropdown-menu">'+
-		'          <li><a href="registerSystem.html"><span class="glyphicon glyphicon-pencil"></span> Register System</a></li> '+
-		'          <li><a href="registerCommunity.html"><span class="glyphicon glyphicon-pencil"></span> Register Group</a></li> '+
+		'          <li><a href="registerSystem.html"><span class="glyphicon glyphicon-pencil"></span> Register at eThyclos System</a></li> '+
+		'          <li><a href="registerCommunity.html"><span class="glyphicon glyphicon-pencil"></span> My Community Membership</a></li> '+
 		'          </ul>'+
 		'        </li>'+
 		'      </ul>'+

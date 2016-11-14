@@ -16,20 +16,21 @@
 <script type="text/javascript">
 	window.onload = function() {
 		document.getElementById('me').innerHTML = "ETH Account: <b>"
-				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
-				+ myIsMember + "</b> Alias: <b>" + myAlias
-				+ "<br></b> Whisper Account: <b>" + myWhisper
-				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
-				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
-				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+				+ myCoinbase + "<br></b> eThyclos Member: <b>" + myIsMember
+				+ "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
+				+ myWhisper + "<br></b>Community: <b>" + myCommunity
+				+ "</b> Community Name: <b>" + myCommunityName
+				+ "<br></b> Is Commune: <b>" + isCommune + "</b> Is Bank: <b>"
+				+ isBank + "</b>";
 
 		function register() {
 			if (isMember = false) {
 				var alias = document.getElementById('alias').value;
 				var whisperIdentity = web3.shh.newIdentity();
-				var description = document.getElementById('description').value;
+				var narrative = document.getElementById('description').value;
 				var imageLink = document.getElementById('imageLink').value;
-				creditCommons.registerSystem(newAlias, whisperIdentity, description, imageLink);
+				ethyclos.registerSystem(newAlias, whisperIdentity, narrative,
+						imageLink);
 				location.reload();
 			}
 		}
@@ -58,29 +59,41 @@
 				Register at <strong>eThyclos</strong>
 			</h3>
 			<div class="col-sm-6">
-				<form class="form-horizontal" role="form" action="">
-					<div class="form-group">
-						<label class="control-label" for="alias">Chose alias:</label>
-						<div>
-							<input type="text" class="form-control" id="alias"
-								placeholder="Enter your alias">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Register</h4>
+					</div>
+					<div class="panel-body">
+						<p id="display"></p>
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="control-label col-sm-2" for="alias">
+									Alias:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="alias"
+										placeholder="Enter alias">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-2" for="imageLink">Image:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="imageLink"
+										placeholder="Enter image URL">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2" for="description">Description:</label>
+								<textarea rows="3" cols="50" id="description" placeholder="Make a short presentation. Add address, phones, emails, websites. You may use HTML."></textarea>
+							</div>
+						</form>
+					</div>
+					<div class="panel-footer">
+						<div class="btn-group">
+							<button type="submit" class="btn btn-success"
+								onClick="register();">Register</button>
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="control-label" for="description">Description</label>
-						<div>
-							<textarea class="form-control" rows="5" id="description"
-								placeholder="Introduce yourself" cols=""></textarea>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="imageLink">Image</label>
-						<div>
-							<input type="text" class="form-control" id="imageLink"
-								placeholder="URL of your image">
-						</div>
-				</form>
-				<button type="submit" class="btn btn-default" onClick="register();">Register</button>
+				</div>
 			</div>
 		</div>
 	</div>

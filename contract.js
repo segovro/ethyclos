@@ -244,7 +244,7 @@ contract ethyclos {
     	    			community[_communityID].creditRewardRate = _creditRewardRate;
     	    			community[_communityID].defaultCreditLine = _defaultCreditLine;
     	    			community[_communityID].defaultTrust = _defaultTrust;
-    	    			community[_communityID].open = false;
+    	    			community[_communityID].open = _open;
     	    			community[_communityID].nrMembers = 1;
     	    			community[_communityID].quorum = _quorum;
                         	// @notice make the creator member of the community

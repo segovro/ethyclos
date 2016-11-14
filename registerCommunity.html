@@ -16,25 +16,78 @@
 <script type="text/javascript">
 	window.onload = function() {
 		document.getElementById('me').innerHTML = "ETH Account: <b>"
-				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
-				+ myIsMember + "</b> Alias: <b>" + myAlias
-				+ "<br></b> Whisper Account: <b>" + myWhisper
-				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
-				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
-				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+				+ myCoinbase + "<br></b> eThyclos Member: <b>" + myIsMember
+				+ "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
+				+ myWhisper + "<br></b>Community: <b>" + myCommunity
+				+ "</b> Community Name: <b>" + myCommunityName
+				+ "<br></b> Is Commune: <b>" + isCommune + "</b> Is Bank: <b>"
+				+ isBank + "</b>";
 
+		var community = "";
+		community = "<div class=\"well text-left\">"
+				+ "<div class=\"media\">"
+				+ "<div class=\"media-left\">"
+				+ "<img src=\"" + myCommunityImage
+	                + "\" class=\"media-object img-circle\" style=\"width: 100px\">"
+				+ "</div>"
+				+ "<div class=\"media-body\">"
+				+ "<p><span class=\"glyphicon glyphicon-flag\"></span>  <b>My Community</b></p>"
+				+ "<p class=\"name\">"
+				+ myCommunityName
+				+ "</p>"
+				+ "Community ID: <b>"
+				+ myCommunity
+				+ "</b>"
+				+ "</div></div>"
+				+ "<p><i>"
+				+ myCommunityDescription
+				+ " </i></p>"
+				+ "<p>Currency name: <span class=\"badge\">"
+				+ myCurrencyName
+				+ " </span></p>"
+				+ "<p>Open : <b>"
+				+ myCommunityOpen
+				+ "</b></p>"
+				+ "<p>Number of Members: <b>"
+				+ myCommunityNrM
+				+ "</b></p>"
+				+ "<p>Exchange Rate: <b>"
+				+ myRate
+				+ "%</b></p>"
+				+ "<p>Transfer Tax: <b>"
+				+ "%</b></p>"
+				+ "<p>Accumulation Tax : <b>"
+				+ "%</b> per year</p>"
+				+ "<p>Credit Trust Reward : <b>"
+				+ "%</b></p>"
+				+ "<p>Default Member Credit Line : <b>"
+				+ mydefaultMemberCreditLine
+				+ "</b> <span class=\"badge\">"
+				+ myCurrencyName
+				+ " </span></p>"
+				+ "<p>Default Member Trust : <b>"
+				+ mydefaultMemberTrust
+				+ "</b> <span class=\"badge\"><span class=\"glyphicon glyphicon-thumbs-up\"></span> trusts</span></p>"
+				+ "<p>Commune Account: <b>"
+				+ myCommunityCommuneAccount
+				+ "</b></p>"
+				+ "<p>Central Bank Account: <b>"
+				+ myCommunityBankAccount + "</b></p>" + "</div>";
+
+		document.getElementById('community').innerHTML = community;
+	}
 
 	function resign() {
 		if (myGroupID > 0) {
-			creditCommons.resignGroup();
+			ethyclos.resignGroup();
 			location.reload();
 		}
 	}
 
-	function joinGroup() {
+	function joinCommunity() {
 		if (myGroupID = 0) {
 			var group = document.getElementById('group').value;
-			creditCommons.joinGroup(group);
+			ethyclos.joinGroup(group);
 			location.reload();
 		}
 	}
@@ -48,64 +101,41 @@
 		<script type="text/javascript" src="navbar.js"></script>
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
-			<h3>Community Registration</h3>
-
+			<h3>My Community Membership</h3>
 			<div class="col-sm-6">
-			<h4>Resign<h4>
-			<div class="well">
-                    <div class="media">
-                        <div class="media-left">
-                            <img
-                                src="https://avatars0.githubusercontent.com/u/6016780?v=3&s=466"
-                                class="media-object" style="width: 60px">
-                        </div>
-                        <div class="media-body">
-                            <h4>
-                                <img
-                                    src="https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png"
-                                    class="img-circle" width="50" height="50"> My Community
-                            </h4>
-                        </div>
-                    </div>
-                    <br />
-                    <table class="table small">
-                        <thead>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-right col-sm-2">Name:</td>
-                                <td class="text-left"><p id="myGroupName"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Description:</td>
-                                <td class="text-left col-sm-4"><p id="myGroupDescription"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Group ID:</td>
-                                <td class="text-left"><p id="myGroupNr"></p></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-				
-						<button type="submit" class="btn btn-default" onClick="resign();">Resign
-							from your Community</button>
-							</div>
+				<p id="community"></p>
+				<button type="submit" class="btn btn-default" onClick="resign();">Resign
+					from your Community</button>
+			</div>
 			<div class="col-sm-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4>
+						Join Community
 						<h4>
-							Join Community
-							<h4>
-								<form class="form-horizontal" role="form" action="">
-									<div class="form-group">
-										<input type="text" class="form-control" id="groupToJoin"
-											placeholder="Enter the group ID">
-									</div>
-								</form>
-								<button type="submit" class="btn btn-default"
-									onClick="joinGroup();">Join</button>
+				</div>
+				<div class="panel-body">
+
+					<form class="form-horizontal" role="form" action="">
+						<div class="form-group">
+							<input type="text" class="form-control" id="groupToJoin"
+								placeholder="Enter the group ID">
+						</div>
+					</form>
+				</div>
+				<div class="panel-footer">
+						<div class="btn-group">
+							<button type="submit" class="btn btn-warning"
+								onClick="viewCommunity();">Review Community</button>
+							<button type="submit" class="btn btn-success"
+								onClick="joinCommunity();">Join Community</button>
+						</div>
+				</div>
+			</div>
 			</div>
 		</div>
 	</div>
+
 
 	<div class="panel-footer">
 		<p>
