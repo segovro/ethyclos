@@ -75,6 +75,23 @@
 				+ myCommunityBankAccount + "</b></p>" + "</div>";
 
 		document.getElementById('community').innerHTML = community;
+
+		var communities = "<form>" + "<div class=\"form-group\">"
+				+ "<label for=\"communityToJoin\">Chose Community</label>"
+				+ "<select class=\"form-control\" id=\"communityToJoin\">";
+
+		for (i = 0; i < nrCommunities; i++) {
+			var communityID = ethyclos.getCommunitybyIndex(i);
+			var communityName = ethyclos.getCommunityDescription(communityID)[0];
+			var option = "<option value=\"" + communityID + "\">" + communityID
+					+ " - " + communityName + "</option>";
+			communities += option;
+		}
+
+		communities += "</select>" + "</div>" + "</form>";
+
+		document.getElementById('communities').innerHTML = communities;
+
 	}
 
 	function resign() {
@@ -187,13 +204,7 @@
 							<h4>
 					</div>
 					<div class="panel-body">
-
-						<form class="form-horizontal" role="form" action="">
-							<div class="form-group">
-								<input type="text" class="form-control" id="communityToJoin"
-									placeholder="Enter the Community ID">
-							</div>
-						</form>
+						<p id="communities"></p>
 					</div>
 					<div class="panel-footer">
 						<div class="btn-group">

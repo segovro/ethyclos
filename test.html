@@ -1,26 +1,45 @@
 <html lang="en">
 <head>
-<title>Posts</title>
+<title>test</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="./dist/dapp-styles.css">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="ethyclos.css">
 <script
-    src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script
-    src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="web3.js"></script>
 <script type="text/javascript" src="bignumber.js"></script>
 <script type="text/javascript" src="ethyclos.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
-        document.getElementById('me').innerHTML = "ETH Account: <b>"
-            + myCoinbase + "<br></b> Credit Commons Member: <b>"
-            + myIsMember + "</b> Alias: <b>" + myAlias
-            + "<br></b> Whisper Account: <b>" + myWhisper
-            + "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
-            + myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
-            + "</b> Is Commune: <b>" + isCommune + "</b>";
-            
+		document.getElementById('me').innerHTML = "ETH Account: <b>"
+				+ myCoinbase + "<br></b> eThyclos Member: <b>" + myIsMember
+				+ "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
+				+ myWhisper + "<br></b>Community: <b>" + myCommunity
+				+ "</b> Community Name: <b>" + myCommunityName
+				+ "<br></b> Is Commune: <b>" + isCommune + "</b> Is Bank: <b>"
+				+ isBank + "</b>";
+
+		var communities = "<form>" + "<div class=\"form-group col-sm-6\">"
+				+ "<label for=\"communityToJoin\">Chose Community</label>"
+				+ "<select class=\"form-control\" id=\"communityToJoin\">";
+
+		for (i = 0; i < nrCommunities; i++) {
+			var communityID = ethyclos.getCommunitybyIndex(i);
+			var communityName = ethyclos.getCommunityDescription(communityID)[0];
+			var option = "<option value=\"" + communityID + "\">" + communityID
+					+ " - " + communityName + "</option>";
+			communities += option;
+		}
+
+		communities += "</select>" + "</div>" + "</form>";
+
+		document.getElementById('communities').innerHTML = communities;
+
+	}
 </script>
 <style>
 .navbar {
@@ -30,255 +49,35 @@
 </style>
 </head>
 <body>
-	<header class="dapp-header">
-hello
 
-	</header>
-
-	<div class="dapp-flex-content">
-
-		<!-- aside -->
-		<aside class="dapp-aside">
-		    <h4><a href="https://github.com/segovro/ethyclos/wiki">eThyclos</a></h4>
-            <a href="index.html">My account</a><br /> 
-            <h4>Banking</h4>
-            <a href="transfers.html">Transfers</a><br />
-            <a href="bills.html">Bills</a><br /> 
-            <a href="endorseCredit.html">Credits</a><br />
-            <h4>Marketplace</h4> 
-            <a href="shopping.html">Shopping</a><br /> 
-            <a href="myOffers.html">Manage offers </a><br /> 
-            <h4><span aria-hidden="true" class="icon-user"></span> People</h4>
-            <a href="members.html">Members</a><br /> <a href="groups.html">Communities</a><br />
-            <a href="memberMngt.html">Members Management</a><br /> 
-            <a href="groupMngt.html">Community Management</a><br /> 
-            <h4>Posts</h4>
-            <a href="postMembers.html">Post Members</a><br /> 
-            <a href="postGroups.html">Group Board </a><br /> 
-            <a href="announcements.html">Broadcast announcements</a><br />
-            <h4>Polls</h4>
-            <a href="polls.html">General Polls</a><br /> 
-            <a href="acceptance.html">Members acceptance</a><br /> 
-            <h4>Community</h4>
-            <a href="budget.html">Commons Finances </a><br /> 
-            <a href="monitor.html">Community Monitoring</a><br /> 
-            <a href="commune.html">Commune Budget </a><br /> 
-            <a href="civilService.html">Community Service</a><br /> 
-            <a href="funding.html">Community Funding</a><br /> 
-            <a href="treasury.html">Monetary Adjustments</a><br /> 
-            <a href="administration.html">Administration </a><br />
-
-		</aside>
-
-		<!-- content-->
-		<main class="dapp-content"> 
-<div class="container bg-3 text-center">
-        <small><p class="bg-info" id="me"></p></small>
-        <div class="row">
-            <h3>My account</h3>
-            <div class="col-sm-6">
-                <div class="well">
-                    <div class="media">
-                        <div class="media-left">
-                            <img
-                                src="http://i2.mirror.co.uk/incoming/article5428583.ece/BINARY/archetypal-male-fa_3249635c.jpg"
-                                class="media-object" style="width: 60px">
-                        </div>
-                        <div class="media-body">
-                            <h4>
-                                <span class="glyphicon glyphicon-user"></span> My Wallet
-                            </h4>
-                        </div>
-                    </div>
-                    <br />
-                    <table class="table">
-                        <thead>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-right col-sm-1">Alias:</td>
-                                <td class="text-left"><p id="alias"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-1">Description:</td>
-                                <td class="text-left col-sm-5"><p id="description"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-1">Balance:</td>
-                                <td class="text-right"><p id="balance"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-1">Debit Limit:</td>
-                                <td class="text-right"><p id="debitLimit"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-1">Available:</td>
-                                <td class="text-right"><p id="available"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-1">Intertrade:</td>
-                                <td class="text-center"><p id="isIntertrade"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-1">Commune:</td>
-                                <td class="text-center"><p id="isCommune"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-1">Seller Reputation:</td>
-                                <td class="text-center"><p id=""></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-1">Moneylender Trust:</td>
-                                <td class="text-center"><p id=""></p></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <h3>
-                        <span class="glyphicon glyphicon-thumbs-down"></span> Liabilities
-                    </h3>
-                    <div id="amountCredit"></div>
-                    <div id="unitsOfTrust"></div>
-                    <div id="deadline"></div>
-                    <div id="moneyLender"></div>
-                    <h3>
-                        <span class="glyphicon glyphicon-thumbs-up"></span> Endorsed
-                        Credits
-                    </h3>
-                    <h4>
-                        <span class="glyphicon glyphicon-ok"></span> Ongoing Credits
-                    </h4>
-                    <div id="listCredit"></div>
-                    <h4>
-                        <span class="glyphicon glyphicon-remove"></span> Expired Credits
-                    </h4>
-                    <div id="listCreditEx"></div>
-                </div>
-
-                <hr />
-                <h4>Register at Credit Commons system</h4>
-                <form class="form-horizontal" role="form" action="">
-                    <div class="form-group">
-                        <label class="control-label" for="alias">Chose alias:</label>
-                        <div>
-                            <input type="text" class="form-control" id="alias"
-                                placeholder="Enter your alias">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="description">Description</label>
-                        <div>
-                            <textarea class="form-control" rows="5" id="description"
-                                placeholder="Introduce yourself. Geolocation. Country code. Phones, email, etc."
-                                cols=""></textarea>
-                        </div>
-                    </div>
-                </form>
-                <button type="submit" class="btn btn-default" onClick="register();">Register</button>
-            </div>
-            <div class="col-sm-6">
-                <div class="well">
-                    <h4>
-                        <img
-                            src="https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png"
-                            class="img-circle" width="50" height="50"> My Community
-                    </h4>
-                    <table class="table small">
-                        <thead>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-right col-sm-2">Name:</td>
-                                <td class="text-left"><p id="myGroupName"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Description:</td>
-                                <td class="text-left col-sm-4"><p id="myGroupDescription"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Group ID:</td>
-                                <td class="text-left"><p id="myGroupNr"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Number of Members:</td>
-                                <td class="text-center"><p id="myGroupNrM"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Currency:</td>
-                                <td class="text-center"><p id="myCurrencyName"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Rate:</td>
-                                <td class="text-right"><p id="myRate"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Default Debit:</td>
-                                <td class="text-right"><p id="myGroupDebitLimit"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Default Credit:</td>
-                                <td class="text-right"><p id="myGroupCreditLimit"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Open:</td>
-                                <td class="text-center"><p id="myGroupOpen"></p></td>
-                            </tr>
-
-                            <tr>
-                                <td class="text-right col-sm-2">Commune account:</td>
-                                <td class="text-left"><p id="communeAccount"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Intertrade Account::</td>
-                                <td class="text-left"><p id="intertradeAccount"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Intertrade Balance:</td>
-                                <td class="text-right" id="intertradeBalance"><p></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Intertrade Debit:</td>
-                                <td class="text-right"><p id="intertradeDebitLimit"></p></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right col-sm-2">Intertrade Credit:</td>
-                                <td class="text-right"><p id="intertradeCreditLimit"></p></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <hr />
-                <h4>
-                    Resign
-                    <h4>
-                        <button type="submit" class="btn btn-default" onClick="resign();">Resign
-                            from your Group</button>
-                        <h4>
-                            Join Group
-                            <h4>
-                                <form class="form-horizontal" role="form" action="">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="groupToJoin"
-                                            placeholder="Enter the group ID">
-                                    </div>
-                                </form>
-                                <button type="submit" class="btn btn-default"
-                                    onClick="joinGroup();">Join</button>
-                                <hr />
-            </div>
-        </div>
-    </div>
-		</main>
-
-		<!-- actionbar -->
-		<aside class="dapp-actionbar">
-		<small><p id="me"></p></small>
-		</aside>
-
+	<div class="container bg-3 text-center">
+		<div class=container">
+			<script type="text/javascript" src="navbar.js"></script>
+		</div>
+		<small><p class="bg-info" id="me"></p></small>
+		<div class="row">
+			<div class="col-sm-12">
+				<h3>Chose Community</h3>
+				<p id="communities"></p>
+				<p id="bla"></p>
+			</div>
+		</div>
 	</div>
 
-
-	<!-- footer -->
-
+	<div class="panel-footer">
+		<p>
+			<img
+				src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png"
+				width="20" align="top" /> <i>Powered by ethereum</i>
+		</p>
+		<a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+			alt="Creative Commons License" style="border-width: 0"
+			src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This
+		work is licensed under a <a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
+			Commons Attribution-NonCommercial-ShareAlike 4.0 International
+			License</a>.
+	</div>
 </body>
 </html>
