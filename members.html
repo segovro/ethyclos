@@ -7,101 +7,122 @@
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" href="ethyclos.css">
 <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+	type="text/javascript"></script>
 <script
-	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+	type="text/javascript"></script>
 <script type="text/javascript" src="web3.js"></script>
 <script type="text/javascript" src="bignumber.js"></script>
 <script type="text/javascript" src="ethyclos.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
-		document.getElementById('me').innerHTML = "ETH Account: <b>"
+		document.getElementById('me').innerHTML = "ETH Account: <b>" 
 				+ myCoinbase + "<br></b> eThyclos Member: <b>" + myIsMember
 				+ "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
-				+ myWhisper + "<br></b>Group: <b>" + myCommunity
-				+ "</b> Group Name: <b>" + myCommunityName
+				+ myWhisper + "<br></b>Community: <b>" + myCommunity
+				+ "</b> Community Name: <b>" + myCommunityName
 				+ "<br></b> Is Commune: <b>" + isCommune + "</b> Is Bank: <b>"
 				+ isBank + "</b>";
 
 		document.getElementById('nrMembers').innerHTML = "Number of members in <b>eThyclos</b> system: <b>"
 				+ nrMembers + "</b>";
 
-		var listMembers = "";
-			for (i = 0; i < nrMembers; i++) {
-	                var memberCoinbase = ethyclos.getMPbyIndex(i);
-	                var memberInformation = ethyclos.getMemberInfo(memberCoinbase);	                
-					var memberIsMember = memberInformation[0];
-					var memberAlias = memberInformation[1];
-					var memberDescription = memberInformation[2];
-					var memberCommunity = ethyclos.getMemberInfo(memberCoinbase)[3];
-					var memberCommunityName = ethyclos
-							.getCommunityDescription(memberCommunity)[0];
+		var communities = "<form>" + "<div class=\"form-group col-sm-6\">"
+				+ "<label for=\"selCommunity\">Choose Community</label>"
+				+ "<select class=\"form-control\" id=\"selCommunity\">";
 
-					var memberWallet = ethyclos.getMemberWallet(memberCoinbase);
-					var memberBalance = memberWallet[0];
-					var memberCreditLine = memberWallet[1];
-					var memberTrust = memberWallet[2];
-					var memberReputation = memberWallet[3];
-					var memberLastTransaction = memberWallet[4];
-
-					var memberCurrencyName = ethyclos
-							.getCommunityDescription(memberCommunity)[2];
-
-					var memberCredit = ethyclos.getMemberCredit(memberCoinbase);
-					var memberMoneyLender = memberCredit[0];
-					var memberCreditTrust = memberCredit[1];
-					var memberCredit = memberCredit[2];
-					var memberCreditDeadline = memberCredit[3];
-
-					var memberStatus = ethyclos.getMemberStatus(memberCoinbase);
-					var memberisBank = memberStatus[0];
-					var memberisCommune = memberStatus[1];
-
-					var memberlinks = ethyclos.getMemberLinks(memberCoinbase);
-					var memberWhisper = memberlinks[0];
-					var memberImage = memberlinks[1];
-
-					var member = "";
-					member = "<div class=\"well col-sm-12 text-left\">"
-							+ "<div class=\"media col-sm-6\"><div class=\"media-left\">"
-							+ "<img src=\"" + memberImage 
-							+ "\" class=\"media-object img-circle\" style=\"width: 50px\">"
-							+ "</div><div class=\"media-body\">"
-							+ "<p class=\"name\">"
-							+ memberAlias
-							+ "</p>"
-							+ "<p><strong>"
-							+ memberCommunityName
-							+ "</p></strong>"
-							+ "<p><small><i>"
-							+ memberDescription
-							+ " </i></small></p>"
-							+ "</div></div>"
-							+ "<div class=\"col-sm-6\"><b>"
-							+ memberCoinbase
-							+ "</b><br/>"
-							+ "Balance: "
-							+ memberBalance
-							+ " <span class=\"badge\">"
-							+ memberCurrencyName
-							+ " </span><br/>"
-							+ "Credit Line: "
-							+ memberCreditLine
-							+ " <span class=\"badge\">"
-							+ memberCurrencyName
-							+ " </span><br/>"
-							+ "Reputation: "
-							+ memberReputation
-							+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-star-empty\"></span> stars</span><br/>"
-							+ "Trust: "
-							+ memberTrust
-							+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-thumbs-up\"></span> trusts</span></p>"
-							+ "<span class=\"glyphicon glyphicon-envelope\"><span><a href=\"\"> post</a>"
-							+ "</div></div></div>";
-
-					listMembers += member;
+		for (i = 0; i < nrCommunities; i++) {
+			var communityID = ethyclos.getCommunitybyIndex(i);
+			var communityName = ethyclos.getCommunityDescription(communityID)[0];
+			var option = "<option value=\"" + communityID + "\">" + communityID
+					+ " - " + communityName + "</option>";
+			communities += option;
 		}
 
+		communities += "</select>" + "</div>" + "</form>";
+
+		document.getElementById('communities').innerHTML = communities;
+		
+		var listMembers = "";
+		for (i = 0; i < nrMembers; i++) {
+			var memberCoinbase = ethyclos.getMPbyIndex(i);
+			var memberInformation = ethyclos.getMemberInfo(memberCoinbase);
+			var memberIsMember = memberInformation[0];
+			var memberAlias = memberInformation[1];
+			var memberDescription = memberInformation[2];
+			var memberCommunity = ethyclos.getMemberInfo(memberCoinbase)[3];
+			var memberCommunityName = ethyclos
+					.getCommunityDescription(memberCommunity)[0];
+
+			var memberWallet = ethyclos.getMemberWallet(memberCoinbase);
+			var memberBalance = memberWallet[0];
+			var memberCreditLine = memberWallet[1];
+			var memberTrust = memberWallet[2];
+			var memberReputation = memberWallet[3];
+			var memberLastTransaction = memberWallet[4];
+
+			var memberCurrencyName = ethyclos
+					.getCommunityDescription(memberCommunity)[2];
+
+			var memberCredit = ethyclos.getMemberCredit(memberCoinbase);
+			var memberMoneyLender = memberCredit[0];
+			var memberCreditTrust = memberCredit[1];
+			var memberCredit = memberCredit[2];
+			var memberCreditDeadline = memberCredit[3];
+
+			var memberStatus = ethyclos.getMemberStatus(memberCoinbase);
+			var memberisBank = memberStatus[0];
+			var memberisCommune = memberStatus[1];
+
+			var memberlinks = ethyclos.getMemberLinks(memberCoinbase);
+			var memberWhisper = memberlinks[0];
+			var memberImage = memberlinks[1];
+
+			var member = "";
+			member = "<div class=\"well col-sm-12 text-left\">"
+					+ "<div class=\"media col-sm-6\"><div class=\"media-left\">"
+					+ "<img src=\"" + memberImage 
+							+ "\" class=\"media-object img-circle\" style=\"width: 50px\">"
+					+ "</div><div class=\"media-body\">" + "<p class=\"name\">"
+					+ memberAlias
+					+ "</p>"
+					+ "<p><strong>"
+					+ memberCommunityName
+					+ "</p></strong>"
+					+ "<p><small><i>"
+					+ memberDescription
+					+ " </i></small></p>"
+					+ "</div></div>"
+					+ "<div class=\"col-sm-6\"><b>"
+					+ memberCoinbase
+					+ "</b><br/>"
+					+ "Balance: "
+					+ memberBalance
+					+ " <span class=\"badge\">"
+					+ memberCurrencyName
+					+ " </span><br/>"
+					+ "Credit Line: "
+					+ memberCreditLine
+					+ " <span class=\"badge\">"
+					+ memberCurrencyName
+					+ " </span><br/>"
+					+ "Reputation: "
+					+ memberReputation
+					+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-star-empty\"></span> stars</span><br/>"
+					+ "Trust: "
+					+ memberTrust
+					+ " <span class=\"badge\"><span class=\"glyphicon glyphicon-thumbs-up\"></span> trusts</span></p>"
+					+ "<span class=\"glyphicon glyphicon-envelope\"><span><a href=\"\"> post</a>"
+					+ "</div></div></div>";
+
+			listMembers += member;
+		}
+	
+		function chooseC() {
+		var selected = document.getElementById("selCommunity").value;
+		document.getElementById('selected').innerHTML = selected;
+		}
 		document.getElementById('listMembers').innerHTML = listMembers;
 
 	}
@@ -121,7 +142,10 @@
 				<h3>List of Members of eThyclos</h3>
 				<p id="nrMembers"></p>
 				<p id="info"></p>
-
+				<p id="communities"></p>
+				<button type="submit" class="btn btn-success"
+								onClick="chooseC();">Choose</button>
+				<p id="selected"></p>
 				<div id="listMembers"></div>
 			</div>
 		</div>
