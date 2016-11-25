@@ -11,8 +11,6 @@ contract ethyclos {
 		uint nrMembers;
 		uint nrCommunities;
 		uint nrProposals;
-		uint nrGoods;
-		uint nrSells;
 	
 	// @notice at creating the contract we declare the general variables
 	function ethyclos() {
@@ -22,12 +20,10 @@ contract ethyclos {
 			    nrMembers = 0;
 			    nrCommunities = 0;
 			    nrProposals = 0;
-			    nrGoods = 0;
-			    nrSells = 0;
         }
 	
-    function getTotals () constant returns (uint, uint, uint, uint, uint) {
-    	return (nrMembers, nrCommunities, nrProposals, nrGoods, nrSells);
+    function getTotals () constant returns (uint, uint, uint) {
+    	return (nrMembers, nrCommunities, nrProposals);
     }
 	
 	event NewMember (address indexed _memberAddress, string _memberAlias, string _narrative, uint _TimeStamp);
@@ -165,6 +161,18 @@ contract ethyclos {
 		ResignCommunity (_memberOfCommunity, member[_memberOfCommunity].alias, _communityID, community[_communityID].communityName, now);		
 		}
 	}
+	
+	function like (address _member) {
+		if (member[msg.sender].memberCommunity == member[_member].memberCommunity) {
+		member[_member].reputation ++;
+		}
+	}
+	
+	function notLike (address _member) {
+		if (member[msg.sender].memberCommunity == member[_member].memberCommunity) {
+		member[_member].reputation --;
+		}
+	}
 
 	function getMemberInfo (address _member) constant returns (bool, string, string, uint) {
 	    return (member[_member].isMember, member[_member].alias, member[_member].memberDescription, member[_member].memberCommunity);
@@ -203,6 +211,7 @@ contract ethyclos {
     	uint exchangeRate;
     	uint transferTax;
     	uint accumulationTax;
+    	uint importTax;
     	uint creditRewardRate;
     	uint defaultCreditLine;
     	uint defaultTrust;	
@@ -225,7 +234,7 @@ contract ethyclos {
 	// communities
     // @notice the commune account holding the community common moneys, such as
 	// taxes
-    function createCommunity (string _communityName, string _narrative, string _currencyName, string _cImageLink, uint _exchangeRate, uint _transferTax, uint _accumulationTax, uint _creditRewardRate, uint _defaultCreditLine, uint _defaultTrust, bool _open, uint _quorum, uint _bankCreditLine, uint _bankTrust) {
+    function createCommunity (string _communityName, string _narrative, string _currencyName, string _cImageLink, uint _exchangeRate, uint _transferTax, uint _accumulationTax, uint _importTax, uint _creditRewardRate, uint _defaultCreditLine, uint _defaultTrust, bool _open, uint _quorum, uint _bankCreditLine, uint _bankTrust) {
     	// @notice the member exists in the system and the member is not in a
 		// community and the name is valid
     	if (member[msg.sender].isMember = true) {
@@ -241,10 +250,11 @@ contract ethyclos {
     	    			community[_communityID].exchangeRate = _exchangeRate;
     	    			community[_communityID].transferTax = _transferTax;
     	    			community[_communityID].accumulationTax = _accumulationTax;
+    	    			community[_communityID].importTax = _importTax;
     	    			community[_communityID].creditRewardRate = _creditRewardRate;
     	    			community[_communityID].defaultCreditLine = _defaultCreditLine;
     	    			community[_communityID].defaultTrust = _defaultTrust;
-    	    			community[_communityID].open = _open;
+    	    			community[_communityID].open = false;
     	    			community[_communityID].nrMembers = 1;
     	    			community[_communityID].quorum = _quorum;
                         	// @notice make the creator member of the community
@@ -320,15 +330,14 @@ contract ethyclos {
     				}     					
     }
     
-        function modifyCommunityRates (uint _communityID, uint _exchangeRate, uint _transferTax, uint _accumulationTax, uint _creditRewardRate, uint _defaultCreditLine, uint _defaultTrust, bool _open, uint _quorum, uint _bankCreditLine, uint _bankTrust) {
+    function modifyCommunityRates (uint _communityID, uint _exchangeRate, uint _creditRewardRate, uint _defaultCreditLine, uint _defaultTrust, bool _open, uint _quorum, uint _bankCreditLine, uint _bankTrust) {
     	        address _commune = community[_communityID].commune;
     	        address _bank = community[_communityID].communityBank;
     	        if (msg.sender == _commune) {
     			// @notice if a value for a parameter is given, change the
 				// parameter, if empty retain old value
-    			if (_transferTax != 0) {community[_communityID].transferTax = _transferTax;} 
-    			if (_accumulationTax != 0) {community[_communityID].accumulationTax = _accumulationTax;} 
-    			if (_creditRewardRate != 0) {community[_communityID].creditRewardRate = _creditRewardRate;} 
+				if (_exchangeRate != 0) {community[_communityID].exchangeRate = _exchangeRate;}
+				if (_creditRewardRate != 0) {community[_communityID].creditRewardRate = _creditRewardRate;}
     			if (_defaultCreditLine != 0) {community[_communityID].defaultCreditLine = _defaultCreditLine;} 
     			if (_defaultTrust != 0) {community[_communityID].defaultTrust = _defaultTrust;}
     			if (_bankCreditLine != 0) {member[_bank].creditLine = _bankCreditLine;}
@@ -339,12 +348,29 @@ contract ethyclos {
     				}     					
     }
     
+    function modifyCommunityTaxes (uint _communityID, uint _transferTax, uint _accumulationTax, uint _importTax) {
+    	        address _commune = community[_communityID].commune;
+    	        address _bank = community[_communityID].communityBank;
+    	        if (msg.sender == _commune) {
+    			// @notice if a value for a parameter is given, change the
+				// parameter, if empty retain old value
+    			if (_transferTax != 0) {community[_communityID].transferTax = _transferTax;} 
+    			if (_accumulationTax != 0) {community[_communityID].accumulationTax = _accumulationTax;} 
+    			if (_importTax != 0) {community[_communityID].importTax = _importTax;} 
+    			ModifyCommunity (msg.sender, _communityID, now);				
+    				}     					
+    }
+    
     function getCommunityDescription (uint _communityID) constant returns (string, string, string, string, bool, uint) {
     return (community[_communityID].communityName, community[_communityID].communityDescription, community[_communityID].currencyName, community[_communityID].cImageLink, community[_communityID].open, community[_communityID].nrMembers);
     }
     
-    function getCommunityRates (uint _communityID) constant returns (uint, uint, uint, uint, uint, uint) {
-    return (community[_communityID].exchangeRate, community[_communityID].defaultCreditLine, community[_communityID].defaultTrust, community[_communityID].accumulationTax, community[_communityID].transferTax, community[_communityID].creditRewardRate);
+    function getCommunityRates (uint _communityID) constant returns (uint, uint, uint) {
+    return (community[_communityID].exchangeRate, community[_communityID].defaultCreditLine, community[_communityID].defaultTrust);
+    }
+    
+    function getCommunityTaxes (uint _communityID) constant returns (uint, uint, uint) {
+    return (community[_communityID].transferTax, community[_communityID].accumulationTax, community[_communityID].importTax);
     }
     
     function getCommunityManagement (uint _communityID) constant returns (address, address) {
@@ -355,39 +381,40 @@ contract ethyclos {
     	_getCommunityID = communityIndex[_gIndex];
     }
     
-    event Transfer (uint indexed _communityID, address indexed _sender, address indexed _receiver, uint _amount, uint _TimeStamp);
+    event Transfer (string _concept, uint indexed _communityID, address indexed _sender, address indexed _receiver, uint _amount, uint _TimeStamp);
     event Credit (address indexed _MoneyLender, address indexed _borrowerAddress, uint _cDealine, uint _endorsedUoT);
     event CreditExp (address indexed _moneyLender, address indexed _borrower, uint _creditCost, bool _success, uint _TimeStamp);
 
 	// @notice function transfer from the member of the same bank or to the
 	// member of another bank. The amount is expressed in the sender
 	// currency
-	function transaction (address _to, uint _amount) {		
+	function payment (address _to, uint _amount) external {		
 		address _from = msg.sender;
 		uint _toAmount = _amount;
 		payAccTax (_amount);
 		// @notice check if both accounts are in the same community
 		if (member[msg.sender].memberCommunity == member[_to].memberCommunity) {
-			transfer (_from, _to, _amount);
+			transfer ("pay", _from, _to, _amount);
 			payTrnsTax (_to, _amount);
 		} else {
 			exchange (_from, _to, _amount);
 			}
 		}
 	
-	function transfer (address _from, address _to, uint _amount) internal {
+	function transfer (string _concept, address _from, address _to, uint _amount) internal {
 		int _intAmount = int(_amount);
 		if ((member[_from].balance - _intAmount) > - int((member[_from].creditLine)))  { 
 			member[_from].balance -= _intAmount;
 			member[_to].balance += _intAmount;
-			Transfer (member[msg.sender].memberCommunity, msg.sender, _to, _amount, now);
+			Transfer (_concept, member[msg.sender].memberCommunity, msg.sender, _to, _amount, now);
 		}
 	}
 		
 	function exchange (address _from, address _to, uint _amount) internal {		
 		address _fromExchange = community[member[_from].memberCommunity].communityBank;
 		address _toExchange = community[member[_to].memberCommunity].communityBank;
-		transfer (_from, _fromExchange, _amount);
+		Transfer ("exchange", member[_from].memberCommunity, _from, _to, _amount, now);
+		transfer ("exchangeOUT", _from, _fromExchange, _amount);
 		uint _exchangeRateFrom = community[member[_from].memberCommunity].exchangeRate;
 		uint _exchangeRateTo = community[member[_from].memberCommunity].exchangeRate;
 		uint _amountTo = _amount * _exchangeRateFrom/_exchangeRateTo;
@@ -397,8 +424,8 @@ contract ethyclos {
 			member[_fromExchange].balance -= _intAmountFrom;
 			member[_toExchange].balance += _intAmountTo;
 		}
-		transfer (_toExchange, _to, _amountTo);
-		payTrnsTax (_to, _amountTo);
+		transfer ("exchangeIN", _toExchange, _to, _amountTo);
+		payImportTax (_to, _amountTo);		
 	}
 	
 	function payAccTax (uint _amount) internal {
@@ -412,7 +439,7 @@ contract ethyclos {
 				_tax = 0;
 			}
 		member[msg.sender].lastTransaction = now;
-		transfer (msg.sender, _commune,  _tax);
+		transfer ("capitalTax", msg.sender, _commune,  _tax);
 	}
 	
 	function payTrnsTax (address _to, uint _amount) internal {
@@ -420,7 +447,15 @@ contract ethyclos {
 		address _commune = community[_communityID].commune;
 		uint _taxRate = community[_communityID].transferTax;
 		uint _tax = _amount * _taxRate / 100;
-		transfer (_to, _commune,  _tax);	
+		transfer ("vatTax", _to, _commune,  _tax);	
+	}
+	
+	function payImportTax (address _to, uint _amount) internal {
+		uint _communityID = member[_to].memberCommunity;
+		address _commune = community[_communityID].commune;
+		uint _taxRate = community[_communityID].importTax;
+		uint _tax = _amount * _taxRate / 100;
+		transfer ("importTax", _to, _commune,  _tax);	
 	}
 	
 	// @notice function authorize a credit
@@ -501,110 +536,6 @@ contract ethyclos {
 			}
 		}	
   
-	event Sell (uint _sellNumber, uint _buyerCommunity, address indexed _buyer, uint _sellerCommunity, address indexed _seller, uint _good, uint _price, uint _TimeStamp);
-	
-		struct Goods {
-			address seller;
-			string cathegory;
-			string narrative;
-			string goodImageLink;
-			uint unitPrice; 
-			uint nrSells;
-			int userSatisfaction;
-			bool onOffer;
-		}
-		
-		mapping(uint => Goods) good; 
-		
-		function offer (string _cathegory, string _narrative, string _goodImageLink, uint _unitPrice) {
-			nrGoods ++;
-			uint goodNumber = nrGoods;
-			good[goodNumber].seller = msg.sender;
-			good[goodNumber].cathegory = _cathegory;
-			good[goodNumber].narrative = _narrative;
-			good[goodNumber].goodImageLink = _goodImageLink;
-			good[goodNumber].unitPrice = _unitPrice;
-			good[goodNumber].nrSells = 0;
-			good[goodNumber].userSatisfaction = 0;
-			good[goodNumber].onOffer = true;
-		}
-		
-		function getGood (uint _goodNumber) constant returns (address, string, string, string, uint, bool) {
-			return (good[_goodNumber].seller, good[_goodNumber].cathegory, good[_goodNumber].narrative, good[_goodNumber].goodImageLink, good[_goodNumber].unitPrice, good[_goodNumber].onOffer);
-		}
-		
-		function offerOn (uint _goodNumber) {
-			if (good[_goodNumber].seller == msg.sender) {
-				good[_goodNumber].onOffer = true;
-			}
-		}
-
-		function offerOff (uint _goodNumber) {
-			if (good[_goodNumber].seller == msg.sender) {
-				good[_goodNumber].onOffer = false;
-			}
-		}
-		
-	
-		struct Sells {
-		uint good;
-		uint units;
-		address buyer;
-		uint price;
-		uint sellDateTime;
-		bool bill;
-		bool received;
-	    }
-
-	mapping(uint => Sells) sell;    
-
-	function buy (uint _good, uint _units) {
-	    nrSells ++;
-		uint sellNumber = nrSells;
-		sell[sellNumber].good = _good;
-		sell[sellNumber].units = _units;
-		sell[sellNumber].buyer = msg.sender;
-		sell[sellNumber].price = good[_good].unitPrice * _units;
-		sell[sellNumber].sellDateTime = now;
-		sell[sellNumber].bill = false;	
-		sell[sellNumber].received = false;
-		good[_good].nrSells ++;
-		address _seller = good[_good].seller;
-		uint _sellerCommunity = member[_seller].memberCommunity;	
-		uint _buyerCommunity = member[msg.sender].memberCommunity;	
-		Sell (nrSells, _buyerCommunity, msg.sender, _sellerCommunity, _seller, _good, sell[sellNumber].price, now);
-	}
-	
-	function sendBill (uint _sellNumber) {
-	    uint _good = sell[_sellNumber].good;
-	    address _seller = good[_good].seller;
-		if (_seller == msg.sender) {
-			sell[_sellNumber].bill = true;	
-			}    	
-	}	
-	
-	function signReceipt (uint _sellNumber, int _userSatisfaction) {
-		if (sell[_sellNumber].buyer == msg.sender) {
-		    uint _good = sell[_sellNumber].good;
-	        address _seller = good[_good].seller;
-			good[_good].userSatisfaction += _userSatisfaction;
-			member[_seller].reputation += _userSatisfaction;
-		sell[_sellNumber].received = true;
-			}    	
-	}	
-	
-	function getsell (uint _sellNumber) constant returns (uint, uint, uint, uint, bool, bool) {
-	    uint _good = sell[_sellNumber].good;
-	    address _seller = good[_good].seller;
-		return (_good, sell[_sellNumber].units, sell[_sellNumber].price, sell[_sellNumber].sellDateTime, sell[_sellNumber].bill, sell[_sellNumber].received);
-	}
-	
-	function getSellAgents (uint _sellNumber) constant returns (uint,address, address) {
-	    uint _good = sell[_sellNumber].good;
-	    address _seller = good[_good].seller;
-		return (_good, _seller, sell[_sellNumber].buyer);
-	}
-	
     
     event ProposalAdded(uint proposalNumber, uint community, string narrative, address creator);
     event Voted(address voter, uint proposalNumber, int8 vote, int result);
@@ -707,5 +638,5 @@ contract ethyclos {
     			proposal[_proposalNumber].proposalPassed    			
     			);
     }	
-	
+    
 }
