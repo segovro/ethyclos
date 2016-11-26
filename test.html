@@ -24,6 +24,11 @@
 				+ "</b> Community Name: <b>" + myCommunityName
 				+ "<br></b> Is Commune: <b>" + isCommune + "</b> Is Bank: <b>"
 				+ isBank + "</b>";
+				
+		function newWhisperID () {
+			var whisperIdentity = web3.shh.newIdentity();
+			document.getElementById('whisperID').innerHTML = whisperIdentity;
+		}
 
 		var communities = "<form>" + "<div class=\"form-group col-sm-6\">"
 				+ "<label for=\"communityToJoin\">Chose Community</label>"
@@ -58,10 +63,17 @@
 		</div>
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
-			<div class="col-sm-12">
+			<div class="col-sm-6">
 				<h3>Chose Community</h3>
 				<p id="communities"></p>
-				<p id="bla"></p>
+			</div>
+			<div class="col-sm-6">
+				<h3>Whisper ID</h3>
+						<div class="btn-group">
+							<button type="submit"
+								onClick="newWhisperID;">new whisper ID</button>
+						</div>
+				<p id="whisperID"></p>
 			</div>
 		</div>
 	</div>
