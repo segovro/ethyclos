@@ -1,4 +1,4 @@
-pragma solidity ^0.4.2;
+pragma solidity ^0.4.6;
 
 contract ethyclos {
 
@@ -234,7 +234,7 @@ contract ethyclos {
 	// communities
     // @notice the commune account holding the community common moneys, such as
 	// taxes
-    function createCommunity (string _communityName, string _narrative, string _currencyName, string _cImageLink, uint _exchangeRate, uint _transferTax, uint _accumulationTax, uint _importTax, uint _creditRewardRate, uint _defaultCreditLine, uint _defaultTrust, bool _open, uint _quorum, uint _bankCreditLine, uint _bankTrust) {
+    function createCommunity (string _communityName, string _narrative, string _currencyName, string _cImageLink, uint _exchangeRate, uint _creditRewardRate, uint _defaultCreditLine, uint _defaultTrust, bool _open, uint _quorum, uint _bankCreditLine, uint _bankTrust) {
     	// @notice the member exists in the system and the member is not in a
 		// community and the name is valid
     	if (member[msg.sender].isMember = true) {
@@ -248,9 +248,6 @@ contract ethyclos {
                         community[_communityID].commune = msg.sender;
                         community[_communityID].communityBank = msg.sender;
     	    			community[_communityID].exchangeRate = _exchangeRate;
-    	    			community[_communityID].transferTax = _transferTax;
-    	    			community[_communityID].accumulationTax = _accumulationTax;
-    	    			community[_communityID].importTax = _importTax;
     	    			community[_communityID].creditRewardRate = _creditRewardRate;
     	    			community[_communityID].defaultCreditLine = _defaultCreditLine;
     	    			community[_communityID].defaultTrust = _defaultTrust;
