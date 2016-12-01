@@ -587,8 +587,8 @@ contract ethyclos {
         return (community[_communityID].communityName, community[_communityID].communityDescription, community[_communityID].currencyName, community[_communityID].cImageLink, community[_communityID].open, community[_communityID].nrMembers);
         }
         
-        function getCommunityRates (uint _communityID) constant returns (uint, uint, uint) {
-        return (community[_communityID].exchangeRate, community[_communityID].defaultCreditLine, community[_communityID].defaultTrust);
+        function getCommunityRates (uint _communityID) constant returns (uint, uint, uint, uint) {
+        return (community[_communityID].exchangeRate, community[_communityID].creditRewardRate, community[_communityID].defaultCreditLine, community[_communityID].defaultTrust);
         }
         
         function getCommunityTaxes (uint _communityID) constant returns (uint, uint, uint) {

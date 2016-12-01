@@ -1000,6 +1000,11 @@ var myRate = myCommunityRates[0];
 var mydefaultMemberCreditLine = myCommunityRates[1];
 var mydefaultMemberTrust = myCommunityRates[2];
 
+var myCommunityTaxes = ethyclos.getCommunityTaxes(myCommunity);
+var transferTax = ethyclos.getCommunityTaxes(myCommunity)[0];
+var accumulationTax = ethyclos.getCommunityTaxes(myCommunity)[1];
+var importTax = ethyclos.getCommunityTaxes(myCommunity)[2];
+
 var myCommunityManagement = ethyclos.getCommunityManagement(myCommunity);
 var myCommunityBankAccount = myCommunityManagement[0];
 var myCommunityCommuneAccount = myCommunityManagement[1];
