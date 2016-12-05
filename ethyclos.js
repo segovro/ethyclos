@@ -1008,3 +1008,5 @@ var importTax = ethyclos.getCommunityTaxes(myCommunity)[2];
 var myCommunityManagement = ethyclos.getCommunityManagement(myCommunity);
 var myCommunityBankAccount = myCommunityManagement[0];
 var myCommunityCommuneAccount = myCommunityManagement[1];
+
+
